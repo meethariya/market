@@ -13,69 +13,72 @@ import jakarta.persistence.OneToOne;
 /**
  * @author meet
  * @since 10-Feb-2023
- * @see User
+ * @see Customer
+ * @see ProductList
+ * @See Order
  */
 @Entity
-public class Manager {
+public class Cart {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@OneToOne(cascade = CascadeType.REMOVE)
-	private User user;
-	
+	private Customer customer;
+
 	/**
-	 * Default constructor
+	 * Default Constructor
 	 */
-	public Manager() {
+	public Cart() {
 		super();
 	}
-	
+
 	/**
 	 * @param id
-	 * @param user
+	 * @param customer
 	 */
-	public Manager(long id, User user) {
+	public Cart(long id, Customer customer) {
 		super();
 		this.id = id;
-		this.user = user;
+		this.customer = customer;
 	}
-	
+
 	/**
 	 * @return the id
 	 */
 	public long getId() {
 		return id;
 	}
-	
+
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	/**
-	 * @return the user
+	 * @return the customer
 	 */
-	public User getUser() {
-		return user;
+	public Customer getCustomer() {
+		return customer;
 	}
-	
+
 	/**
-	 * @param user the user to set
+	 * @param customer the customer to set
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
-	
+
 	/**
-	 * @return the Manager model string value
+	 * @return the Cart model string value
 	 */
 	@Override
 	public String toString() {
-		return "Manager [id=" + id + ", user=" + user + "]";
+		return "Cart [id=" + id + ", customer=" + customer + "]";
 	}
+	
 	
 }

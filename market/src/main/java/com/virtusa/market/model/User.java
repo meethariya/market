@@ -11,7 +11,9 @@ import jakarta.persistence.Id;
 
 /**
  * @author meet
- * 09-Feb-2023
+ * @since 09-Feb-2023
+ * @see Customer
+ * @see Manager
  */
 @Entity
 public class User {
@@ -19,16 +21,22 @@ public class User {
 	@Id()
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	
 	@Column(length = 30, nullable = false)
 	private String name;
+	
 	@Column(length = 50, unique = true, nullable = false)
 	private String email;
+	
+	
 	@Column(nullable = false)
 	private String password;
+	
 	@Column(length = 20, nullable = false)
 	private String role;
+	
 	@Column(nullable = false)
-	private String profilePicAddress;
+	private String profilePicPath;
 	
 	/**
 	 * Default constructor
@@ -43,7 +51,7 @@ public class User {
 	 * @param email
 	 * @param password
 	 * @param role
-	 * @param profilePicAddress
+	 * @param profilePicPath
 	 */
 	public User(long id, String name, String email, String password, String role, String profilePicAddress) {
 		super();
@@ -52,7 +60,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.role = role;
-		this.profilePicAddress = profilePicAddress;
+		this.profilePicPath = profilePicAddress;
 	}
 
 	/**
@@ -126,17 +134,17 @@ public class User {
 	}
 
 	/**
-	 * @return the profilePicAddress
+	 * @return the profilePicPath
 	 */
-	public String getProfilePicAddress() {
-		return profilePicAddress;
+	public String getProfilePicPath() {
+		return profilePicPath;
 	}
 
 	/**
-	 * @param profilePicAddress the profilePicAddress to set
+	 * @param profilePicPath the profilePicPath to set
 	 */
-	public void setProfilePicAddress(String profilePicAddress) {
-		this.profilePicAddress = profilePicAddress;
+	public void setProfilePicPath(String profilePicAddress) {
+		this.profilePicPath = profilePicAddress;
 	}
 
 	/**
@@ -145,7 +153,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", role=" + role
-				+ ", profilePicAddress=" + profilePicAddress + "]";
+				+ ", profilePicPath=" + profilePicPath + "]";
 	}
 	
 

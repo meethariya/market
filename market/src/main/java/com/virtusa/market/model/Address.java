@@ -11,7 +11,8 @@ import jakarta.persistence.Id;
 
 /**
  * @author meet
- * 10-Feb-2023
+ * @since 10-Feb-2023
+ * @see Customer
  */
 @Entity
 public class Address {
@@ -19,16 +20,22 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	
 	@Column(length = 30, nullable = false)
 	private String houseNo;
+	
 	@Column(length = 50, nullable = false)
 	private String addressLine1;
+	
 	@Column(length = 50)
 	private String addressLine2;
+	
 	@Column(length = 30, nullable = false)
 	private String city;
+	
 	@Column(length = 30, nullable = false)
 	private String state;
+	
 	@Column(nullable = false)
 	private int pincode;
 	

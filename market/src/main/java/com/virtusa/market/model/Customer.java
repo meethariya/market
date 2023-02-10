@@ -15,7 +15,9 @@ import jakarta.persistence.OneToOne;
 
 /**
  * @author meet
- * 10-Feb-2023
+ * @since 10-Feb-2023
+ * @see User
+ * @see Address
  */
 @Entity
 public class Customer {
@@ -23,13 +25,18 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	
 	@OneToOne(cascade = CascadeType.REMOVE)
 	private User user;
+	
 	@OneToOne(cascade = CascadeType.REMOVE)
 	private Address address;
+	
 	private boolean gender;
+	
 	@Column(length = 10,unique = true,nullable = false)
 	private String phone;
+	
 	@Column(nullable = false)
 	private Date dob;
 	

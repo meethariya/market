@@ -3,79 +3,79 @@
  */
 package com.virtusa.market.model;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 
 /**
  * @author meet
  * @since 10-Feb-2023
- * @see User
+ * @see Product
  */
 @Entity
-public class Manager {
+public class Category {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@OneToOne(cascade = CascadeType.REMOVE)
-	private User user;
+	@Column(length = 30)
+	private String categoryName;
 	
 	/**
 	 * Default constructor
 	 */
-	public Manager() {
+	public Category() {
 		super();
 	}
 	
 	/**
 	 * @param id
-	 * @param user
+	 * @param category
 	 */
-	public Manager(long id, User user) {
+	public Category(long id, String category) {
 		super();
 		this.id = id;
-		this.user = user;
+		this.categoryName = category;
 	}
-	
+
 	/**
 	 * @return the id
 	 */
 	public long getId() {
 		return id;
 	}
-	
+
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	/**
-	 * @return the user
+	 * @return the category
 	 */
-	public User getUser() {
-		return user;
+	public String getCategoryName() {
+		return categoryName;
 	}
-	
+
 	/**
-	 * @param user the user to set
+	 * @param category the category to set
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	public void setCategoryName(String category) {
+		this.categoryName = category;
 	}
-	
+
 	/**
-	 * @return the Manager model string value
+	 * @return the Category model string value
 	 */
 	@Override
 	public String toString() {
-		return "Manager [id=" + id + ", user=" + user + "]";
+		return "Category [id=" + id + ", category=" + categoryName + "]";
 	}
+	
 	
 }

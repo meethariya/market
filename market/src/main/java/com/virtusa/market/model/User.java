@@ -28,7 +28,6 @@ public class User {
 	@Column(length = 50, unique = true, nullable = false)
 	private String email;
 	
-	
 	@Column(nullable = false)
 	private String password;
 	
@@ -37,6 +36,9 @@ public class User {
 	
 	@Column(nullable = false)
 	private String profilePicPath;
+	
+	@Column(nullable = false)
+	private boolean enabled = true;
 	
 	/**
 	 * Default constructor
@@ -52,15 +54,18 @@ public class User {
 	 * @param password
 	 * @param role
 	 * @param profilePicPath
+	 * @param enabled
 	 */
-	public User(long id, String name, String email, String password, String role, String profilePicAddress) {
+	public User(long id, String name, String email, String password, String role, String profilePicPath,
+			boolean enabled) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.role = role;
-		this.profilePicPath = profilePicAddress;
+		this.profilePicPath = profilePicPath;
+		this.enabled = enabled;
 	}
 
 	/**
@@ -145,6 +150,20 @@ public class User {
 	 */
 	public void setProfilePicPath(String profilePicAddress) {
 		this.profilePicPath = profilePicAddress;
+	}
+
+	/**
+	 * @return the enabled
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	/**

@@ -3,9 +3,13 @@
  */
 package com.virtusa.market.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,11 +37,6 @@ public class GeneralController {
 	@Autowired
 	GeneralService service;
 
-	@GetMapping("/")
-	public ResponseEntity<String> home() {
-		return new ResponseEntity<>("Welcome", HttpStatus.OK);
-	}
-
 	/**
 	 * Saves customer to database
 	 * @param customer
@@ -57,5 +56,21 @@ public class GeneralController {
 		}
 		Long id = service.registerCustomer(customer);
 		return new ResponseEntity<>(id, HttpStatus.CREATED);
+	}
+	
+	/**
+	 * Checks for the role of the logged in user and redirects accordingly
+	 * @param auth
+	 * @return Redirects to {@link CustomerController#customerHome()} or {@link ManagerController#managerHome()}
+	 */
+	@GetMapping("/postLogin")
+	public ResponseEntity<HttpHeaders> postLogin(Authentication auth){
+		HttpHeaders httpHeader = new HttpHeaders();
+		if(auth.getAuthorities().stream().allMatch(a -> a.getAuthority().equalsIgnoreCase("customer"))) {
+			httpHeader.setLocation(URI.create("customer/"));
+		}else {
+			httpHeader.setLocation(URI.create("manager/"));
+		}
+		return new ResponseEntity<>(httpHeader,HttpStatus.PERMANENT_REDIRECT);
 	}
 }

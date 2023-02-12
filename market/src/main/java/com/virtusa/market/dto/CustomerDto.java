@@ -33,52 +33,52 @@ public class CustomerDto {
 
 	private static final Random RANDOM = new Random();
 	
-	@NotEmpty
+	@NotEmpty(message = "{NotEmpty.customer.gender}")
 	private String gender;
 
-	@NotEmpty
-	@Length(min = 10, max = 10)
+	@NotEmpty(message = "{NotEmpty.customer.phone}")
+	@Length(min = 10, max = 10, message = "{Length.customer.phone}")
 	private String phone;
 
-	@NotEmpty
+	@NotEmpty(message = "{NotEmpty.customer.dob}")
 	private String dob;
 
-	@NotEmpty
-	@Length(max = 30)
+	@NotEmpty(message = "{NotEmpty.customer.name}")
+	@Length(max = 30, message = "{Length.customer.name}")
 	private String name;
 
-	@NotEmpty
-	@Email
-	@Length(max = 50)
+	@NotEmpty(message = "{NotEmpty.customer.email}")
+	@Email(message = "{Email.customer.email}")
+	@Length(max = 50, message = "{Length.customer.email}")
 	private String email;
 
-	@NotEmpty
+	@NotEmpty(message = "{NotEmpty.customer.password}")
 	private String password;
 
 	private String profilePicPath;
 
-	@NotEmpty
-	@Length(max = 30)
+	@NotEmpty(message = "{NotEmpty.customer.houseNo}")
+	@Length(max = 30, message = "{Length.customer.houseNo}")
 	private String houseNo;
 
-	@NotEmpty
-	@Length(max = 50)
+	@NotEmpty(message = "{NotEmpty.customer.addressLine1}")
+	@Length(max = 50, message = "{Length.customer.addressLine1}")
 	private String addressLine1;
 
-	@Length(max = 50)
+	@Length(max = 50, message = "{Length.customer.addressLine2}")
 	private String addressLine2;
 
-	@NotEmpty
-	@Length(max = 30)
+	@NotEmpty(message = "{NotEmpty.customer.city}")
+	@Length(max = 30, message = "{Length.customer.city}")
 	private String city;
 
-	@NotEmpty
-	@Length(max = 30)
+	@NotEmpty(message = "{NotEmpty.customer.state}")
+	@Length(max = 30, message = "{Length.customer.state}")
 	private String state;
 
-	@NotNull
-	@Min(value = 100000)
-	@Max(value = 999999)
+	@NotNull(message = "{NotNull.customer.pincode}")
+	@Min(value = 100000, message = "{Min.customer.pincode}")
+	@Max(value = 999999, message = "{Max.customer.pincode}")
 	private int pincode;
 
 	private Address address = new Address();

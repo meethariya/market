@@ -9,10 +9,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.virtusa.market.controller.GeneralController;
+import com.virtusa.market.dao.CartDao;
 import com.virtusa.market.dao.CustomerDao;
 import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CustomerDto;
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
+import com.virtusa.market.model.Cart;
 import com.virtusa.market.model.Customer;
 import com.virtusa.market.model.User;
 
@@ -41,6 +43,9 @@ public class GeneralService {
 	@Autowired
 	private UserDao userDao;
 	
+	@Autowired
+	private CartDao cartDao;
+	
 	/**
 	 * Checks 
 	 * <ul>
@@ -48,7 +53,8 @@ public class GeneralService {
 	 * 	<li>Email of Customer in database for duplicates</li>
 	 * 	<li>Phone of Customer in database for duplicates</li>
 	 * </ul>
-	 * Sets all parameters for CustomerDto's Customer field and finally saves to database.
+	 * Sets all parameters for CustomerDto's Customer field and finally saves to database.<br>
+	 * Also creates a shopping cart for created customer.
 	 * @param customerDto
 	 * @return ID of the customer saved in database
 	 * @throws CustomerAlreadyExistsException
@@ -71,6 +77,7 @@ public class GeneralService {
 		customerDto.setCustomer();
 		
 		Customer saved = customerDao.save(customerDto.getCustomer());
+		cartDao.save(new Cart(saved));
 		return saved.getId();
 	}
 }

@@ -23,7 +23,7 @@ public class ProductImage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Product product;
 	
 	@Column(nullable = false, updatable = false)
@@ -44,6 +44,16 @@ public class ProductImage {
 	public ProductImage(long id, Product product, String imagePath) {
 		super();
 		this.id = id;
+		this.product = product;
+		this.imagePath = imagePath;
+	}
+
+	/**
+	 * @param product
+	 * @param imagePath
+	 */
+	public ProductImage(Product product, String imagePath) {
+		super();
 		this.product = product;
 		this.imagePath = imagePath;
 	}

@@ -45,6 +45,14 @@ public class Cart {
 	}
 
 	/**
+	 * @param customer
+	 */
+	public Cart(Customer customer) {
+		super();
+		this.customer = customer;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public long getId() {

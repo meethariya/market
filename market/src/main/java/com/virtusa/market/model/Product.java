@@ -30,7 +30,7 @@ public class Product {
 	@Column(length = 30)
 	private String brand;
 	
-	@ManyToOne(cascade = CascadeType.DETACH)
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Category category;
 	
 	@Column(nullable = false, precision = 2)

@@ -34,3 +34,8 @@ build/
 
 ### logs ###
 appLog.log
+
+### images ###
+*.png
+*.jpg
+*.jpeg

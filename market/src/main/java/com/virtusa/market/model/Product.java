@@ -3,9 +3,13 @@
  */
 package com.virtusa.market.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +19,6 @@ import jakarta.persistence.ManyToOne;
  * @author meet
  * @since 10-Feb-2023
  * @see Category
- * @see ProductImage
  */
 @Entity
 public class Product {
@@ -30,7 +33,7 @@ public class Product {
 	@Column(length = 30)
 	private String brand;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.DETACH)
 	private Category category;
 	
 	@Column(nullable = false, precision = 2)
@@ -39,6 +42,9 @@ public class Product {
 	@Column(nullable = false)
 	private byte rating;
 	
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> imagePath;
+	
 	/**
 	 * Default constructor
 	 */
@@ -46,6 +52,7 @@ public class Product {
 		super();
 	}
 
+	
 	/**
 	 * @param id
 	 * @param name
@@ -53,8 +60,10 @@ public class Product {
 	 * @param category
 	 * @param price
 	 * @param rating
+	 * @param imagePath
 	 */
-	public Product(long id, String name, String brand, Category category, double price, byte rating) {
+	public Product(long id, String name, String brand, Category category, double price, byte rating,
+			List<String> imagePath) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -62,7 +71,9 @@ public class Product {
 		this.category = category;
 		this.price = price;
 		this.rating = rating;
+		this.imagePath = imagePath;
 	}
+
 
 	/**
 	 * @return the id
@@ -148,14 +159,27 @@ public class Product {
 		this.rating = rating;
 	}
 
+	/**
+	 * @return the imagePath
+	 */
+	public List<String> getImagePath() {
+		return imagePath;
+	}
 
 	/**
-	 * @return the Product model string value
+	 * @param imagePath the imagePath to set
+	 */
+	public void setImagePath(List<String> imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	/**
+	 * @return Product model string value
 	 */
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", brand=" + brand + ", category=" + category + ", price="
-				+ price + ", rating=" + rating + "]";
+				+ price + ", rating=" + rating + ", imagePath=" + imagePath + "]";
 	}
 	
 	

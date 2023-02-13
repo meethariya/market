@@ -3,11 +3,12 @@
  */
 package com.virtusa.market.dto;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.virtusa.market.model.Category;
 import com.virtusa.market.model.Product;
-import com.virtusa.market.model.ProductImage;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -39,6 +40,8 @@ public class ProductDto {
 	private double price;
 	
 	private byte rating = 0;
+	
+	private List<String> imagePath;
 	
 	private Product product;
 	
@@ -119,6 +122,7 @@ public class ProductDto {
 		temp.setCategory(getCategory());
 		temp.setPrice(getPrice());
 		temp.setRating(getRating());
+		temp.setImagePath(getImagePath());
 		this.product = temp;
 	}
 	/**
@@ -144,4 +148,20 @@ public class ProductDto {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
+	/**
+	 * @return the imagePath
+	 */
+	public List<String> getImagePath() {
+		return imagePath;
+	}
+	
+	/**
+	 * @param imagePath the imagePath to set
+	 */
+	public void setImagePath(List<String> imagePath) {
+		this.imagePath = imagePath;
+	}
+	
+	
 }

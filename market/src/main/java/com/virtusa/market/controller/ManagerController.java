@@ -64,7 +64,7 @@ public class ManagerController {
 	 */
 	@PostMapping("/product")
 	public ResponseEntity<Long> addProduct(@Valid @ModelAttribute("product") ProductDto productDto, Errors error,
-			@RequestParam("images") MultipartFile[] files) throws ProductAlreadyExistsException, IOException {
+			@RequestParam(name = "images", required = false) MultipartFile[] files) throws ProductAlreadyExistsException, IOException {
 
 		FieldError fieldError = error.getFieldError();
 		if (fieldError != null) {

@@ -3,7 +3,9 @@
  */
 package com.virtusa.market.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,51 +13,54 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /**
  * @author meet
  * @since 10-Feb-2023
+ * @see Customer
  * @see Product
- * @see Cart
+ * @See Order
  */
 @Entity
-public class ProductList {
+public class CartList {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne(cascade = CascadeType.REMOVE)
-	private Cart cart;
-	
+	@UpdateTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private Timestamp addedOn;
+	private Date addedOn;
 	
 	@Column(nullable = false)
 	private long quantity;
 	
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable = false)
 	private Product product;
 
 	/**
 	 * Default Constructor
 	 */
-	public ProductList() {
+	public CartList() {
 		super();
 	}
 
 	/**
 	 * @param id
-	 * @param cart
+	 * @param customer
 	 * @param addedOn
 	 * @param quantity
 	 * @param product
 	 */
-	public ProductList(long id, Cart cart, Timestamp addedOn, long quantity, Product product) {
+	public CartList(long id, Date addedOn, long quantity, Product product) {
 		super();
 		this.id = id;
-		this.cart = cart;
 		this.addedOn = addedOn;
 		this.quantity = quantity;
 		this.product = product;
@@ -76,30 +81,16 @@ public class ProductList {
 	}
 
 	/**
-	 * @return the cart
-	 */
-	public Cart getCart() {
-		return cart;
-	}
-
-	/**
-	 * @param cart the cart to set
-	 */
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-
-	/**
 	 * @return the addedOn
 	 */
-	public Timestamp getAddedOn() {
+	public Date getAddedOn() {
 		return addedOn;
 	}
 
 	/**
 	 * @param addedOn the addedOn to set
 	 */
-	public void setAddedOn(Timestamp addedOn) {
+	public void setAddedOn(Date addedOn) {
 		this.addedOn = addedOn;
 	}
 
@@ -131,14 +122,10 @@ public class ProductList {
 		this.product = product;
 	}
 
-	/**
-	 * @return the ProductList model string value
-	 */
 	@Override
 	public String toString() {
-		return "ProductList [id=" + id + ", cart=" + cart + ", addedOn=" + addedOn + ", quantity=" + quantity
+		return "CartList [id=" + id + ", addedOn=" + addedOn + ", quantity=" + quantity
 				+ ", product=" + product + "]";
 	}
-	
 	
 }

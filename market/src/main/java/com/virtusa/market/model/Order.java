@@ -3,21 +3,29 @@
  */
 package com.virtusa.market.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /**
  * @author meet
  * @since 10-Feb-2023
- * @see Cart
+ * @see CartList
  * @see Product
  */
 @Entity
@@ -29,16 +37,21 @@ public class Order {
 	private long id;
 	
 	@OneToOne(cascade = CascadeType.REMOVE)
-	private Cart cart;
+	private Customer customer;
 	
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private Timestamp timestamp;
+	private Date timestamp;
 	
 	@Column(nullable = false, precision = 2)
 	private double price;
 	
 	@Column(length = 30)
 	private String payementMethod;
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<CartList> cart = new HashSet<>();
 
 	/**
 	 * Default Constructor
@@ -49,18 +62,21 @@ public class Order {
 
 	/**
 	 * @param id
-	 * @param cart
+	 * @param customer
 	 * @param timestamp
 	 * @param price
 	 * @param payementMethod
+	 * @param cart
 	 */
-	public Order(long id, Cart cart, Timestamp timestamp, double price, String payementMethod) {
+	public Order(long id, Customer customer, Date timestamp, double price, String payementMethod,
+			Set<CartList> cart) {
 		super();
 		this.id = id;
-		this.cart = cart;
+		this.customer = customer;
 		this.timestamp = timestamp;
 		this.price = price;
 		this.payementMethod = payementMethod;
+		this.cart = cart;
 	}
 
 	/**
@@ -78,30 +94,30 @@ public class Order {
 	}
 
 	/**
-	 * @return the cart
+	 * @return the Customer
 	 */
-	public Cart getCart() {
-		return cart;
+	public Customer getCustomer() {
+		return customer;
 	}
 
 	/**
-	 * @param cart the cart to set
+	 * @param Customer the Customer to set
 	 */
-	public void setCart(Cart cart) {
-		this.cart = cart;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	/**
 	 * @return the timestamp
 	 */
-	public Timestamp getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
 	/**
 	 * @param timestamp the timestamp to set
 	 */
-	public void setTimestamp(Timestamp timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -132,14 +148,28 @@ public class Order {
 	public void setPayementMethod(String payementMethod) {
 		this.payementMethod = payementMethod;
 	}
+	
+	/**
+	 * @return the cart
+	 */
+	public Set<CartList> getCart() {
+		return cart;
+	}
 
 	/**
-	 * @return the Order model string value
+	 * @param cart the cart to set
+	 */
+	public void setCart(Set<CartList> cart) {
+		this.cart = cart;
+	}
+
+	/**
+	 * @return Order model's string value
 	 */
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", cart=" + cart + ", timestamp=" + timestamp + ", price=" + price
-				+ ", payementMethod=" + payementMethod + "]";
+		return "Order [id=" + id + ", customer=" + customer + ", timestamp=" + timestamp + ", price=" + price
+				+ ", payementMethod=" + payementMethod + ", cart=" + cart + "]";
 	}
 	
 	

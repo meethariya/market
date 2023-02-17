@@ -4,7 +4,6 @@
 package com.virtusa.market.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,18 +21,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.virtusa.market.dto.InventoryDto;
 import com.virtusa.market.dto.ProductDto;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Product;
-import com.virtusa.market.service.CustomerService;
 import com.virtusa.market.service.ManagerService;
 
 import jakarta.validation.Valid;
 
 /**
- * Must require role as Manager to access these URL
+ * All methods specific for Manager.<br>
+ * Security Level: <strong>Manager role</strong>.
  * 
  * @author meet
  * @since 12-Feb-2023
@@ -43,10 +43,7 @@ import jakarta.validation.Valid;
 public class ManagerController {
 
 	@Autowired
-	ManagerService managerService;
-
-	@Autowired
-	CustomerService customerService;
+	private ManagerService managerService;
 
 	@GetMapping("/")
 	public ResponseEntity<String> managerHome() {
@@ -77,14 +74,6 @@ public class ManagerController {
 	}
 
 	/**
-	 * @return List of products and its image path
-	 */
-	@GetMapping("/product")
-	public ResponseEntity<List<Product>> getAllProduct() {
-		return new ResponseEntity<>(customerService.getAllProducts(), HttpStatus.OK);
-	}
-
-	/**
 	 * Updates the Product
 	 * 
 	 * @param id
@@ -110,7 +99,7 @@ public class ManagerController {
 	}
 
 	/**
-	 * Deletes the Product, given its Id.
+	 * Deletes the Product, given its Id. Also deletes its images.
 	 * 
 	 * @param id
 	 * @return String
@@ -122,5 +111,25 @@ public class ManagerController {
 			throws ProductNotFoundException, IOException {
 		managerService.deleteProduct(id);
 		return new ResponseEntity<>("Deleted", HttpStatus.OK);
+	}
+
+	/**
+	 * Saves product to inventory
+	 * 
+	 * @param inventoryDto
+	 * @param error
+	 * @return Id of the inventory created
+	 * @throws ProductNotFoundException
+	 */
+	@PostMapping("/inventory")
+	public ResponseEntity<Long> addToInventory(@Valid @ModelAttribute("inventory") InventoryDto inventoryDto,
+			Errors error) throws ProductNotFoundException {
+		
+		FieldError fieldError = error.getFieldError();
+		if (fieldError != null) {
+			throw new IncorrectFormDetailsException(fieldError.getDefaultMessage());
+		}
+		
+		return new ResponseEntity<>(managerService.addToInventory(inventoryDto), HttpStatus.CREATED);
 	}
 }

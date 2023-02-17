@@ -5,13 +5,18 @@ package com.virtusa.market.model;
 
 import java.util.Date;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /**
  * @author meet
@@ -26,11 +31,15 @@ public class Inventory {
 	private long id;
 	
 	@OneToOne(cascade = CascadeType.REMOVE)
+	@JoinColumn(unique = true, nullable = false)
 	private Product product;
 	
 	@Column(nullable = false)
 	private long quantity;
 	
+	@UpdateTimestamp
+	@Temporal(TemporalType.DATE)
+	@Column(nullable = false)
 	private Date lastImportDate;
 	
 	private Date lastSoldDate;

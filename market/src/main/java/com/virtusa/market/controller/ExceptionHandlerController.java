@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
+import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.exception.UserNotFoundException;
 
 /**
  * Handle all exceptions thrown by controllers
@@ -80,6 +82,28 @@ public class ExceptionHandlerController {
 	 */
 	@ExceptionHandler(ProductNotFoundException.class)
 	public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Handles error for UserNotFoundException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Handles error for CustomerNotFoundException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(CustomerNotFoundException.class)
+	public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException e){
 		log.error(e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}

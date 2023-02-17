@@ -20,11 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.virtusa.market.controller.ManagerController;
 import com.virtusa.market.dao.CategoryDao;
+import com.virtusa.market.dao.InventoryDao;
 import com.virtusa.market.dao.ProductDao;
+import com.virtusa.market.dto.InventoryDto;
 import com.virtusa.market.dto.ProductDto;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Category;
+import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Product;
 
 import jakarta.transaction.Transactional;
@@ -41,13 +44,16 @@ import jakarta.transaction.Transactional;
 public class ManagerService {
 
 	@Autowired
-	ProductDao productDao;
+	private ProductDao productDao;
 
 	@Autowired
-	CategoryDao categoryDao;
+	private CategoryDao categoryDao;
 
 	@Autowired
-	MessageSource source;
+	private InventoryDao inventoryDao;
+
+	@Autowired
+	private MessageSource source;
 
 	/**
 	 * Saves product into database with series of actions.<br>
@@ -92,7 +98,10 @@ public class ManagerService {
 		if (existingCategory != null) {
 			productDto.setCategory(existingCategory);
 		} else {
-			productDto.setCategory();
+			Category category = new Category();
+			category.setCategoryName(productDto.getCategoryName());
+			categoryDao.save(category);
+			productDto.setCategory(category);
 		}
 
 		// saving all images to resources and setting its path in Dto
@@ -156,8 +165,8 @@ public class ManagerService {
 	/**
 	 * Updates product into database with series of actions.<br>
 	 * <ul>
-	 * <li>Finds product in database using name and brand. If exists other than its own ID throws
-	 * <strong>ProductAlreadyExistsException</strong>.</li>
+	 * <li>Finds product in database using name and brand. If exists other than its
+	 * own ID throws <strong>ProductAlreadyExistsException</strong>.</li>
 	 * <li>Finds Category in database using name. If exists uses same category, else
 	 * creates new.</li>
 	 * <li>Sets {@link Category} and {@link Product} from raw input.</li>
@@ -173,6 +182,7 @@ public class ManagerService {
 	 * <li>Updates Product.</li>
 	 * <li>Finally returns the Id of the Product that is saved.</li>
 	 * </ul>
+	 * 
 	 * @param id
 	 * @param productDto
 	 * @param files
@@ -180,15 +190,16 @@ public class ManagerService {
 	 * @throws ProductAlreadyExistsException
 	 * @throws IOException
 	 */
-	public Product editProduct(long id, ProductDto productDto, MultipartFile[] files) throws ProductAlreadyExistsException, IOException {
-		
+	public Product editProduct(long id, ProductDto productDto, MultipartFile[] files)
+			throws ProductAlreadyExistsException, IOException {
+
 		// finds product by name and brand, if already exists then throws exception
 		Product existing = productDao.findByNameAndBrand(productDto.getName(), productDto.getBrand());
-		if (existing != null && existing.getId()!=id) {
+		if (existing != null && existing.getId() != id) {
 			throw new ProductAlreadyExistsException(
 					productDto.getName() + " of " + productDto.getBrand() + " already exists.");
 		}
-		
+
 		// finds category, id found uses existing or else creates new
 		Category existingCategory = categoryDao.findByCategoryName(productDto.getCategoryName());
 		if (existingCategory != null) {
@@ -196,7 +207,7 @@ public class ManagerService {
 		} else {
 			productDto.setCategory();
 		}
-		
+
 		// saving all images to resources and setting its path in Dto
 		List<String> allImagePath = new ArrayList<>();
 		for (int i = 0; i < files.length; i++) {
@@ -204,7 +215,7 @@ public class ManagerService {
 			allImagePath.add(imagePath);
 		}
 		productDto.setImagePath(allImagePath);
-		
+
 		// sets product and updates its id and saves it
 		productDto.setProduct();
 		Product updated = productDto.getProduct();
@@ -214,23 +225,53 @@ public class ManagerService {
 	}
 
 	/**
-	 * Deletes if product exists or else, throws ProductNotFoundException.
-	 * Also deletes all its images.
+	 * Deletes if product exists or else, throws ProductNotFoundException. Also
+	 * deletes all its images.
+	 * 
 	 * @param id
 	 * @throws ProductNotFoundException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void deleteProduct(long id) throws ProductNotFoundException, IOException {
 		Optional<Product> optionalProduct = productDao.findById(id);
-		
-		if(optionalProduct.isEmpty())
+
+		if (optionalProduct.isEmpty())
 			throw new ProductNotFoundException("No such Product found");
-		
+
 		// deletes entire folder of images
 		Product product = optionalProduct.get();
 		String filePath = product.getImagePath().get(0);
 		FileUtils.deleteDirectory(new File(filePath).getParentFile());
-		
+
 		productDao.deleteById(id);
+	}
+
+	/**
+	 * Checks if product with that Id exist, else throws
+	 * ProductNotFoundException.<br>
+	 * Checks if that product exists in inventory database. Updates it if exists
+	 * else creates new.
+	 * 
+	 * @param inventoryDto
+	 * @return Id of the inventory created
+	 * @throws ProductNotFoundException
+	 */
+	public Long addToInventory(InventoryDto inventoryDto) throws ProductNotFoundException {
+		Optional<Product> dbProduct = productDao.findById(inventoryDto.getId());
+		if (dbProduct.isEmpty()) {
+			throw new ProductNotFoundException("No such product. Please Add new product");
+		}
+
+		Inventory inventoryByProduct = inventoryDao.findByProduct(dbProduct.get());
+		if (inventoryByProduct != null) {
+			inventoryByProduct.setQuantity(inventoryByProduct.getQuantity() + inventoryDto.getQuantity());
+			inventoryDao.save(inventoryByProduct);
+			return inventoryByProduct.getId();
+		}
+
+		inventoryDto.setProduct(dbProduct.get());
+		inventoryDto.setInventory();
+		Inventory save = inventoryDao.save(inventoryDto.getInventory());
+		return save.getId();
 	}
 }

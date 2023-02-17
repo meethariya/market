@@ -3,19 +3,25 @@
  */
 package com.virtusa.market.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.virtusa.market.controller.GeneralController;
-import com.virtusa.market.dao.CartDao;
 import com.virtusa.market.dao.CustomerDao;
+import com.virtusa.market.dao.InventoryDao;
+import com.virtusa.market.dao.ProductDao;
 import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CustomerDto;
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
-import com.virtusa.market.model.Cart;
+import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Customer;
+import com.virtusa.market.model.Inventory;
+import com.virtusa.market.model.Product;
 import com.virtusa.market.model.User;
 
 import jakarta.transaction.Transactional;
@@ -44,7 +50,10 @@ public class GeneralService {
 	private UserDao userDao;
 	
 	@Autowired
-	private CartDao cartDao;
+	private ProductDao productDao;
+	
+	@Autowired
+	private InventoryDao inventoryDao;
 	
 	/**
 	 * Checks 
@@ -54,7 +63,7 @@ public class GeneralService {
 	 * 	<li>Phone of Customer in database for duplicates</li>
 	 * </ul>
 	 * Sets all parameters for CustomerDto's Customer field and finally saves to database.<br>
-	 * Also creates a shopping cart for created customer.
+	 * 
 	 * @param customerDto
 	 * @return ID of the customer saved in database
 	 * @throws CustomerAlreadyExistsException
@@ -77,7 +86,34 @@ public class GeneralService {
 		customerDto.setCustomer();
 		
 		Customer saved = customerDao.save(customerDto.getCustomer());
-		cartDao.save(new Cart(saved));
+
 		return saved.getId();
+	}
+	
+	/**
+	 * @return List of all products
+	 */
+	public List<Product> getAllProducts(){
+		return productDao.findAll();
+	}
+
+	/**
+	 * Get Product by id
+	 * @param id
+	 * @return Product
+	 * @throws ProductNotFoundException 
+	 */
+	public Product getProduct(long id) throws ProductNotFoundException {
+		Optional<Product> optionalProduct = productDao.findById(id);
+		if(optionalProduct.isEmpty())
+			throw new ProductNotFoundException("No Such Product");
+		return optionalProduct.get();
+	}
+	
+	/**
+	 * @return List of all products in Inventory
+	 */
+	public List<Inventory> allInventory(){
+		return inventoryDao.findAll();
 	}
 }

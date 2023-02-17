@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.virtusa.market.model.Customer;
+import com.virtusa.market.model.User;
 
 import jakarta.annotation.Nullable;
 
@@ -25,4 +26,12 @@ public interface CustomerDao extends JpaRepository<Customer, Long>{
 	 */
 	@Nullable
 	public Customer findByPhone(String phone);
+	
+	/**
+	 * Finds Customer by User
+	 * @param user
+	 * @return
+	 */
+	@Nullable
+	public Customer findByUser(User user);
 }

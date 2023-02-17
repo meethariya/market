@@ -4,14 +4,21 @@
 package com.virtusa.market.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /**
  * @author meet
@@ -27,9 +34,11 @@ public class Customer {
 	private long id;
 	
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(unique = true, nullable = false)
 	private User user;
 	
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable = false)
 	private Address address;
 	
 	private boolean gender;
@@ -38,8 +47,12 @@ public class Customer {
 	private String phone;
 	
 	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date dob;
 	
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<CartList> cart = new HashSet<>();
+
 	/**
 	 * Default Constructor
 	 */
@@ -54,8 +67,9 @@ public class Customer {
 	 * @param gender
 	 * @param phone
 	 * @param dob
+	 * @param cart
 	 */
-	public Customer(long id, User user, Address address, boolean gender, String phone, Date dob) {
+	public Customer(long id, User user, Address address, boolean gender, String phone, Date dob, Set<CartList> cart) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -63,6 +77,7 @@ public class Customer {
 		this.gender = gender;
 		this.phone = phone;
 		this.dob = dob;
+		this.cart = cart;
 	}
 
 	/**
@@ -150,12 +165,23 @@ public class Customer {
 	}
 
 	/**
-	 * @return the Customer model string value
+	 * @return the cart
 	 */
+	public Set<CartList> getCart() {
+		return cart;
+	}
+
+	/**
+	 * @param cart the cart to set
+	 */
+	public void setCart(Set<CartList> cart) {
+		this.cart = cart;
+	}
+
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", user=" + user + ", address=" + address + ", gender=" + gender + ", phone="
-				+ phone + ", dob=" + dob + "]";
+				+ phone + ", dob=" + dob + ", cart=" + cart + "]";
 	}
 	
 	

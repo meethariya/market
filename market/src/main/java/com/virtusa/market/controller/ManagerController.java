@@ -4,6 +4,7 @@
 package com.virtusa.market.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import com.virtusa.market.dto.ProductDto;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.model.Order;
 import com.virtusa.market.model.Product;
 import com.virtusa.market.service.ManagerService;
 
@@ -131,5 +133,13 @@ public class ManagerController {
 		}
 		
 		return new ResponseEntity<>(managerService.addToInventory(inventoryDto), HttpStatus.CREATED);
+	}
+	
+	/**
+	 * @return list of Order
+	 */
+	@GetMapping("order")
+	public ResponseEntity<List<Order>> getAllOrders(){
+		return new ResponseEntity<>(managerService.getAllOrders(), HttpStatus.OK);
 	}
 }

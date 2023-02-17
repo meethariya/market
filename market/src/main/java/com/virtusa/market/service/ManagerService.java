@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.virtusa.market.controller.ManagerController;
 import com.virtusa.market.dao.CategoryDao;
 import com.virtusa.market.dao.InventoryDao;
+import com.virtusa.market.dao.OrderDao;
 import com.virtusa.market.dao.ProductDao;
 import com.virtusa.market.dto.InventoryDto;
 import com.virtusa.market.dto.ProductDto;
@@ -29,6 +30,7 @@ import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Category;
 import com.virtusa.market.model.Inventory;
+import com.virtusa.market.model.Order;
 import com.virtusa.market.model.Product;
 
 import jakarta.transaction.Transactional;
@@ -52,6 +54,9 @@ public class ManagerService {
 
 	@Autowired
 	private InventoryDao inventoryDao;
+	
+	@Autowired
+	private OrderDao orderDao;
 
 	@Autowired
 	private MessageSource source;
@@ -275,5 +280,12 @@ public class ManagerService {
 		inventoryDto.setInventory();
 		Inventory save = inventoryDao.save(inventoryDto.getInventory());
 		return save.getId();
+	}
+	
+	/**
+	 * @return List of Orders
+	 */
+	public List<Order> getAllOrders(){
+		return orderDao.findAll();
 	}
 }

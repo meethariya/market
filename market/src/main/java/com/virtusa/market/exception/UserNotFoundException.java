@@ -20,11 +20,11 @@ public class UserNotFoundException extends RuntimeException {
 	}
 
 	/**
-	 * Constructor with message
-	 * @param message
+	 * Constructor with userEmail
+	 * @param email
 	 */
-	public UserNotFoundException(String message) {
-		super(message);
+	public UserNotFoundException(String email) {
+		super("No user with email: " + email);
 	}
 
 	

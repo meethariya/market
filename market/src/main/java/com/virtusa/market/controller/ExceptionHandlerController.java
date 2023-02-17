@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
+import com.virtusa.market.exception.InsufficientStockException;
+import com.virtusa.market.exception.InvalidPaymentMethodException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
@@ -106,5 +108,27 @@ public class ExceptionHandlerController {
 	public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException e){
 		log.error(e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Handles error for InvalidPaymentMethodException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(InvalidPaymentMethodException.class)
+	public ResponseEntity<String> handleInvalidPaymentMethodException(InvalidPaymentMethodException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	/**
+	 * Handles error for InvalidPaymentMethodException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(InsufficientStockException.class)
+	public ResponseEntity<String> handleInsufficientStockException(InsufficientStockException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
 	}
 }

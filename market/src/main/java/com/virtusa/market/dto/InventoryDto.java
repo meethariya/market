@@ -3,6 +3,8 @@
  */
 package com.virtusa.market.dto;
 
+import java.util.Date;
+
 import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Product;
 
@@ -85,6 +87,7 @@ public class InventoryDto {
 		Inventory temp = new Inventory();
 		temp.setQuantity(getQuantity());
 		temp.setProduct(getProduct());
+		temp.setLastImportDate(new Date());
 		this.inventory = temp;
 	}
 	

@@ -19,11 +19,11 @@ public class CustomerNotFoundException extends RuntimeException {
 	}
 
 	/**
-	 * Constructor with message
-	 * @param message
+	 * Constructor with email
+	 * @param email
 	 */
-	public CustomerNotFoundException(String message) {
-		super(message);
+	public CustomerNotFoundException(String email) {
+		super("No Customer with email: " + email);
 	}
 
 	

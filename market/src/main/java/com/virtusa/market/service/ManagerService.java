@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -265,6 +266,7 @@ public class ManagerService {
 		Inventory inventoryByProduct = inventoryDao.findByProduct(dbProduct.get());
 		if (inventoryByProduct != null) {
 			inventoryByProduct.setQuantity(inventoryByProduct.getQuantity() + inventoryDto.getQuantity());
+			inventoryByProduct.setLastImportDate(new Date());
 			inventoryDao.save(inventoryByProduct);
 			return inventoryByProduct.getId();
 		}

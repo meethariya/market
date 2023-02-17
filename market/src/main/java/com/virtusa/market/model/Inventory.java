@@ -5,8 +5,6 @@ package com.virtusa.market.model;
 
 import java.util.Date;
 
-import org.hibernate.annotations.UpdateTimestamp;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,11 +35,11 @@ public class Inventory {
 	@Column(nullable = false)
 	private long quantity;
 	
-	@UpdateTimestamp
 	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Date lastImportDate;
 	
+	@Temporal(TemporalType.DATE)
 	private Date lastSoldDate;
 
 	/**

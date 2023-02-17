@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virtusa.market.dto.CartDto;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
+import com.virtusa.market.exception.InsufficientStockException;
+import com.virtusa.market.exception.InvalidPaymentMethodException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.CartList;
 import com.virtusa.market.service.CustomerService;
@@ -67,9 +70,42 @@ public class CustomerController {
 
 		return new ResponseEntity<>(customerService.addToCart(cart, auth.getName()), HttpStatus.CREATED);
 	}
-	
+
+	/**
+	 * Gets customer's cart
+	 * 
+	 * @param auth
+	 * @return set of cart Items
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
 	@GetMapping("/cart")
-	public ResponseEntity<Set<CartList>> getCustomerCart(Authentication auth){
-		return new ResponseEntity<>(customerService.getCart(auth.getName()), HttpStatus.CREATED);
+	public ResponseEntity<Set<CartList>> getCustomerCart(Authentication auth) {
+		return new ResponseEntity<>(customerService.getCart(auth.getName()), HttpStatus.OK);
 	}
+
+	/**
+	 * Place customer's order.
+	 * 
+	 * @param payment
+	 * @param auth
+	 * @return Id of the order placed
+	 * @throws InvalidPaymentMethodException
+	 * @throws InsufficientStockException
+	 * @throws ProductNotFoundException
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	@PostMapping("/order")
+	public ResponseEntity<Long> placeOrder(@RequestParam(name = "payment", required = false) String payment, Authentication auth)
+			throws InvalidPaymentMethodException, ProductNotFoundException, InsufficientStockException {
+
+		if (payment == null || payment.isBlank()) {
+			throw new InvalidPaymentMethodException("Enter valid payment method");
+		}
+
+		return new ResponseEntity<>(customerService.placeOrder(auth.getName(), payment), HttpStatus.CREATED);
+	}
+	
+	
 }

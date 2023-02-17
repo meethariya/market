@@ -17,6 +17,7 @@ import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.InsufficientStockException;
 import com.virtusa.market.exception.InvalidPaymentMethodException;
+import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
@@ -122,7 +123,7 @@ public class ExceptionHandlerController {
 	}
 	
 	/**
-	 * Handles error for InvalidPaymentMethodException
+	 * Handles error for InsufficientStockException
 	 * @param e
 	 * @return Error Message response
 	 */
@@ -130,5 +131,16 @@ public class ExceptionHandlerController {
 	public ResponseEntity<String> handleInsufficientStockException(InsufficientStockException e){
 		log.error(e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	/**
+	 * Handles error for OrderNotFoundException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(OrderNotFoundException.class)
+	public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}
 }

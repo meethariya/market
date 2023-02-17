@@ -4,6 +4,7 @@
 package com.virtusa.market.exception;
 
 /**
+ * Throws <strong>Unchecked</strong> Exception if Customer is not found.
  * @author meet
  * @since 17-Feb-2023
  */

@@ -21,6 +21,7 @@ import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CartDto;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.InsufficientStockException;
+import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
 import com.virtusa.market.model.CartList;
@@ -89,17 +90,7 @@ public class CustomerService {
 		}
 		cartDto.setProduct(findById.get());
 
-		// checks if user with authenticated email exists or not
-		User user = userDao.findByEmail(customerEmail);
-		if (user == null) {
-			throw new UserNotFoundException(customerEmail);
-		}
-
-		// checks if Particular user is a customer or not
-		Customer customer = customerDao.findByUser(user);
-		if (customer == null) {
-			throw new CustomerNotFoundException(customerEmail);
-		}
+		Customer customer = customerValidator(customerEmail);
 
 		// checks if the product is already in customer's cart
 		Set<CartList> cart = customer.getCart();
@@ -139,17 +130,7 @@ public class CustomerService {
 	 * @throws CustomerNotFoundException
 	 */
 	public Set<CartList> getCart(String customerEmail) {
-		// checks if user with authenticated email exists or not
-		User user = userDao.findByEmail(customerEmail);
-		if (user == null) {
-			throw new UserNotFoundException(customerEmail);
-		}
-
-		// checks if Particular user is a customer or not
-		Customer customer = customerDao.findByUser(user);
-		if (customer == null) {
-			throw new CustomerNotFoundException(customerEmail);
-		}
+		Customer customer = customerValidator(customerEmail);
 
 		return customer.getCart();
 	}
@@ -157,22 +138,23 @@ public class CustomerService {
 	/**
 	 * Performs several validation actions before placing an Order.<br>
 	 * <ul>
-	 * 	<li>Validates existing User with authenticated email</li>
-	 * 	<li>Validates existing Customer with authenticated email</li>
-	 * 	<li>Creates new Order and sets it's attributes</li>
-	 * 	<ul>
-	 * 		<li>Sets Payment method from user input</li>
-	 * 		<li>Sets cartItems from Cart of the Authenticated Customer</li>
-	 * 		<li>Goes through each cart item</li>
-	 * 		<ul>
-	 * 			<li>Checks if the cartItem's product is in Inventory</li>
-	 * 			<li>Checks if cartItem's quantity is <= quantity in Inventory</li>
-	 * 		</ul>
-	 * 		<li>Modifies Inventory's quantity and Last Sold Date</li>
-	 * 		<li>Saves the Order</li>
-	 * 	</ul>
-	 * 	<li>Clears the Customer's cart</li>
+	 * <li>Validates existing User with authenticated email</li>
+	 * <li>Validates existing Customer with authenticated email</li>
+	 * <li>Creates new Order and sets it's attributes</li>
+	 * <ul>
+	 * <li>Sets Payment method from user input</li>
+	 * <li>Sets cartItems from Cart of the Authenticated Customer</li>
+	 * <li>Goes through each cart item</li>
+	 * <ul>
+	 * <li>Checks if the cartItem's product is in Inventory</li>
+	 * <li>Checks if cartItem's quantity is <= quantity in Inventory</li>
 	 * </ul>
+	 * <li>Modifies Inventory's quantity and Last Sold Date</li>
+	 * <li>Saves the Order</li>
+	 * </ul>
+	 * <li>Clears the Customer's cart</li>
+	 * </ul>
+	 * 
 	 * @param customerEmail
 	 * @param paymentMethod
 	 * @return Id of the Order placed
@@ -183,29 +165,19 @@ public class CustomerService {
 	 */
 	public long placeOrder(String customerEmail, String paymentMethod)
 			throws ProductNotFoundException, InsufficientStockException {
-		// checks if user with authenticated email exists or not
-		User user = userDao.findByEmail(customerEmail);
-		if (user == null) {
-			throw new UserNotFoundException(customerEmail);
-		}
+		Customer customer = customerValidator(customerEmail);
 
-		// checks if Particular user is a customer or not
-		Customer customer = customerDao.findByUser(user);
-		if (customer == null) {
-			throw new CustomerNotFoundException(customerEmail);
-		}
-		
 		// create new order and set its attributes
 		Order order = new Order();
-		
+
 		order.setPayementMethod(paymentMethod);
 		order.setCart(customer.getCart());
-		
+
 		// checking the product and quantity in inventory.
 		double price = 0;
 		for (CartList i : order.getCart()) {
 			// calculate price
-			price += i.getProduct().getPrice();
+			price += i.getProduct().getPrice() * i.getQuantity();
 
 			Inventory findByProduct = inventoryDao.findByProduct(i.getProduct());
 			// if product does not exist in inventory
@@ -218,13 +190,13 @@ public class CustomerService {
 						+ " of " + findByProduct.getProduct().getBrand() + " available.";
 				throw new InsufficientStockException(errorMessage);
 			}
-			
+
 			// modify inventory
-			findByProduct.setQuantity(findByProduct.getQuantity()-i.getQuantity());
+			findByProduct.setQuantity(findByProduct.getQuantity() - i.getQuantity());
 			findByProduct.setLastSoldDate(new Date());
 			inventoryDao.save(findByProduct);
 		}
-		
+
 		order.setPrice(price);
 		order.setCustomer(customer);
 
@@ -236,5 +208,64 @@ public class CustomerService {
 		customerDao.save(customer);
 
 		return savedOrder.getId();
+	}
+
+	/**
+	 * Get All orders for the given customer.
+	 * 
+	 * @param customerEmail
+	 * @return List of Order
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	public List<Order> getMyOrders(String customerEmail) {
+		Customer customer = customerValidator(customerEmail);
+		return orderDao.findByCustomer(customer);
+	}
+
+	/**
+	 * Finds order by Id. If order is not of the authenticated Customer; throws an exception
+	 * @param orderId
+	 * @param customerEmail
+	 * @return Order
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 * @throws OrderNotFoundException
+	 */
+	public Order findOrder(long orderId, String customerEmail) {
+		Customer customer = customerValidator(customerEmail);
+		
+		Optional<Order> findById = orderDao.findById(orderId);
+		if(findById.isEmpty())
+			throw new OrderNotFoundException("No Order Found");
+		
+		Order order = findById.get();
+		if(order.getCustomer().getId()!=customer.getId())
+			throw new OrderNotFoundException("This order is not yours.");
+		
+		return order;
+	}
+
+	/**
+	 * Validates User and if its a customer using its email id
+	 * @param customerEmail
+	 * @return Customer
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	private Customer customerValidator(String customerEmail) {
+		// checks if user with authenticated email exists or not
+		User user = userDao.findByEmail(customerEmail);
+		if (user == null) {
+			throw new UserNotFoundException(customerEmail);
+		}
+
+		// checks if Particular user is a customer or not
+		Customer customer = customerDao.findByUser(user);
+		if (customer == null) {
+			throw new CustomerNotFoundException(customerEmail);
+		}
+		
+		return customer;
 	}
 }

@@ -3,6 +3,7 @@
  */
 package com.virtusa.market.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +14,22 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virtusa.market.dto.CartDto;
+import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.InsufficientStockException;
 import com.virtusa.market.exception.InvalidPaymentMethodException;
+import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.exception.UserNotFoundException;
 import com.virtusa.market.model.CartList;
+import com.virtusa.market.model.Order;
 import com.virtusa.market.service.CustomerService;
 
 import jakarta.validation.Valid;
@@ -107,5 +113,30 @@ public class CustomerController {
 		return new ResponseEntity<>(customerService.placeOrder(auth.getName(), payment), HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Get all orders for the authenticated Customer.
+	 * 
+	 * @param auth
+	 * @return List of Order
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	@GetMapping("/order")
+	public ResponseEntity<List<Order>> getMyOrders(Authentication auth){
+		return new ResponseEntity<>(customerService.getMyOrders(auth.getName()), HttpStatus.OK);
+	}
 	
+	/**
+	 * Finds order by its Id
+	 * 
+	 * @param orderId
+	 * @return Order
+	 * @throws OrderNotFoundException
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	@GetMapping("/order/{id}")
+	public ResponseEntity<Order> findOrder(@PathVariable("id") long orderId, Authentication auth){
+		return new ResponseEntity<>(customerService.findOrder(orderId, auth.getName()), HttpStatus.OK);
+	}
 }

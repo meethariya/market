@@ -7,11 +7,5 @@ import { Component } from '@angular/core';
   ]
 })
 export class NavbarComponent {
-  email!: string;
-  password!: string;
-
-  login(){
-    console.log(this.email);
-    console.log(this.password);
-  }
+  
 }

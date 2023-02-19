@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author meet
@@ -22,48 +24,51 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends AbstractSecurityWebApplicationInitializer{
-	
+public class SecurityConfig extends AbstractSecurityWebApplicationInitializer implements WebMvcConfigurer {
+
 	@Autowired
 	private DataSource dataSource;
-	
+
 	/**
 	 * Security configuration for all URLs, Login, Logout, CSRF and basic HTTP.
+	 * 
 	 * @param http
 	 * @return Security FilterChain
 	 * @throws Exception
 	 */
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-		
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
 		http
 			.authorizeHttpRequests()
-			.requestMatchers("/").permitAll()
-			.requestMatchers("/register").anonymous()
-			.requestMatchers("/postLogin").authenticated()
-			.requestMatchers("/product").authenticated()
-			.requestMatchers("/product/*").authenticated()
-			.requestMatchers("/inventory").authenticated()
-			.requestMatchers("/customer/**").hasAuthority("Customer")
-			.requestMatchers("/manager/**").hasAuthority("Manager")
-			.and()
-		   .httpBasic()
-		   	.and()
-		   .formLogin()
-		   	.loginProcessingUrl("/login")
-		   	.usernameParameter("email")
-		   	.defaultSuccessUrl("/postLogin")
-		   	.permitAll()
-		   	.and()
-		   .csrf()
-		    .disable();
-		
+				.requestMatchers("/").permitAll()
+				.requestMatchers("/register").anonymous()
+				.requestMatchers("/postLogin").authenticated()
+				.requestMatchers("/product").authenticated()
+				.requestMatchers("/product/*").authenticated()
+				.requestMatchers("/inventory").authenticated()
+				.requestMatchers("/customer/**").hasAuthority("Customer")
+				.requestMatchers("/manager/**").hasAuthority("Manager")
+				.and()
+			.httpBasic()
+				.and()
+			.cors()
+				.and()
+			.formLogin()
+				.usernameParameter("email")
+				.defaultSuccessUrl("/postLogin")
+				.permitAll()
+				.and()
+			.csrf()
+				.disable();
+
 		return http.build();
 	}
-	
+
 	/**
 	 * Sets query to get User for login and role verification.
 	 * Password encoder is autowired.
+	 * 
 	 * @param auth
 	 * @param pe
 	 * @throws Exception
@@ -78,5 +83,14 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer{
 			.dataSource(dataSource)
 			.passwordEncoder(pe);
 	}
-	
+
+	/**
+	 * Cross origin security configuration
+	 * 
+	 * @return WebMvcConfigurer
+	 */
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+	}
 }

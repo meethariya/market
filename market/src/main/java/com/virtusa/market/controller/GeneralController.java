@@ -3,16 +3,16 @@
  */
 package com.virtusa.market.controller;
 
-import java.net.URI;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +38,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/")
+@CrossOrigin(origins = "http://localhost:4200")
 public class GeneralController {
 
 	@Autowired
@@ -69,15 +70,15 @@ public class GeneralController {
 	 * @param auth
 	 * @return Redirects to {@link CustomerController#customerHome()} or {@link ManagerController#managerHome()}
 	 */
-	@GetMapping("/postLogin")
-	public ResponseEntity<HttpHeaders> postLogin(Authentication auth){
-		HttpHeaders httpHeader = new HttpHeaders();
+	@GetMapping(path = "/postLogin", produces = "application/json")
+	public ResponseEntity<JSONObject> postLogin(Authentication auth){
+		JSONObject jo = new JSONObject();
 		if(auth.getAuthorities().stream().allMatch(a -> a.getAuthority().equalsIgnoreCase("customer"))) {
-			httpHeader.setLocation(URI.create("customer/"));
+			jo.put("role", "customer");
 		}else {
-			httpHeader.setLocation(URI.create("manager/"));
+			jo.put("role", "manager");
 		}
-		return new ResponseEntity<>(httpHeader,HttpStatus.PERMANENT_REDIRECT);
+		return new ResponseEntity<>(jo, HttpStatus.OK);
 	}
 	
 	/**
@@ -105,5 +106,10 @@ public class GeneralController {
 	@GetMapping("/inventory")
 	public ResponseEntity<List<Inventory>> allInventory(){
 		return new ResponseEntity<>(service.allInventory(), HttpStatus.OK);
+	}
+	
+	@GetMapping(name = "/", produces = "application/json")
+	public ResponseEntity<List<Product>> hello(){
+		return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
 	}
 }

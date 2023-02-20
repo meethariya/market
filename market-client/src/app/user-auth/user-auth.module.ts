@@ -4,13 +4,15 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LogoutComponent } from './logout/logout.component';
 
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    LogoutComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +20,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     FontAwesomeModule
   ],
   exports: [
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    LogoutComponent
   ]
 })
 export class UserAuthModule { }

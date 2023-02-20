@@ -1,5 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { UserAuthService } from '../user-auth.service';
 
 @Component({
@@ -13,6 +12,7 @@ export class LoginComponent {
   failedLogin:boolean = false;
 
   constructor(private userAuthService: UserAuthService) {}
+  @Output() loginEmitter: EventEmitter<void> = new EventEmitter();
 
   login() {
     this.userAuthService.login(this.email, this.password).subscribe({
@@ -24,6 +24,7 @@ export class LoginComponent {
           )
         );
         console.log(localStorage.getItem('cred'));
+        this.loginEmitter.emit();
       },
       error: (err) => this.failedLogin=true
     });

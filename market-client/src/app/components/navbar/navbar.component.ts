@@ -7,5 +7,13 @@ import { Component } from '@angular/core';
   ]
 })
 export class NavbarComponent {
-  
+  authenticated = false;
+
+  loggedIn(){
+    this.authenticated = true;
+  }
+
+  loggedOut(){
+    this.authenticated = false;
+  }
 }

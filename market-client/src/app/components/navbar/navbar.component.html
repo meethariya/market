@@ -24,7 +24,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       </ul>
-      <div class="rounded peach">
+      <div class="rounded peach" *ngIf="!authenticated">
         <button
           type="button"
           class="btn"
@@ -35,8 +35,11 @@
         </button>
       </div>
       <!-- model -->
-      <app-login></app-login>
-      
+      <app-login (loginEmitter)="loggedIn()"></app-login>
+
+      <div class="rounded peach" *ngIf="authenticated">
+        <app-logout (logoutEmitter)="loggedOut()"></app-logout>
+      </div>
     </div>
   </div>
 </nav>

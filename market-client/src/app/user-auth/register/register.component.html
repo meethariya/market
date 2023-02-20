@@ -1,0 +1,247 @@
+<div class="container w-50 mt-5">
+  <form class="g-3 needs-validation" (ngSubmit)="register()">
+    <h1 class="text-center">Register</h1>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="failedStatus">
+      <fa-icon [icon]="notOk"></fa-icon><strong>Failed!</strong> {{errorMessage}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success" role="alert" *ngIf="successStatus">
+      <fa-icon [icon]="ok"></fa-icon>Registered Successfully <a href="/" class="alert-link">Click here to login</a>.
+    </div>
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <label for="firstName" class="form-label">First name</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="firstName"
+          id="firstName"
+          name="firstName"
+          placeholder="Mark"
+          required
+          autofocus
+          maxlength="15"
+        />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in First name.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="lastName" class="form-label">Last name</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="lastName"
+          id="lastName"
+          name="lastName"
+          placeholder="Otto"
+          required
+          maxlength="15"
+        />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in last name.</div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="phone"
+          id="phone"
+          name="phone"
+          required
+          min="1000000000"
+          max="9999999999"
+          placeholder="80595XXXXX"
+        />
+        <div class="form-text">10 digits number</div>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please enter a valid Phone Number.</div>
+      </div>
+      <div class="col-md-4">
+        <label for="dob" class="form-label">Date of Birth</label>
+        <input type="date" class="form-control" id="dob" name="dob" [(ngModel)]="dob" required />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please enter Date of Birth.</div>
+      </div>
+      <div class="col-md-4">
+        <label for="gender" class="form-label">Gender</label><br />
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="male"
+            name="gender"
+            [(ngModel)]="gender"
+            value="male"
+            checked
+          />
+          <label class="form-check-label" for="male">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="female"
+            name="gender"
+            [(ngModel)]="gender"
+            value="female"
+          />
+          <label class="form-check-label" for="female">Female</label>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <label for="userEmail" class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          id="userEmail"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Mark12@mail.com"
+          required
+          maxlength="50"
+        />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in email.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="userPassword" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="userPassword"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="8"
+        />
+        <div class="form-text">
+          For secure password use combination of upper-case, lower-case,
+          numbers, and special characters greater than 8 characters.
+        </div>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please enter a valid password.</div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <label for="houseNo" class="form-label">House No</label>
+        <input
+          type="text"
+          class="form-control"
+          id="houseNo"
+          name="houseNo"
+          [(ngModel)]="houseNo"
+          placeholder="A-123, White House"
+          required
+          maxlength="30"
+        />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in House no.</div>
+      </div>
+      <div class="col-md-8">
+        <label for="addressLine1" class="form-label">Address Line 1</label>
+        <input
+          type="text"
+          class="form-control"
+          id="addressLine1"
+          name="addressLine1"
+          [(ngModel)]="addressLine1"
+          placeholder="Abc road, near tower"
+          required
+          maxlength="50"
+        />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in address line.</div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <label for="addressLine2" class="form-label">Address Line 2</label>
+        <input
+          type="text"
+          class="form-control"
+          id="addressLine2"
+          name="addressLine2"
+          [(ngModel)]="addressLine2"
+          maxlength="50"
+        />
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <label for="city" class="form-label">City</label>
+        <input
+          type="text"
+          class="form-control"
+          id="city"
+          name="city"
+          [(ngModel)]="city"
+          required
+          placeholder="Mumbai"
+          maxlength="30"
+        />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in City.</div>
+      </div>
+      <div class="col-md-4">
+        <label for="state" class="form-label">State</label>
+        <input
+          type="text"
+          class="form-control"
+          id="state"
+          name="state"
+          [(ngModel)]="state"
+          required
+          placeholder="Maharashtra"
+          maxlength="30"
+        />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in State.</div>
+      </div>
+      <div class="col-md-4">
+        <label for="pincode" class="form-label">Pincode</label>
+        <input
+          type="number"
+          class="form-control"
+          id="pincode"
+          name="pincode"
+          [(ngModel)]="pincode"
+          min="100000"
+          max="999999"
+          required
+          placeholder="123456"
+        />
+        <div class="form-text">6 Digits pincode</div>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please fill in Pincode.</div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-auto mt-2">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="invalidCheck"
+            required
+          />
+          <label class="form-check-label" for="invalidCheck">
+            Agree to terms and conditions
+          </label>
+          <div class="invalid-feedback">You must agree before submitting.</div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-md-12 d-grid">
+        <button class="btn btn-success" type="submit">Register</button>
+      </div>
+    </div>
+  </form>
+</div>

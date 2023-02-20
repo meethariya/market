@@ -29,4 +29,8 @@ export class UserAuthService {
       headers: headers
     });
   }
+
+  register(formData: FormData){
+    return this.httpClient.post(this.path+"/register",formData);
+  }
 }

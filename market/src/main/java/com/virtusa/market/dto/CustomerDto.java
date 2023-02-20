@@ -335,7 +335,7 @@ public class CustomerDto {
 		this.customer.setPhone(getPhone());
 		this.customer.setUser(getUser());
 		try {
-			this.customer.setDob(new SimpleDateFormat("dd/MM/yyyy").parse(getDob()));
+			this.customer.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(getDob()));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

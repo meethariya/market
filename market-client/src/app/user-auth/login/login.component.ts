@@ -23,7 +23,7 @@ export class LoginComponent {
             'Basic ' + window.btoa(this.email + ':' + this.password)
           )
         );
-        // console.log(localStorage.getItem('cred'));
+        console.log(localStorage.getItem('cred'));
       },
       error: (err) => this.failedLogin=true
     });

@@ -36,7 +36,6 @@
       </div>
       <!-- model -->
       <app-login (loginEmitter)="loggedIn()"></app-login>
-
       <div class="rounded peach" *ngIf="authenticated">
         <app-logout (logoutEmitter)="loggedOut()"></app-logout>
       </div>

@@ -116,4 +116,8 @@ public class GeneralService {
 	public List<Inventory> allInventory(){
 		return inventoryDao.findAll();
 	}
+	
+	public User getUser(String email) {
+		return userDao.findByEmail(email);
+	}
 }

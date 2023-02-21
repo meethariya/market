@@ -5,7 +5,6 @@ package com.virtusa.market.controller;
 
 import java.util.List;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,7 @@ import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Product;
+import com.virtusa.market.model.User;
 import com.virtusa.market.service.GeneralService;
 
 import jakarta.validation.Valid;
@@ -66,19 +66,13 @@ public class GeneralController {
 	}
 	
 	/**
-	 * Checks for the role of the logged in user and redirects accordingly
+	 * get user that is authenticated
 	 * @param auth
-	 * @return Redirects to {@link CustomerController#customerHome()} or {@link ManagerController#managerHome()}
+	 * @return User object
 	 */
-	@GetMapping(path = "/postLogin", produces = "application/json")
-	public ResponseEntity<JSONObject> postLogin(Authentication auth){
-		JSONObject jo = new JSONObject();
-		if(auth.getAuthorities().stream().allMatch(a -> a.getAuthority().equalsIgnoreCase("customer"))) {
-			jo.put("role", "customer");
-		}else {
-			jo.put("role", "manager");
-		}
-		return new ResponseEntity<>(jo, HttpStatus.OK);
+	@GetMapping(path = "/postLogin")
+	public ResponseEntity<User> postLogin(Authentication auth){
+		return new ResponseEntity<>(service.getUser(auth.getName()), HttpStatus.OK);
 	}
 	
 	/**

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { UserAuthService } from '../user-auth.service';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({
   selector: 'app-register',

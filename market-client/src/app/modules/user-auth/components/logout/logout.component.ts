@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({
   selector: 'app-logout',
@@ -9,11 +10,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class LogoutComponent {
   @Output() logoutEmitter: EventEmitter<void> = new EventEmitter();
 
+  constructor(private userAuthService: UserAuthService){}
+
   logout(){
-    let credentials = localStorage.getItem('cred');
-    if(credentials!=null){
-      localStorage.removeItem('cred');
-    }
+    this.userAuthService.logout();
     this.logoutEmitter.emit();
   }
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GeneralService } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +8,11 @@ import { Component } from '@angular/core';
   ]
 })
 export class NavbarComponent {
-  authenticated = false;
+  authenticated: boolean;
+
+  constructor(private generalService: GeneralService){
+    this.authenticated = generalService.isAuthenticated();
+  }
 
   loggedIn(){
     this.authenticated = true;

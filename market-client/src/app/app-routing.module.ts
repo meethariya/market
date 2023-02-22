@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { CustomerGuard } from './modules/customer/guard/customer.guard';
+import { ManagerGuard } from './modules/manager/guard/manager.guard';
 import { RegisterComponent } from './modules/user-auth/components/register/register.component';
 
 const routes: Routes = [
@@ -13,6 +15,7 @@ const routes: Routes = [
       import('./modules/customer/customer.module').then(
         (m) => m.CustomerModule
       ),
+    canActivateChild: [CustomerGuard]
   },
   {
     path: 'Manager',
@@ -20,6 +23,7 @@ const routes: Routes = [
       import('./modules/manager/manager.module').then(
         (m) => m.ManagerModule
       ),
+    canActivateChild: [ManagerGuard]
   },
   { path: '**', component: NotFoundComponent },
 ];

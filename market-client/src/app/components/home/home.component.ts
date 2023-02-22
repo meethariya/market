@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CustomerService } from 'src/app/modules/customer/services/customer.service';
+import { GeneralService } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-home',
@@ -19,4 +22,23 @@ import { Component } from '@angular/core';
     `,
   ],
 })
-export class HomeComponent {}
+export class HomeComponent implements OnInit {
+  constructor(
+    private generalService: GeneralService,
+    private customerService: CustomerService,
+    private router: Router
+  ) {
+    
+  }
+  async ngOnInit(): Promise<void> {
+    // if logged in, avoids user to go to home page
+    if (this.generalService.isAuthenticated()) {
+      // goes to role based home page.
+      if (await this.customerService.isCustomer()) {
+        this.router.navigate(['Customer']);
+      } else {
+        this.router.navigate(['Manager']);
+      }
+    }
+  }
+}

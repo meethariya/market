@@ -1,1 +1,7 @@
-<p>customer-home works!</p>
+<div class="container my-5">
+    <div class="row" *ngFor="let product of products">
+        <div class="col-md-4">
+            <app-product [product]="product"></app-product>
+        </div>        
+    </div>
+</div>

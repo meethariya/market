@@ -1,0 +1,63 @@
+<div class="d-grid text-center rounded blue mb-3">
+  <button
+    class="btn"
+    (click)="showQuantity = !showQuantity"
+    *ngIf="!showQuantity"
+  >
+    Add to Cart
+  </button>
+</div>
+<div class="container" *ngIf="showQuantity">
+  <div class="row">
+    <div class="col-sm-2 d-grid mb-3">
+      <button
+        class="btn btn-danger"
+        (click)="showQuantity = !showQuantity"
+        data-bs-toggle="tooltip"
+        title="Cancel"
+      >
+        <fa-icon [icon]="cancel"></fa-icon>
+      </button>
+    </div>
+    <div class="col-sm-8 mb-3">
+      <div
+        class="btn-group"
+        role="group"
+        aria-label="Basic mixed styles example"
+      >
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="quantity = quantity - 1"
+          [attr.disabled]="quantity <= 1 ? true : null"
+        >
+          <fa-icon [icon]="minus"></fa-icon>
+        </button>
+        <input
+          class="form-control text-center"
+          type="number"
+          style="flex-grow: 0; flex-basis: 75px"
+          value="{{ quantity }}"
+          readonly
+        />
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          (click)="quantity = quantity + 1"
+        >
+          <fa-icon [icon]="plus"></fa-icon>
+        </button>
+      </div>
+    </div>
+    <div class="col-sm-2 d-grid mb-3">
+      <button
+        class="btn btn-success"
+        data-bs-toggle="tooltip"
+        title="Add to Cart"
+        (click)="addToCart()"
+      >
+        <fa-icon [icon]="check"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>

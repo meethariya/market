@@ -50,6 +50,7 @@ export class UserAuthService {
    * removes the token and redirects to home page
    */
   logout(): void {
+    this.httpClient.get(this.path+"/logout").subscribe();
     localStorage.removeItem('token');
     this.router.navigate(['/']);
   }

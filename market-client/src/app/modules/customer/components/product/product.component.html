@@ -1,0 +1,49 @@
+<div class="card">
+  <div id="carouselExample" class="carousel">
+    <div class="carousel-inner">
+      <div
+        *ngFor="let image of product.imagePath; let i = index"
+        [attr.data-index]="i"
+      >
+        <div class="carousel-item" [ngClass]="i === 0 ? 'active' : ''">
+          <img
+            src="{{ image.split('src/')[1] }}"
+            class="card-img-top img-fluid"
+            alt="{{ i }}"
+            style="width: 100%; height: 250px; object-fit: cover"
+          />
+        </div>
+      </div>
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExample"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExample"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class="card-body">
+    <h6 class="card-subtitle mb-2 text-muted">
+      {{ product.category.categoryName }}
+    </h6>
+    <h5 class="card-title">{{ product.name }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ product.brand }}</h6>
+    <div class="d-flex justify-content-between">
+      <p>{{ product.price | currency: 'INR'}}</p>
+      <p>{{ product.rating }} stars</p>
+    </div>
+    <app-add-to-cart [productId]="product.id" (cartSuccessEmitter)="successEmit()"></app-add-to-cart>
+  </div>
+</div>

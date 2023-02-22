@@ -59,6 +59,9 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 				.defaultSuccessUrl("/postLogin")
 				.permitAll()
 				.and()
+			.logout()
+			 .permitAll()
+			 .and()
 			.csrf()
 				.disable();
 

@@ -3,33 +3,41 @@ import { Injectable } from '@angular/core';
 import { lastValueFrom, Observable, take } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GeneralService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
+  serverPath:string = 'http://localhost:8081';
 
-  isAuthenticated(): boolean{
-    let token = localStorage.getItem('token');
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  isAuthenticated(): boolean {
+    let token = this.getToken();
     return token != null;
   }
 
-  async roleVerifier(role:string): Promise<boolean> {
-    let token = localStorage.getItem('token');
+  async roleVerifier(role: string): Promise<boolean> {
+    let token = this.getToken();
 
     if (token == null) return false;
 
-    let user = await lastValueFrom(this.getUser(token).pipe(take(1)));
+    let user = await lastValueFrom(this.getUser().pipe(take(1)));
 
     if (user == null) return false;
 
     return user.role === role;
   }
 
-  getUser(token: string): Observable<any> {
-    let headers = new HttpHeaders({ Authorization: 'Basic ' + token });
-    return this.http.get('http://localhost:8081/postLogin', {
-      headers: headers,
+  getUser(): Observable<any> {
+    return this.http.get(this.serverPath+'/postLogin', {
+      headers: this.headerGenerator(),
     });
+  }
+
+  headerGenerator(): HttpHeaders {
+    return new HttpHeaders({ Authorization: 'Basic ' + this.getToken() });
   }
 }

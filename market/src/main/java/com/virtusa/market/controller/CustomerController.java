@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virtusa.market.dto.CartDto;
+import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.InsufficientStockException;
@@ -90,6 +92,19 @@ public class CustomerController {
 		return new ResponseEntity<>(customerService.getCart(auth.getName()), HttpStatus.OK);
 	}
 
+	/**
+	 * Modifies quantity of the cartlist item
+	 * 
+	 * @param id
+	 * @param quantityDiff
+	 * @return CartList
+	 * @throws CartListNotFoundException
+	 */
+	@PutMapping("/cart")
+	public ResponseEntity<CartList> editCartItemQuantity(@RequestParam("cartListId") long id, @RequestParam("quantity") long quantityDiff){
+		return new ResponseEntity<>(customerService.modifyCartItem(id, quantityDiff), HttpStatus.ACCEPTED);	
+	}
+	
 	/**
 	 * Place customer's order.
 	 * 

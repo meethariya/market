@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
@@ -140,6 +141,17 @@ public class ExceptionHandlerController {
 	 */
 	@ExceptionHandler(OrderNotFoundException.class)
 	public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Handles error for CartListNotFoundException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(CartListNotFoundException.class)
+	public ResponseEntity<String> handleCartListNotFoundException(CartListNotFoundException e){
 		log.error(e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}

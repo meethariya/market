@@ -19,6 +19,7 @@ import com.virtusa.market.dao.OrderDao;
 import com.virtusa.market.dao.ProductDao;
 import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CartDto;
+import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.InsufficientStockException;
 import com.virtusa.market.exception.OrderNotFoundException;
@@ -267,5 +268,22 @@ public class CustomerService {
 		}
 		
 		return customer;
+	}
+
+	/**
+	 * Modifies( +/- ) the quantity of the CartList item.
+	 * @param id
+	 * @param quantityDiff
+	 * @return CartList
+	 * @throws CartListNotFoundException
+	 */
+	public CartList modifyCartItem(long id, long quantityDiff) {
+		Optional<CartList> findById = cartListDao.findById(id);
+		
+		if(findById.isEmpty()) throw new CartListNotFoundException("No Cart Item with id: "+id);
+		
+		CartList cartList = findById.get();
+		cartList.setQuantity(cartList.getQuantity() + quantityDiff);
+		return cartListDao.save(cartList);
 	}
 }

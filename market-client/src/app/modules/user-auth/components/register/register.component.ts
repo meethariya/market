@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({

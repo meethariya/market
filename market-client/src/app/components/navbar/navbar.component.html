@@ -22,7 +22,49 @@
       <span class="navbar-toggler-icon text-white"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <!-- Navbar for UnAuthenticated -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="role == null">
+      </ul>
+      <!-- Navbar for Customer -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="role === 'Customer'">
+        <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link text-white" aria-current="page" routerLink="/customer">Home</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link text-white" routerLink="/customer/cart">Cart</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link text-white" routerLink="/customer/order">My Order</a>
+        </li>
+      </ul>
+      <!-- Navbar for Manager -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="role === 'Manager'">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Dropdown
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled">Disabled</a>
+        </li>
       </ul>
       <div class="rounded peach" *ngIf="!authenticated">
         <button
@@ -35,7 +77,7 @@
         </button>
       </div>
       <!-- model -->
-      <app-login (loginEmitter)="loggedIn()"></app-login>
+      <app-login (loginEmitter)="loggedIn($event)"></app-login>
       <div class="rounded peach" *ngIf="authenticated">
         <app-logout (logoutEmitter)="loggedOut()"></app-logout>
       </div>

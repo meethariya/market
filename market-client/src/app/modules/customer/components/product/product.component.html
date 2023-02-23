@@ -1,5 +1,5 @@
 <div class="card">
-  <div id="carouselExample" class="carousel">
+  <div attr.id="carouselExample{{ product.id }}" class="carousel">
     <div class="carousel-inner">
       <div
         *ngFor="let image of product.imagePath; let i = index"
@@ -18,7 +18,7 @@
     <button
       class="carousel-control-prev"
       type="button"
-      data-bs-target="#carouselExample"
+      attr.data-bs-target="#carouselExample{{ product.id }}"
       data-bs-slide="prev"
     >
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -27,7 +27,7 @@
     <button
       class="carousel-control-next"
       type="button"
-      data-bs-target="#carouselExample"
+      attr.data-bs-target="#carouselExample{{ product.id }}"
       data-bs-slide="next"
     >
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -41,9 +41,18 @@
     <h5 class="card-title">{{ product.name }}</h5>
     <h6 class="card-subtitle mb-2 text-muted">{{ product.brand }}</h6>
     <div class="d-flex justify-content-between">
-      <p>{{ product.price | currency: 'INR'}}</p>
+      <p>{{ product.price | currency : "INR" }}</p>
       <p>{{ product.rating }} stars</p>
     </div>
-    <app-add-to-cart [productId]="product.id" (cartSuccessEmitter)="successEmit()"></app-add-to-cart>
+    <app-add-to-cart
+      *ngIf="product.inStock; else outOfStock"
+      [productId]="product.id"
+      (cartSuccessEmitter)="successEmit()"
+    ></app-add-to-cart>
+    <ng-template #outOfStock>
+      <div class="d-grid text-center rounded peach mb-3">
+        <button class="btn border border-0" disabled>Out Of Stock, Stay Tuned.</button>
+      </div>
+    </ng-template>
   </div>
 </div>

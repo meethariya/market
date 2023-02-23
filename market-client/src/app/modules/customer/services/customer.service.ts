@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { lastValueFrom, map, Observable, Subject, take } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Inventory } from 'src/app/models/inventory';
 import { Product } from 'src/app/models/product';
 import { GeneralService } from 'src/app/services/general.service';
 
@@ -18,12 +19,11 @@ export class CustomerService {
   }
 
   getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(
-      this.generalService.serverPath + '/product',
-      {
-        headers: this.generalService.headerGenerator(),
-      }
-    );
+    return this.generalService.getAllProducts();
+  }
+
+  getInventory(): Observable<Inventory[]> {
+    return this.generalService.getInventory();
   }
 
   addToCart(cartData: FormData) {

@@ -1,4 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from 'src/app/models/product';
 
 @Component({
@@ -8,8 +8,9 @@ import { Product } from 'src/app/models/product';
 })
 export class ProductComponent {
   @Input() product!: Product;
+  @Output() addToCartSuccessEmitter: EventEmitter<any> = new EventEmitter();
   
   successEmit() {
-    // TODO: display success alert message in customer home. 
+    this.addToCartSuccessEmitter.emit();
   }
 }

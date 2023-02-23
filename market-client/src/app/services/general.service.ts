@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { lastValueFrom, Observable, take } from 'rxjs';
+import { catchError, lastValueFrom, Observable, take, throwError } from 'rxjs';
+import { Inventory } from '../models/inventory';
+import { Product } from '../models/product';
 
 @Injectable({
   providedIn: 'root',
@@ -8,10 +10,14 @@ import { lastValueFrom, Observable, take } from 'rxjs';
 export class GeneralService {
   constructor(private http: HttpClient) {}
 
-  serverPath:string = 'http://localhost:8081';
+  serverPath: string = 'http://localhost:8081';
 
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  getRole(): string | null {
+    return localStorage.getItem('role');
   }
 
   isAuthenticated(): boolean {
@@ -32,12 +38,24 @@ export class GeneralService {
   }
 
   getUser(): Observable<any> {
-    return this.http.get(this.serverPath+'/postLogin', {
+    return this.http.get(this.serverPath + '/postLogin', {
       headers: this.headerGenerator(),
     });
   }
 
   headerGenerator(): HttpHeaders {
     return new HttpHeaders({ Authorization: 'Basic ' + this.getToken() });
+  }
+
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.serverPath + '/product', {
+      headers: this.headerGenerator(),
+    });
+  }
+
+  getInventory(): Observable<Inventory[]> {
+    return this.http.get<Inventory[]>(this.serverPath + '/inventory', {
+      headers: this.headerGenerator(),
+    });
   }
 }

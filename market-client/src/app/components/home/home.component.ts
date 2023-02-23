@@ -35,9 +35,9 @@ export class HomeComponent implements OnInit {
     if (this.generalService.isAuthenticated()) {
       // goes to role based home page.
       if (await this.customerService.isCustomer()) {
-        this.router.navigate(['Customer']);
+        this.router.navigate(['customer']);
       } else {
-        this.router.navigate(['Manager']);
+        this.router.navigate(['manager']);
       }
     }
   }

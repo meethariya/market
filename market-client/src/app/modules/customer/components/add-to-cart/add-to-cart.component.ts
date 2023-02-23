@@ -1,8 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { faCartPlus, faMinus, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { CustomerService } from '../../services/customer.service';
 
 @Component({

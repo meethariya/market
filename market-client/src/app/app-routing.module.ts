@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   {
-    path: 'Customer',
+    path: 'customer',
     loadChildren: () =>
       import('./modules/customer/customer.module').then(
         (m) => m.CustomerModule
@@ -18,7 +18,7 @@ const routes: Routes = [
     canActivateChild: [CustomerGuard]
   },
   {
-    path: 'Manager',
+    path: 'manager',
     loadChildren: () =>
       import('./modules/manager/manager.module').then(
         (m) => m.ManagerModule

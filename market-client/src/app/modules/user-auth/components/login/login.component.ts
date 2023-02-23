@@ -16,7 +16,7 @@ export class LoginComponent {
     private userAuthService: UserAuthService,
     private router: Router
   ) {}
-  @Output() loginEmitter: EventEmitter<void> = new EventEmitter();
+  @Output() loginEmitter: EventEmitter<string> = new EventEmitter();
 
   /**
    * creates token using email and password.
@@ -36,9 +36,11 @@ export class LoginComponent {
     this.userAuthService.login(formData, token).subscribe({
       next: (user) => {
         this.userAuthService.setToken(token);
+        this.userAuthService.setRole(user.role);
         this.failedLogin = false;
-        this.loginEmitter.emit();
-        this.router.navigate([user.role]);
+        this.loginEmitter.emit(user.role);
+
+        this.router.navigate([user.role.toLowerCase()]);
         document.getElementById('closeButton')!.click();
       },
       error: (err) => {

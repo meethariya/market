@@ -1,7 +1,26 @@
+<!-- actual data -->
 <div class="container my-5">
-    <div class="row" *ngFor="let product of products">
-        <div class="col-md-4">
-            <app-product [product]="product"></app-product>
-        </div>        
+  <div
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+    *ngIf="addedToCart"
+  >
+    <strong>Success!</strong> Item added to cart. You can check your cart
+    <a routerLink="/customer/cart">here</a>.
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+      (click)="addedToCart = !addedToCart"
+    ></button>
+  </div>
+  <div class="row">
+    <div *ngFor="let product of products" class="col-md-4 my-2">
+      <app-product
+        [product]="product"
+        (addToCartSuccessEmitter)="addedToCart = !addedToCart"
+      ></app-product>
     </div>
+  </div>
 </div>

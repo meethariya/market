@@ -29,6 +29,14 @@ export class UserAuthService {
   }
 
   /**
+   * sets role to local storage
+   * @param role
+   */
+  setRole(role: string): void {
+    localStorage.setItem('role', role);
+  }
+
+  /**
    * fetchs token from local storage
    * @returns token
    */
@@ -50,7 +58,7 @@ export class UserAuthService {
    * removes the token and redirects to home page
    */
   logout(): void {
-    this.httpClient.get(this.path+"/logout").subscribe();
+    this.httpClient.get(this.path+"/logout", {responseType:"text"}).subscribe();
     localStorage.removeItem('token');
     this.router.navigate(['/']);
   }

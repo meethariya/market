@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { ManagerRoutingModule } from './manager-routing.module';
 import { ManagerHomeComponent } from './components/manager-home/manager-home.component';
 import { ProductComponent } from './components/product/product.component';
+import { ManagerRoutingModule } from './manager-routing.module';
 
 
 @NgModule({

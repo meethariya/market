@@ -8,6 +8,7 @@ export class Product {
   price: number;
   rating: number;
   imagePath: string[];
+  inStock?: boolean=false;
 
   constructor(
     id: number,

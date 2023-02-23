@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CartList } from 'src/app/models/cart-list';
 import { Inventory } from 'src/app/models/inventory';
 import { Product } from 'src/app/models/product';
 import { GeneralService } from 'src/app/services/general.service';
@@ -27,8 +28,34 @@ export class CustomerService {
   }
 
   addToCart(cartData: FormData) {
-    return this.http.post(this.generalService.serverPath + '/customer/cart', cartData, {
-      headers: this.generalService.headerGenerator(),
-    });
+    return this.http.post(
+      this.generalService.serverPath + '/customer/cart',
+      cartData,
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
+  }
+
+  getCart(): Observable<CartList[]> {
+    return this.http.get<CartList[]>(
+      this.generalService.serverPath + '/customer/cart',
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
+  }
+
+  cartItemQuantityEditor(cartItemId: number, quantityDiff: number) {
+    let temp: FormData = new FormData();
+    temp.set('cartListId', cartItemId.toString());
+    temp.set('quantity', quantityDiff.toString());
+    return this.http.put<CartList>(
+      this.generalService.serverPath + '/customer/cart',
+      temp,
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
   }
 }

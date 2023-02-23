@@ -60,6 +60,7 @@ export class UserAuthService {
   logout(): void {
     this.httpClient.get(this.path+"/logout", {responseType:"text"}).subscribe();
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     this.router.navigate(['/']);
   }
 

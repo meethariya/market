@@ -8,6 +8,7 @@ import { CustomerHomeComponent } from './components/customer-home/customer-home.
 import { OrderComponent } from './components/order/order.component';
 import { ProductComponent } from './components/product/product.component';
 import { CustomerRoutingModule } from './customer-routing.module';
+import { CartItemComponent } from './components/cart-item/cart-item.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CustomerRoutingModule } from './customer-routing.module';
     CartComponent,
     OrderComponent,
     ProductComponent,
-    AddToCartComponent
+    AddToCartComponent,
+    CartItemComponent
   ],
   imports: [
     CommonModule,

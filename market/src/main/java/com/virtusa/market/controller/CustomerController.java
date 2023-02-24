@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,6 +108,17 @@ public class CustomerController {
 		return new ResponseEntity<>(customerService.modifyCartItem(id, quantityDiff), HttpStatus.ACCEPTED);	
 	}
 	
+	/**
+	 * Deletes cart item given it's id.
+	 * Silently ignores if no item found with given Id.
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping("/cart/{id}")
+	public ResponseEntity<Long> deleteCartItem(@PathVariable("id") long id, Authentication auth){
+		return new ResponseEntity<>(customerService.deleteCartItem(id, auth.getName()), HttpStatus.OK);
+	}
+		
 	/**
 	 * Place customer's order.
 	 * 

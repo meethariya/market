@@ -286,4 +286,19 @@ public class CustomerService {
 		cartList.setQuantity(cartList.getQuantity() + quantityDiff);
 		return cartListDao.save(cartList);
 	}
+
+	/**
+	 * Deletes the cart item. Ignores silently if Id dosent match any item.
+	 * @param id
+	 * @return id of the deleted cart item
+	 */
+	public long deleteCartItem(long id, String email) {
+		Customer customer = customerValidator(email);
+		for(CartList i: customer.getCart())
+			if(i.getId()==id) {
+				cartListDao.deleteById(id);
+				return id;
+			}
+		throw new CartListNotFoundException("Invalid cartList ID");
+	}
 }

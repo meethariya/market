@@ -21,6 +21,7 @@ import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CartDto;
 import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerNotFoundException;
+import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.InsufficientStockException;
 import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductNotFoundException;
@@ -225,7 +226,9 @@ public class CustomerService {
 	}
 
 	/**
-	 * Finds order by Id. If order is not of the authenticated Customer; throws an exception
+	 * Finds order by Id. If order is not of the authenticated Customer; throws an
+	 * exception
+	 * 
 	 * @param orderId
 	 * @param customerEmail
 	 * @return Order
@@ -235,20 +238,21 @@ public class CustomerService {
 	 */
 	public Order findOrder(long orderId, String customerEmail) {
 		Customer customer = customerValidator(customerEmail);
-		
+
 		Optional<Order> findById = orderDao.findById(orderId);
-		if(findById.isEmpty())
+		if (findById.isEmpty())
 			throw new OrderNotFoundException("No Order Found");
-		
+
 		Order order = findById.get();
-		if(order.getCustomer().getId()!=customer.getId())
+		if (order.getCustomer().getId() != customer.getId())
 			throw new OrderNotFoundException("This order is not yours.");
-		
+
 		return order;
 	}
 
 	/**
 	 * Validates User and if its a customer using its email id
+	 * 
 	 * @param customerEmail
 	 * @return Customer
 	 * @throws UserNotFoundException
@@ -266,36 +270,58 @@ public class CustomerService {
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerEmail);
 		}
-		
+
 		return customer;
 	}
 
 	/**
 	 * Modifies( +/- ) the quantity of the CartList item.
+	 * 
 	 * @param id
 	 * @param quantityDiff
 	 * @return CartList
 	 * @throws CartListNotFoundException
 	 */
-	public CartList modifyCartItem(long id, long quantityDiff) {
-		Optional<CartList> findById = cartListDao.findById(id);
-		
-		if(findById.isEmpty()) throw new CartListNotFoundException("No Cart Item with id: "+id);
-		
-		CartList cartList = findById.get();
-		cartList.setQuantity(cartList.getQuantity() + quantityDiff);
-		return cartListDao.save(cartList);
+	public CartList modifyCartItem(long id, long quantityDiff, String email) {
+		Customer customer = customerValidator(email);
+		CartList findById = null;
+		// check if the Cart Item is of the same customer
+		for (CartList i : customer.getCart())
+			if (i.getId() == id) {
+				findById = i;
+				break;
+			}
+
+		if (findById == null)
+			throw new CartListNotFoundException("No Cart Item with id: " + id);
+
+		findById.setQuantity(findById.getQuantity() + quantityDiff);
+
+		if (findById.getQuantity() <= 0)
+			throw new IncorrectFormDetailsException("Min 1 quantity required");
+
+		return cartListDao.save(findById);
 	}
 
 	/**
-	 * Deletes the cart item. Ignores silently if Id dosent match any item.
+	 * Deletes the cart item. Matches cartList Id with cartList item in customer's
+	 * current cart
+	 * 
 	 * @param id
 	 * @return id of the deleted cart item
 	 */
 	public long deleteCartItem(long id, String email) {
 		Customer customer = customerValidator(email);
-		for(CartList i: customer.getCart())
-			if(i.getId()==id) {
+
+		// check if the Cart Item is of the same customer
+		for (CartList i : customer.getCart())
+			if (i.getId() == id) {
+				customer.setCart(
+						new HashSet<>(customer.getCart().stream()
+														.filter(t -> t.getId() != id)
+														.toList())
+				);
+				customerDao.save(customer);
 				cartListDao.deleteById(id);
 				return id;
 			}

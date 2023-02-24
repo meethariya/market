@@ -40,7 +40,7 @@ public class CartList {
 	@Column(nullable = false)
 	private long quantity;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(nullable = false)
 	private Product product;
 

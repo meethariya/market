@@ -104,21 +104,23 @@ public class CustomerController {
 	 * @throws CartListNotFoundException
 	 */
 	@PutMapping("/cart")
-	public ResponseEntity<CartList> editCartItemQuantity(@RequestParam("cartListId") long id, @RequestParam("quantity") long quantityDiff){
-		return new ResponseEntity<>(customerService.modifyCartItem(id, quantityDiff), HttpStatus.ACCEPTED);	
+	public ResponseEntity<CartList> editCartItemQuantity(@RequestParam("cartListId") long id,
+			@RequestParam("quantity") long quantityDiff, Authentication auth) {
+		return new ResponseEntity<>(customerService.modifyCartItem(id, quantityDiff, auth.getName()), HttpStatus.ACCEPTED);
 	}
-	
+
 	/**
 	 * Deletes cart item given it's id.
-	 * Silently ignores if no item found with given Id.
+	 * 
 	 * @param id
-	 * @return
+	 * @return id of deleted item
+	 * @throws CartListNotFoundException
 	 */
 	@DeleteMapping("/cart/{id}")
-	public ResponseEntity<Long> deleteCartItem(@PathVariable("id") long id, Authentication auth){
+	public ResponseEntity<Long> deleteCartItem(@PathVariable("id") long id, Authentication auth) {
 		return new ResponseEntity<>(customerService.deleteCartItem(id, auth.getName()), HttpStatus.OK);
 	}
-		
+
 	/**
 	 * Place customer's order.
 	 * 
@@ -132,7 +134,8 @@ public class CustomerController {
 	 * @throws CustomerNotFoundException
 	 */
 	@PostMapping("/order")
-	public ResponseEntity<Long> placeOrder(@RequestParam(name = "payment", required = false) String payment, Authentication auth)
+	public ResponseEntity<Long> placeOrder(@RequestParam(name = "payment", required = false) String payment,
+			Authentication auth)
 			throws InvalidPaymentMethodException, ProductNotFoundException, InsufficientStockException {
 
 		if (payment == null || payment.isBlank()) {
@@ -141,7 +144,7 @@ public class CustomerController {
 
 		return new ResponseEntity<>(customerService.placeOrder(auth.getName(), payment), HttpStatus.CREATED);
 	}
-	
+
 	/**
 	 * Get all orders for the authenticated Customer.
 	 * 
@@ -151,10 +154,10 @@ public class CustomerController {
 	 * @throws CustomerNotFoundException
 	 */
 	@GetMapping("/order")
-	public ResponseEntity<List<Order>> getMyOrders(Authentication auth){
+	public ResponseEntity<List<Order>> getMyOrders(Authentication auth) {
 		return new ResponseEntity<>(customerService.getMyOrders(auth.getName()), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Finds order by its Id
 	 * 
@@ -165,7 +168,7 @@ public class CustomerController {
 	 * @throws CustomerNotFoundException
 	 */
 	@GetMapping("/order/{id}")
-	public ResponseEntity<Order> findOrder(@PathVariable("id") long orderId, Authentication auth){
+	public ResponseEntity<Order> findOrder(@PathVariable("id") long orderId, Authentication auth) {
 		return new ResponseEntity<>(customerService.findOrder(orderId, auth.getName()), HttpStatus.OK);
 	}
 }

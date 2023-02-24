@@ -9,13 +9,12 @@ import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -50,7 +49,7 @@ public class Customer {
 	@Temporal(TemporalType.DATE)
 	private Date dob;
 	
-	@ElementCollection(fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	private Set<CartList> cart = new HashSet<>();
 
 	/**

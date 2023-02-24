@@ -28,7 +28,7 @@ public class Inventory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@OneToOne(cascade = CascadeType.REMOVE)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true, nullable = false)
 	private Product product;
 	

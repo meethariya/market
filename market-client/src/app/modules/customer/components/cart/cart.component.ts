@@ -9,6 +9,7 @@ import { CustomerService } from '../../services/customer.service';
 })
 export class CartComponent implements OnInit {
   cart: CartList[] = [];
+  itemRemoved: boolean = false;
 
   constructor(private customerService: CustomerService) {}
 
@@ -17,5 +18,10 @@ export class CartComponent implements OnInit {
       next: (data: CartList[]) => (this.cart = data),
       error: (err) => console.log(err),
     });
+  }
+
+  removeItem(item: CartList){
+    this.cart = this.cart.filter(i => i.id !== item.id);
+    this.itemRemoved = true;
   }
 }

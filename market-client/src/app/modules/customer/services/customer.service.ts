@@ -60,7 +60,7 @@ export class CustomerService {
   }
 
   removeCartitem(id: number):Observable<any> {
-    return this.http.delete(this.generalService.serverPath + '/cart/' + id, {
+    return this.http.delete(this.generalService.serverPath + '/customer/cart/' + id, {
       headers: this.generalService.headerGenerator(),
     });
   }

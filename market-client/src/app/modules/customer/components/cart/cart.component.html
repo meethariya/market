@@ -1,6 +1,23 @@
 <!-- Customer's cart -->
 <div class="container my-5">
-    <div class="mx-5" *ngFor="let cartItem of cart">
-        <app-cart-item [item]="cartItem"></app-cart-item>
-    </div>
+  <div
+    class="alert alert-info alert-dismissible fade show"
+    role="alert"
+    *ngIf="itemRemoved"
+  >
+    <strong>Success!</strong> Item removed from cart. Keep Shopping
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+      (click)="itemRemoved = !itemRemoved"
+    ></button>
+  </div>
+  <div class="mx-5" *ngFor="let cartItem of cart">
+    <app-cart-item
+      [item]="cartItem"
+      (deleteFromCart)="removeItem($event)"
+    ></app-cart-item>
+  </div>
 </div>

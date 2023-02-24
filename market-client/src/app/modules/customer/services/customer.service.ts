@@ -46,7 +46,7 @@ export class CustomerService {
     );
   }
 
-  cartItemQuantityEditor(cartItemId: number, quantityDiff: number) {
+  cartItemQuantityEditor(cartItemId: number, quantityDiff: number): Observable<CartList> {
     let temp: FormData = new FormData();
     temp.set('cartListId', cartItemId.toString());
     temp.set('quantity', quantityDiff.toString());
@@ -57,5 +57,11 @@ export class CustomerService {
         headers: this.generalService.headerGenerator(),
       }
     );
+  }
+
+  removeCartitem(id: number):Observable<any> {
+    return this.http.delete(this.generalService.serverPath + '/cart/' + id, {
+      headers: this.generalService.headerGenerator(),
+    });
   }
 }

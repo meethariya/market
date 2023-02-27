@@ -12,16 +12,17 @@ export class PlaceOrderComponent implements OnInit {
   cart!: CartList[];
   customer!: Customer;
 
-  payment: string = "UPI";
+  payment: string = 'UPI';
   failedOrder: boolean = false;
   total: number = 0;
+  orderSuccess: boolean = false;
 
   constructor(private customerService: CustomerService) {}
 
   ngOnInit(): void {
     this.customerService.getProfile().subscribe({
-      next: (c) => this.customer = c,
-      error: (err) => console.log(err)
+      next: (c) => (this.customer = c),
+      error: (err) => console.log(err),
     });
 
     this.customerService.getCart().subscribe({
@@ -31,10 +32,22 @@ export class PlaceOrderComponent implements OnInit {
       },
       error: (err) => console.log(err),
     });
-
   }
 
   order() {
-    console.log('Order');
+    let formData: FormData = new FormData();
+    formData.set('payment', this.payment);
+    this.customerService.placeOrder(formData).subscribe({
+      next: (id) => {
+        console.log(id);
+        this.orderSuccess = true;
+      },
+      error: (err) => {
+        console.log(err.error);
+        this.failedOrder = true;
+      },
+    });
+    this.cart = [];
+    this.total = 0;
   }
 }

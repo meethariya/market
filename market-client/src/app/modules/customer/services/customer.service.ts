@@ -78,4 +78,12 @@ export class CustomerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
+
+  placeOrder(formData: FormData) {
+    return this.http.post(
+      this.generalService.serverPath + '/customer/order',
+      formData,
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
 }

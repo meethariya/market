@@ -142,6 +142,7 @@ public class CustomerService {
 	 * <ul>
 	 * <li>Validates existing User with authenticated email</li>
 	 * <li>Validates existing Customer with authenticated email</li>
+	 * <li>Checks if cart is empty or not.</li>
 	 * <li>Creates new Order and sets it's attributes</li>
 	 * <ul>
 	 * <li>Sets Payment method from user input</li>
@@ -160,6 +161,7 @@ public class CustomerService {
 	 * @param customerEmail
 	 * @param paymentMethod
 	 * @return Id of the Order placed
+	 * @throws CartListNotFoundException
 	 * @throws ProductNotFoundException
 	 * @throws InsufficientStockException
 	 * @throws UserNotFoundException
@@ -169,6 +171,9 @@ public class CustomerService {
 			throws ProductNotFoundException, InsufficientStockException {
 		Customer customer = customerValidator(customerEmail);
 
+		// Checks if any items exists in cart or not.
+		if(customer.getCart().isEmpty()) throw new CartListNotFoundException("Cart Empty");
+		
 		// create new order and set its attributes
 		Order order = new Order();
 

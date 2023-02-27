@@ -1,23 +1,38 @@
 <div class="container my-5">
-  <h1 class="text-center mb-3">Place Order</h1>
-
   <div *ngIf="failedOrder" class="alert alert-danger" role="alert">
     Unable to place Order
   </div>
   <div *ngIf="orderSuccess" class="alert alert-success" role="alert">
     Order Placed! Cart Cleared, keep shopping.
   </div>
-  <div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/customer/cart">Cart</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Place Order</li>
+    </ol>
+  </nav>
+  <div
+    class="container"
+    *ngIf="cart != null && cart.length !== 0; else emptyCart"
+  >
+    <h1 class="text-center mb-3">Place Order</h1>
     <div class="row">
-      <div class="col-sm-4" *ngIf="customer!==undefined">
-        <img src="{{customer.user.profilePicPath.split('/src')[1]}}" alt="profilePic" class="img-fluid rounded-circle">
-        <h4>{{ customer.user.name | titlecase}}</h4>
+      <div class="col-sm-4" *ngIf="customer !== undefined">
+        <img
+          src="{{ customer.user.profilePicPath.split('/src')[1] }}"
+          alt="profilePic"
+          class="img-fluid rounded-circle"
+        />
+        <h4>{{ customer.user.name | titlecase }}</h4>
         <h6>Email: {{ customer.user.email }}</h6>
         <h6>Phone: {{ customer.phone }}</h6>
-        <p>Address: 
-          {{ customer.address.houseNo | titlecase }} , {{ customer.address.addressLine1 | titlecase }} ,
-          {{ customer.address.addressLine2 | titlecase }} , {{ customer.address.city | titlecase }} ,
-          {{ customer.address.state | titlecase }} - {{ customer.address.pincode }}
+        <p>
+          Address: {{ customer.address.houseNo | titlecase }} ,
+          {{ customer.address.addressLine1 | titlecase }} ,
+          {{ customer.address.addressLine2 | titlecase }} ,
+          {{ customer.address.city | titlecase }} ,
+          {{ customer.address.state | titlecase }} -
+          {{ customer.address.pincode }}
         </p>
       </div>
       <div class="col-sm-8">
@@ -65,4 +80,15 @@
       </div>
     </div>
   </div>
+  <ng-template #emptyCart>
+    <div class="text-center">
+      <img
+        src="/assets/image/emptyCart.png"
+        alt="cart empty"
+        class="img-fluid"
+      />
+      <br />
+      <a routerLink="/customer/" class="text-decoration-none">Keep Shopping.</a>
+    </div>
+  </ng-template>
 </div>

@@ -327,4 +327,15 @@ public class CustomerService {
 			}
 		throw new CartListNotFoundException("Invalid cartList ID");
 	}
+	
+	/**
+	 * Get Customer profile using authenticated email
+	 * @param email
+	 * @return Customer
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	public Customer getProfile(String email) {
+		return customerValidator(email);
+	}
 }

@@ -9,6 +9,8 @@ import { OrderComponent } from './components/order/order.component';
 import { ProductComponent } from './components/product/product.component';
 import { CustomerRoutingModule } from './customer-routing.module';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
+import { PlaceOrderComponent } from './components/place-order/place-order.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { CartItemComponent } from './components/cart-item/cart-item.component';
     OrderComponent,
     ProductComponent,
     AddToCartComponent,
-    CartItemComponent
+    CartItemComponent,
+    PlaceOrderComponent
   ],
   imports: [
     CommonModule,
     CustomerRoutingModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule
   ],
   exports: [
     CustomerHomeComponent,

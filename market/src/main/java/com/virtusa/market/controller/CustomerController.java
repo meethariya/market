@@ -33,6 +33,7 @@ import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
 import com.virtusa.market.model.CartList;
+import com.virtusa.market.model.Customer;
 import com.virtusa.market.model.Order;
 import com.virtusa.market.service.CustomerService;
 
@@ -58,6 +59,19 @@ public class CustomerController {
 		return new ResponseEntity<>("Customer Home", HttpStatus.OK);
 	}
 
+	/**
+	 * Get customer profile using authenticated email
+	 * 
+	 * @param auth
+	 * @return Customer
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	@GetMapping("/profile")
+	public ResponseEntity<Customer> getProfile(Authentication auth){
+		return new ResponseEntity<>(customerService.getProfile(auth.getName()),HttpStatus.OK);
+	}
+	
 	/**
 	 * Adds product to cartlist
 	 * 

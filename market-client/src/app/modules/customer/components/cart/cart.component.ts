@@ -8,7 +8,7 @@ import { CustomerService } from '../../services/customer.service';
   styles: [],
 })
 export class CartComponent implements OnInit {
-  cart: CartList[] = [];
+  cart: CartList[] = []
   itemRemoved: boolean = false;
 
   constructor(private customerService: CustomerService) {}

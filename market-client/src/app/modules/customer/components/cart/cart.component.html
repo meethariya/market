@@ -20,4 +20,16 @@
       (deleteFromCart)="removeItem($event)"
     ></app-cart-item>
   </div>
+  <!-- Place order -->
+  <div class="d-flex flex-row-reverse">
+    <div class="rounded blue mx-5">
+      <button
+        type="button"
+        class="btn"
+        routerLink="/customer/cart/place-order"
+      >
+        Place order
+      </button>
+    </div>
+  </div>
 </div>

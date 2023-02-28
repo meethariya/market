@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerService } from 'src/app/modules/customer/services/customer.service';
 import { GeneralService } from 'src/app/services/general.service';
+import * as Aos from 'aos';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
   }
   async ngOnInit(): Promise<void> {
     // if logged in, avoids user to go to home page
+    Aos.init()
     if (this.generalService.isAuthenticated()) {
       // goes to role based home page.
       if (await this.customerService.isCustomer()) {

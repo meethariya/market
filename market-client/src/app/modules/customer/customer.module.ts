@@ -11,6 +11,7 @@ import { CustomerRoutingModule } from './customer-routing.module';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
 import { PlaceOrderComponent } from './components/place-order/place-order.component';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     CustomerRoutingModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    NgSelectModule
   ],
   exports: [
     CustomerHomeComponent,

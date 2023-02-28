@@ -177,7 +177,7 @@ public class CustomerService {
 		// create new order and set its attributes
 		Order order = new Order();
 
-		order.setPayementMethod(paymentMethod);
+		order.setPaymentMethod(paymentMethod);
 		order.setCart(customer.getCart());
 
 		// checking the product and quantity in inventory.

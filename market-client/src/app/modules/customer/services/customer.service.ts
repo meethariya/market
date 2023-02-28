@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { CartList } from 'src/app/models/cart-list';
 import { Customer } from 'src/app/models/customer';
 import { Inventory } from 'src/app/models/inventory';
+import { Order } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
 import { GeneralService } from 'src/app/services/general.service';
 
@@ -80,9 +81,17 @@ export class CustomerService {
   }
 
   placeOrder(formData: FormData) {
+    console.log(formData.get("payment"));
     return this.http.post(
       this.generalService.serverPath + '/customer/order',
       formData,
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  getOrder() {
+    return this.http.get<Order[]>(
+      this.generalService.serverPath + '/customer/order',
       { headers: this.generalService.headerGenerator() }
     );
   }

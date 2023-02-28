@@ -60,17 +60,15 @@
               <label for="payment" class="form-label" aria-required="true"
                 >Payment Type:</label
               >
-              <select
-                class="form-select"
-                id="payment"
-                name="payment"
+              <ng-select
+                [items]="paymentOptions"
+                bindLabel="name"
+                bindValue="id"
                 [(ngModel)]="payment"
-                required
+                name="payment"
+                placeholder="Payment Options"
               >
-                <option value="UPI" selected>UPI</option>
-                <option value="NetBanking">Net Banking</option>
-                <option value="COD">Cash On Delivery</option>
-              </select>
+              </ng-select>
             </div>
             <div class="d-grid blue rounded">
               <button type="submit" class="btn">Confirm</button>

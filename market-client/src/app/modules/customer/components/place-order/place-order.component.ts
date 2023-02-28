@@ -12,7 +12,13 @@ export class PlaceOrderComponent implements OnInit {
   cart!: CartList[];
   customer!: Customer;
 
-  payment: string = 'UPI';
+  payment: string = '';
+  paymentOptions = [
+    { id: 'UPI', name: 'UPI' },
+    { id: 'NetBanking', name: 'NetBanking' },
+    { id: 'COD', name: 'Cash On Delivery' },
+  ];
+
   failedOrder: boolean = false;
   total: number = 0;
   orderSuccess: boolean = false;
@@ -38,10 +44,7 @@ export class PlaceOrderComponent implements OnInit {
     let formData: FormData = new FormData();
     formData.set('payment', this.payment);
     this.customerService.placeOrder(formData).subscribe({
-      next: (id) => {
-        console.log(id);
-        this.orderSuccess = true;
-      },
+      next: (id) => (this.orderSuccess = true),
       error: (err) => {
         console.log(err.error);
         this.failedOrder = true;
@@ -49,5 +52,6 @@ export class PlaceOrderComponent implements OnInit {
     });
     this.cart = [];
     this.total = 0;
+    this.payment = '';
   }
 }

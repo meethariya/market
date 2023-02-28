@@ -46,8 +46,8 @@ public class Order {
 	@Column(nullable = false, precision = 2)
 	private double price;
 	
-	@Column(length = 30)
-	private String payementMethod;
+	@Column(length = 30, nullable = false)
+	private String paymentMethod;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<CartList> cart = new HashSet<>();
@@ -64,7 +64,7 @@ public class Order {
 	 * @param customer
 	 * @param timestamp
 	 * @param price
-	 * @param payementMethod
+	 * @param paymentMethod
 	 * @param cart
 	 */
 	public Order(long id, Customer customer, Date timestamp, double price, String payementMethod,
@@ -74,7 +74,7 @@ public class Order {
 		this.customer = customer;
 		this.timestamp = timestamp;
 		this.price = price;
-		this.payementMethod = payementMethod;
+		this.paymentMethod = payementMethod;
 		this.cart = cart;
 	}
 
@@ -135,17 +135,17 @@ public class Order {
 	}
 
 	/**
-	 * @return the payementMethod
+	 * @return the paymentMethod
 	 */
-	public String getPayementMethod() {
-		return payementMethod;
+	public String getPaymentMethod() {
+		return paymentMethod;
 	}
 
 	/**
-	 * @param payementMethod the payementMethod to set
+	 * @param paymentMethod the paymentMethod to set
 	 */
-	public void setPayementMethod(String payementMethod) {
-		this.payementMethod = payementMethod;
+	public void setPaymentMethod(String payementMethod) {
+		this.paymentMethod = payementMethod;
 	}
 	
 	/**
@@ -168,7 +168,7 @@ public class Order {
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", customer=" + customer + ", timestamp=" + timestamp + ", price=" + price
-				+ ", payementMethod=" + payementMethod + ", cart=" + cart + "]";
+				+ ", paymentMethod=" + paymentMethod + ", cart=" + cart + "]";
 	}
 	
 	

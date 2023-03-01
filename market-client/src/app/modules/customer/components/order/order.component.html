@@ -1,6 +1,65 @@
 <div class="container my-5">
   <h3 class="text-center">Your Orders</h3>
-  <div *ngFor="let order of allOrders" class="peach rounded p-2 my-2">
+
+  <div class="row border-bottom my-2" *ngFor="let order of allOrders">
+    <div class="col-4 my-1 d-flex flex-column border-end">
+      <div id="list-{{ order.id }}" class="list-group">
+        <ol class="list-group list-group-numbered">
+          <li *ngFor="let item of order.cart" class="list-group-item">{{ item.product.name }}</li>
+        </ol>
+        <!-- <a
+          *ngFor="let item of order.cart"
+          class="list-group-item list-group-item-action"
+          [routerLink]="['./']"
+          fragment="item-{{ order.id }}-{{ item.id }}"
+          >{{ item.product.name }}</a
+        > -->
+      </div>
+      <h6 class="mt-auto text-muted">
+        Total: {{ order.price | currency : "INR" }} by {{ order.paymentMethod }}
+      </h6>
+      <h6 class="text-muted">
+        Placed on: {{ order.timestamp | date : "medium" }}
+      </h6>
+    </div>
+
+    <div class="col-8 my-1 scrollspy-body">
+      <div
+        data-bs-spy="scroll"
+        attr.data-bs-target="#list-{{ order.id }}"
+        data-bs-smooth-scroll="true"
+        class="scrollspy-example-2"
+        tabindex="0"
+        style="overflow-y: auto; height: 200px; scroll-behavior: smooth"
+      >
+        <div
+          id="item-{{ order.id }}-{{ item.id }}"
+          *ngFor="let item of order.cart"
+          class="p-2"
+        >
+          <div class="row g-0">
+            <div class="col-sm-4 mx-2">
+              <img
+                src="{{ item.product.imagePath[0].split('src/')[1] }}"
+                alt="{{ item.product.id }}"
+                class="img-fluid rounded-start border"
+              />
+            </div>
+            <div class="col-auto mx-2">
+              <h4>{{ item.product.name }}</h4>
+              <p class="text-muted">{{ item.product.category.categoryName }}</p>
+              <h6>Brand: {{ item.product.brand }}</h6>
+              <h6>Quantity: {{ item.quantity }}</h6>
+              <p>Current Price: {{ item.product.price | currency:"INR"}}</p>
+              <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi debitis ducimus inventore quae, minima architecto exercitationem delectus aspernatur! Praesentium earum laudantium ratione sequi ad dolorem nemo totam magnam asperiores excepturi reprehenderit vel repellat dignissimos repudiandae, est velit corrupti consectetur. Eum odit, alias distinctio ex repudiandae facilis doloremque facere libero earum dolorum ab sequi tempora.</p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div *ngFor="let order of allOrders" class="peach rounded p-2 my-2">
     <div class="d-flex justify-content-between">
       <h6>Placed on: {{order.timestamp | date: 'medium'}}</h6>
       <h6>{{order.price | currency: 'INR'}} by {{order.paymentMethod}}</h6>
@@ -35,5 +94,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

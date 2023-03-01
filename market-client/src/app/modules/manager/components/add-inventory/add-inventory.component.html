@@ -1,0 +1,53 @@
+<div
+  class="modal fade"
+  id="addInventory{{item.id}}"
+  tabindex="-1"
+  aria-labelledby="addInventoryLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addInventoryLabel">
+          {{ item.product.name | titlecase }}
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form (ngSubmit)="addItem()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="quantity" class="col-form-label">Quantity:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="quantity"
+              name="quantity"
+              min="1"
+              [(ngModel)]="quantity"
+              autofocus
+              required
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            id="close"
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <div class="blue rounded">
+            <button type="submit" class="text-white btn">Add</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

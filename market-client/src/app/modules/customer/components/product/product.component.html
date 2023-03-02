@@ -36,10 +36,10 @@
   </div>
   <div class="card-body">
     <h6 class="card-subtitle mb-2 text-muted">
-      {{ product.category.categoryName }}
+      {{ product.category.categoryName | titlecase }}
     </h6>
-    <h5 class="card-title">{{ product.name }}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ product.brand }}</h6>
+    <h5 class="card-title">{{ product.name | titlecase}}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ product.brand===" "?"----": product.brand | titlecase}}</h6>
     <div class="d-flex justify-content-between">
       <p>{{ product.price | currency : "INR" }}</p>
       <p>{{ product.rating }} stars</p>

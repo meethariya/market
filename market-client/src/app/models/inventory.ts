@@ -1,23 +1,25 @@
 import { Product } from './product';
 
 export class Inventory {
-  id: number;
+  id?: number;
   product: Product;
   quantity: number;
-  lastImportDate: Date;
-  lastSoldDate: Date;
+  lastImportDate?: Date;
+  lastSoldDate?: Date;
 
   constructor(
-    id: number,
     product: Product,
     quantity: number,
-    lastImportDate: Date,
-    lastSoldDate: Date
+    lastImportDate?: Date,
+    lastSoldDate?: Date,
+    id?: number
   ) {
     this.id = id;
     this.product = product;
     this.quantity = quantity;
-    this.lastImportDate = lastImportDate;
-    this.lastSoldDate = lastSoldDate;
+    if(lastImportDate!==undefined)
+      this.lastImportDate = lastImportDate;
+    if(lastSoldDate!==undefined)
+      this.lastSoldDate = lastSoldDate;
   }
 }

@@ -7,7 +7,7 @@
     Error adding stock, please retry after some time.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"(click)="failAdded=false"></button>
   </div>
-  <div attr.id="carouselExample{{ item.id }}" class="carousel">
+  <div attr.id="carouselExample{{ item.product.id }}" class="carousel">
     <div class="carousel-inner">
       <div
         *ngFor="let image of item.product.imagePath; let i = index"
@@ -44,10 +44,10 @@
   </div>
   <div class="card-body">
     <h6 class="card-subtitle mb-2 text-muted">
-      {{ item.product.category.categoryName }}
+      {{ item.product.category.categoryName | titlecase}}
     </h6>
-    <h5 class="card-title">{{ item.product.name }}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand }}</h6>
+    <h5 class="card-title">{{ item.product.name | titlecase}}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand ===" "? "----":item.product.brand| titlecase}}</h6>
     <div class="d-flex justify-content-between">
       <p>{{ item.product.price | currency : "INR" }}</p>
       <p>{{ item.product.rating }} stars</p>
@@ -58,7 +58,7 @@
         <button
           class="btn text-white"
           data-bs-toggle="modal"
-          attr.data-bs-target="#addInventory{{ item.id }}"
+          attr.data-bs-target="#addInventory{{ item.product.id }}"
         >
           Add Stock
         </button>
@@ -76,12 +76,12 @@
     <div class="d-flex justify-content-between">
       <p class="text-muted">
         <small>
-          Last Imported on: {{ item.lastImportDate | date : "mediumDate" }}
+          Last Imported on: {{ item.lastImportDate == undefined? "----" : item.lastImportDate | date : "mediumDate" }}
         </small>
       </p>
       <p class="text-muted">
         <small>
-          Last Sold on: {{ item.lastSoldDate | date : "mediumDate" }}
+          Last Sold on: {{ item.lastSoldDate == undefined? "----" : item.lastSoldDate| date : "mediumDate" }}
         </small>
       </p>
     </div>

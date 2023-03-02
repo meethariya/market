@@ -17,13 +17,13 @@ export class AddInventoryComponent {
 
   addItem(): void {
     let formData = new FormData();
-    formData.set('id', this.item.id.toString());
+    formData.set('id', this.item.product.id.toString());
     formData.set('quantity', this.quantity.toString());
 
     this.managerService.addInventory(formData).subscribe({
       next: (data) => this.successAddEmiiter.emit(this.quantity),
       error: (err) => this.failAddEmiiter.emit(),
     });
-    document.getElementById('close')!.click();
+    document.getElementById('close'+this.item.product.id)!.click();
   }
 }

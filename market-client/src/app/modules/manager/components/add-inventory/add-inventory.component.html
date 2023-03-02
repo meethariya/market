@@ -1,6 +1,6 @@
 <div
   class="modal fade"
-  id="addInventory{{item.id}}"
+  id="addInventory{{item.product.id}}"
   tabindex="-1"
   aria-labelledby="addInventoryLabel"
   aria-hidden="true"
@@ -36,7 +36,7 @@
         </div>
         <div class="modal-footer">
           <button
-            id="close"
+            id="close{{item.product.id}}"
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal"

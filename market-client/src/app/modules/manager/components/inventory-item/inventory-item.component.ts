@@ -16,5 +16,6 @@ export class InventoryItemComponent {
   successAddedFunction(q:number){
     this.successAdded = true;
     this.item.quantity+=q;
+    this.item.lastImportDate = new Date();
   }
 }

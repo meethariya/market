@@ -12,7 +12,7 @@ export class PlaceOrderComponent implements OnInit {
   cart!: CartList[];
   customer!: Customer;
 
-  payment: string = '';
+  payment!: string;
   paymentOptions = [
     { id: 'UPI', name: 'UPI' },
     { id: 'NetBanking', name: 'NetBanking' },
@@ -20,6 +20,7 @@ export class PlaceOrderComponent implements OnInit {
   ];
 
   failedOrder: boolean = false;
+  failedMessage: string = "Unable to place Order, Please try again later."
   total: number = 0;
   orderSuccess: boolean = false;
 
@@ -42,16 +43,20 @@ export class PlaceOrderComponent implements OnInit {
 
   order() {
     let formData: FormData = new FormData();
-    formData.set('payment', this.payment);
+    if(this.payment!=null)
+      formData.set('payment', this.payment);
     this.customerService.placeOrder(formData).subscribe({
-      next: (id) => (this.orderSuccess = true),
+      next: (id) => {
+        this.orderSuccess = true;
+        this.cart = [];
+        this.total = 0;
+        this.payment = '';
+      },
       error: (err) => {
-        console.log(err.error);
+        console.log(err);
+        this.failedMessage = err.error
         this.failedOrder = true;
       },
     });
-    this.cart = [];
-    this.total = 0;
-    this.payment = '';
   }
 }

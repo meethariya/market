@@ -11,11 +11,16 @@
     <div class="col-md-8">
       <div class="card-body">
         <div class="d-flex justify-content-between">
-          <h5 class="card-title">{{ item.product.name }}</h5>
-          <fa-icon class="text-danger" [icon]="trash" data-bs-toggle="tooltip"
-          title="Remove from cart" (click)="removeFromCart()"></fa-icon>
+          <h5 class="card-title">{{ item.product.name | titlecase}}</h5>
+          <fa-icon
+            class="text-danger"
+            [icon]="trash"
+            data-bs-toggle="tooltip"
+            title="Remove from cart"
+            (click)="removeFromCart()"
+          ></fa-icon>
         </div>
-        <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand }}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand==" "?"----":item.product.brand | titlecase}}</h6>
         <p class="card-text">
           Price: {{ item.product.price | currency : "INR" }}
         </p>
@@ -24,7 +29,8 @@
             class="btn-group btn-group-sm"
             role="group"
             aria-label="Basic mixed styles example"
-          >Quantity: 
+          >
+            Quantity:
             <button
               type="button"
               class="btn btn-outline-danger"
@@ -57,8 +63,10 @@
           </p>
         </div>
       </div>
-      <div class="card-footer text-muted">
-        Last updated: {{ item.addedOn | date : "EEEE, dd-MMM-yyyy hh:mm aa" }}
+      <div class="card-footer">
+        <h6 class="text-muted">
+          Last updated: {{ item.addedOn | date : "EEEE, dd-MMM-yyyy hh:mm aa" }}
+        </h6>
       </div>
     </div>
   </div>

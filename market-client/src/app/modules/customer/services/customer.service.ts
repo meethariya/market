@@ -81,7 +81,6 @@ export class CustomerService {
   }
 
   placeOrder(formData: FormData) {
-    console.log(formData.get("payment"));
     return this.http.post(
       this.generalService.serverPath + '/customer/order',
       formData,

@@ -1,6 +1,6 @@
 <div class="container my-5">
   <div *ngIf="failedOrder" class="alert alert-danger" role="alert">
-    Unable to place Order
+    {{failedMessage}}
   </div>
   <div *ngIf="orderSuccess" class="alert alert-success" role="alert">
     Order Placed! Cart Cleared, keep shopping.

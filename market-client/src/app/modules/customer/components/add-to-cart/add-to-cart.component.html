@@ -1,6 +1,6 @@
 <div class="d-grid text-center rounded blue mb-3">
   <button
-    class="btn"
+    class="btn text-white"
     (click)="showQuantity = !showQuantity"
     *ngIf="!showQuantity"
   >
@@ -11,6 +11,7 @@
   <div class="row">
     <div class="col-sm-2 d-grid mb-3">
       <button
+        id="close{{productId}}"
         class="btn btn-danger"
         (click)="showQuantity = !showQuantity"
         data-bs-toggle="tooltip"

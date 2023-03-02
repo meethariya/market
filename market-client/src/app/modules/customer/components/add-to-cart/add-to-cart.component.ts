@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { faCartPlus, faMinus, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCartPlus,
+  faMinus,
+  faPlus,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { CustomerService } from '../../services/customer.service';
 
 @Component({
@@ -26,7 +31,11 @@ export class AddToCartComponent {
     cartData.set('productId', this.productId.toString());
     cartData.set('quantity', this.quantity.toString());
     this.customerService.addToCart(cartData).subscribe({
-      next: (id) => {console.log(id);this.cartSuccessEmitter.emit()},
+      next: (id) => {
+        console.log(id);
+        this.cartSuccessEmitter.emit();
+        document.getElementById('close' + this.productId)!.click();
+      },
       error: (err) => console.log(err),
     });
   }

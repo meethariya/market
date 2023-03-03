@@ -1,15 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Inventory } from 'src/app/models/inventory';
-import { Product } from 'src/app/models/product';
 import { ManagerService } from '../../services/manager.service';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-manager-home',
   templateUrl: './manager-home.component.html',
-  styles: [],
+  styles: [
+    `
+      #onHoverShow {
+        display: none;
+      }
+
+      #addProductButton:hover  #onHoverShow {
+        display: block;
+      }
+    `,
+  ],
 })
 export class ManagerHomeComponent implements OnInit {
   inventory: Inventory[] = [];
+  plus = faPlus;
 
   constructor(private managerService: ManagerService) {}
 

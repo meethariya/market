@@ -293,4 +293,8 @@ public class ManagerService {
 	public List<Order> getAllOrders(){
 		return orderDao.findAll();
 	}
+	
+	public List<Category> getAllCategory(){
+		return categoryDao.findAll();
+	}
 }

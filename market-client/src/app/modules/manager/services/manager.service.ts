@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Category } from 'src/app/models/category';
 import { Inventory } from 'src/app/models/inventory';
 import { Product } from 'src/app/models/product';
 import { GeneralService } from 'src/app/services/general.service';
@@ -22,13 +23,36 @@ export class ManagerService {
     return this.generalService.getAllProducts();
   }
 
+  getCategory(): Observable<Category[]> {
+    return this.http.get<Category[]>(
+      this.generalService.serverPath + '/manager/category',
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
+  }
+
   getInventory(): Observable<Inventory[]> {
     return this.generalService.getInventory();
   }
 
   addInventory(formData: FormData) {
-    return this.http.post(this.generalService.serverPath + '/manager/inventory', formData, {
-      headers: this.generalService.headerGenerator(),
-    });
+    return this.http.post(
+      this.generalService.serverPath + '/manager/inventory',
+      formData,
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
+  }
+
+  addProduct(formData: FormData) {
+    return this.http.post(
+      this.generalService.serverPath + '/manager/product',
+      formData,
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
   }
 }

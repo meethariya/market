@@ -6,7 +6,9 @@ import { ProductComponent } from './components/product/product.component';
 import { ManagerRoutingModule } from './manager-routing.module';
 import { InventoryItemComponent } from './components/inventory-item/inventory-item.component';
 import { AddInventoryComponent } from './components/add-inventory/add-inventory.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AddProductComponent } from './components/add-product/add-product.component';
 
 
 @NgModule({
@@ -14,12 +16,15 @@ import { FormsModule } from '@angular/forms';
     ManagerHomeComponent,
     ProductComponent,
     InventoryItemComponent,
-    AddInventoryComponent
+    AddInventoryComponent,
+    AddProductComponent
   ],
   imports: [
     CommonModule,
     ManagerRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    FontAwesomeModule
   ]
 })
 export class ManagerModule { }

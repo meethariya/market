@@ -1,0 +1,97 @@
+<div class="container">
+  <h2 class="text-center">Add New Product</h2>
+  <br />
+  <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successAdded">
+    <strong>Success!</strong> Product added successfully, Checkout your inventory for more.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <form class="row g-3" [formGroup]="productForm" (ngSubmit)="submit()">
+    <div class="col-md-6">
+      <label for="name" class="form-label">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        required
+        maxlength="30"
+        placeholder="Plain T-shirt"
+        formControlName="name"
+      />
+      <div *ngIf="f.name.touched && f.name.invalid">
+        <div *ngIf="f.name.errors?.['required']" class="form-text text-danger">Name is required.</div>
+        <div *ngIf="f.name.errors?.['maxlength']" class="form-text text-danger">Name should be less than 30 character.</div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="brand" class="form-label">Brand</label>
+      <input
+        type="text"
+        class="form-control"
+        id="brand"
+        placeholder="POLO"
+        required
+        maxlength="30"
+        formControlName="brand"
+      />
+      <div *ngIf="f.brand.touched && f.brand.invalid">
+        <div *ngIf="f.brand.errors?.['required']" class="form-text text-danger">Brand is required.</div>
+        <div *ngIf="f.brand.errors?.['maxlength']" class="form-text text-danger">Brand should be less than 30 character.</div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="category" class="form-label">Category</label>
+      <input
+        class="form-control"
+        list="datalistOptions"
+        id="category"
+        placeholder="Type to search..."
+        maxlength="30"
+        required
+        formControlName="category"
+      />
+      <datalist id="datalistOptions">
+        <option value="{{c}}" *ngFor="let c of categories"></option>
+      </datalist>
+      <div *ngIf="f.category.touched && f.category.invalid">
+        <div *ngIf="f.category.errors?.['required']" class="form-text text-danger">Category is required.</div>
+        <div *ngIf="f.category.errors?.['maxlength']" class="form-text text-danger">Category should be less than 30 character.</div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="price" class="form-label">Price</label>
+      <input
+        type="number"
+        class="form-control"
+        id="price"
+        step="0.01"
+        min="1"
+        placeholder="500.00"
+        required
+        formControlName="price"
+      />
+      <div *ngIf="f.price.touched && f.price.invalid">
+        <div *ngIf="f.price.errors?.['required']" class="form-text text-danger">Price is required.</div>
+        <div *ngIf="f.price.errors?.['min']" class="form-text text-danger">Price can not be less than 1.</div>
+      </div>
+    </div>
+    <div class="col-12">
+      <label for="images" class="form-label">Product Images</label>
+      <input
+        class="form-control"
+        type="file"
+        id="images"
+        multiple
+        formControlName="images"
+        accept="image/*"
+        (change)="onImageChange($event)"
+      />
+      <div *ngIf="f.images.touched && f.images.invalid">
+        <div *ngIf="f.images.errors?.['required']" class="form-text text-danger">Images are required.</div>
+      </div>
+    </div>
+    <div class="col-12">
+      <h6 class="text-success" *ngIf="productForm.valid">Looks good.</h6>
+      <button type="submit" class="btn btn-primary" [disabled]="!productForm.valid">Add Product</button>
+    </div>
+  </form>
+</div>

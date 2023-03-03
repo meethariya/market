@@ -1,0 +1,41 @@
+<div class="container my-5">
+  <div class="table-responsive">
+    <table class="table align-middle text-center table-hover caption-top">
+      <caption>
+        All Orders
+      </caption>
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Order Id</th>
+          <th scope="col">Customer Name</th>
+          <th scope="col">Placed On</th>
+          <th scope="col">Price</th>
+          <th scope="col">Payment Method</th>
+          <th scope="col">Number of Products</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <tr *ngFor="let i of order">
+          <th scope="row">{{ i.id }}</th>
+          <td>{{ i.customer.user.name | titlecase }}</td>
+          <td>{{ i.timestamp | date : "medium" }}</td>
+          <td>{{ i.price | currency : "INR" }}</td>
+          <td>{{ i.paymentMethod }}</td>
+          <td>{{ i.cart.length }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              attr.data-bs-target="#orderModal{{ i.id }}"
+            >
+              More
+            </button>
+            <app-order-detail [order]="i" class="text-start"></app-order-detail>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

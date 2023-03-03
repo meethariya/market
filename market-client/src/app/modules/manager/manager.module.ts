@@ -9,6 +9,8 @@ import { AddInventoryComponent } from './components/add-inventory/add-inventory.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AddProductComponent } from './components/add-product/add-product.component';
+import { OrderComponent } from './components/order/order.component';
+import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { AddProductComponent } from './components/add-product/add-product.compon
     ProductComponent,
     InventoryItemComponent,
     AddInventoryComponent,
-    AddProductComponent
+    AddProductComponent,
+    OrderComponent,
+    OrderDetailComponent
   ],
   imports: [
     CommonModule,

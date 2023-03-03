@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/models/category';
 import { Inventory } from 'src/app/models/inventory';
+import { Order } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
 import { GeneralService } from 'src/app/services/general.service';
 
@@ -53,6 +54,13 @@ export class ManagerService {
       {
         headers: this.generalService.headerGenerator(),
       }
+    );
+  }
+
+  getAllOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(
+      this.generalService.serverPath + '/manager/order',
+      { headers: this.generalService.headerGenerator() }
     );
   }
 }

@@ -1,5 +1,6 @@
 <div class="container my-5">
   <h3 class="text-center">Inventory</h3>
+  <!-- Add Product -->
   <div class="d-flex flex-row-reverse">
     <button
       id="addProductButton"
@@ -8,15 +9,54 @@
       title="Add new Product"
       routerLink="/manager/add-product"
     >
-    <div class="d-inline-flex">
-      <p id="onHoverShow" class="text-center my-0 mx-2">Add New Product</p>
-      <fa-icon [icon]="plus"></fa-icon>
-    </div>
+      <div class="d-inline-flex">
+        <p id="onHoverShow" class="text-center my-0 mx-2">Add New Product</p>
+        <fa-icon [icon]="plus"></fa-icon>
+      </div>
     </button>
   </div>
   <div class="row">
-    <div class="col-md-4 my-2" *ngFor="let i of inventory">
-      <app-inventory-item [item]="i"></app-inventory-item>
+    <div class="col-md-4"></div>
+    <div class="col-md-6">
+      <app-search
+        [productList]="productListForSearching"
+        (productsEmitter)="searchedProducts($event)"
+      ></app-search>
     </div>
+    <div class="col-md-2">
+      <app-sort
+        [products]="products"
+        (productsEmitter)="modifyProducts($event)"
+      ></app-sort>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <app-filters
+        [categories]="category"
+        [brands]="brand"
+        [products]="products"
+        [fixedProducts]="fixedProducts"
+        (productsEmitter)="modifyProducts($event)"
+      ></app-filters>
+    </div>
+    <div class="col-md-9" *ngIf="inventory != null && inventory.length !== 0; else noProducts">
+      <div class="row">
+        <div class="col-md-4 my-2" *ngFor="let i of inventory">
+          <app-inventory-item [item]="i"></app-inventory-item>
+        </div>
+      </div>
+    </div>
+    <!--if no products are available-->
+    <ng-template #noProducts>
+      <div class="text-center col-md-9">
+        <img
+          src="/assets/image/no-product-found.png"
+          alt="cart empty"
+          class="rounded img-fluid"
+        />
+        <br />
+      </div>
+    </ng-template>
   </div>
 </div>

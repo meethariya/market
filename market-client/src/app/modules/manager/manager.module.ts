@@ -11,6 +11,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { OrderComponent } from './components/order/order.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
+import { FacetModule } from '../facet/facet.module';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { OrderDetailComponent } from './components/order-detail/order-detail.com
     ManagerRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FacetModule
   ]
 })
 export class ManagerModule { }

@@ -20,7 +20,7 @@
             (click)="removeFromCart()"
           ></fa-icon>
         </div>
-        <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand==" "?"----":item.product.brand | titlecase}}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand | titlecase}}</h6>
         <p class="card-text">
           Price: {{ item.product.price | currency : "INR" }}
         </p>

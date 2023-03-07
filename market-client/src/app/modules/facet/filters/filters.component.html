@@ -1,0 +1,58 @@
+<!--Filters-->
+<h3 class="text-center">Filters</h3>
+<!-- Categories -->
+<div>
+  <h5>Categories</h5>
+  <div class="form-check" *ngFor="let c of categories">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      value=""
+      id="check-category-{{ c.id }}"
+      (change)="onCategoryChange()"
+      checked
+    />
+    <label class="form-check-label" for="check-category-{{ c.id }}">
+      {{ c.categoryName }}
+    </label>
+  </div>
+  <hr />
+</div>
+<!-- Brands -->
+<div>
+  <h5>Brands</h5>
+  <div class="form-check" *ngFor="let b of brands">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      value=""
+      id="check-brand-{{ b }}"
+      (change)="onBrandChange()"
+      checked
+    />
+    <label class="form-check-label" for="check-{{ b }}">
+      {{ b }}
+    </label>
+  </div>
+  <hr />
+</div>
+<!--In Stock-->
+<div>
+  <h5>Availability</h5>
+  <div class="form-check form-switch">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      role="switch"
+      id="inStockSwitch"
+      (change)="onStockChange($event)"
+      checked
+    />
+    <label class="form-check-label" for="inStockSwitch">In Stock</label>
+  </div>
+  <hr />
+</div>
+<!--Reset-->
+<div class="d-grid text-center rounded peach" (click)="resetFilters()">
+  <button type="button" class="btn text-white">Reset</button>
+</div>

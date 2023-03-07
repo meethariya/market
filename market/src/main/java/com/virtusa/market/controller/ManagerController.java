@@ -28,7 +28,6 @@ import com.virtusa.market.dto.ProductDto;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
-import com.virtusa.market.model.Category;
 import com.virtusa.market.model.Order;
 import com.virtusa.market.model.Product;
 import com.virtusa.market.service.ManagerService;
@@ -145,12 +144,5 @@ public class ManagerController {
 	public ResponseEntity<List<Order>> getAllOrders(){
 		return new ResponseEntity<>(managerService.getAllOrders(), HttpStatus.OK);
 	}
-	
-	/**
-	 * @return list of categories
-	 */
-	@GetMapping("category")
-	public ResponseEntity<List<Category>> getAllCategory(){
-		return new ResponseEntity<>(managerService.getAllCategory(), HttpStatus.OK);		
-	}
+		
 }

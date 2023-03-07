@@ -47,7 +47,7 @@
       {{ item.product.category.categoryName | titlecase}}
     </h6>
     <h5 class="card-title">{{ item.product.name | titlecase}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand ===" "? "----":item.product.brand| titlecase}}</h6>
+    <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand| titlecase}}</h6>
     <div class="d-flex justify-content-between">
       <p>{{ item.product.price | currency : "INR" }}</p>
       <p>{{ item.product.rating }} stars</p>

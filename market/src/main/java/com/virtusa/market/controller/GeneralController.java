@@ -23,6 +23,7 @@ import com.virtusa.market.dto.CustomerDto;
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.model.Category;
 import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Product;
 import com.virtusa.market.model.User;
@@ -102,8 +103,11 @@ public class GeneralController {
 		return new ResponseEntity<>(service.allInventory(), HttpStatus.OK);
 	}
 	
-	@GetMapping(name = "/", produces = "application/json")
-	public ResponseEntity<List<Product>> hello(){
-		return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
+	/**
+	 * @return list of categories
+	 */
+	@GetMapping("category")
+	public ResponseEntity<List<Category>> getAllCategory(){
+		return new ResponseEntity<>(service.getAllCategory(), HttpStatus.OK);		
 	}
 }

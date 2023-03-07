@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.virtusa.market.controller.GeneralController;
+import com.virtusa.market.dao.CategoryDao;
 import com.virtusa.market.dao.CustomerDao;
 import com.virtusa.market.dao.InventoryDao;
 import com.virtusa.market.dao.ProductDao;
@@ -19,6 +20,7 @@ import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CustomerDto;
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.model.Category;
 import com.virtusa.market.model.Customer;
 import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Product;
@@ -54,6 +56,9 @@ public class GeneralService {
 	
 	@Autowired
 	private InventoryDao inventoryDao;
+	
+	@Autowired
+	private CategoryDao categoryDao;
 	
 	/**
 	 * Checks 
@@ -117,7 +122,18 @@ public class GeneralService {
 		return inventoryDao.findAll();
 	}
 	
+	/**
+	 * @param email
+	 * @return User
+	 */
 	public User getUser(String email) {
 		return userDao.findByEmail(email);
+	}
+	
+	/**
+	 * @return List of Categories
+	 */
+	public List<Category> getAllCategory(){
+		return categoryDao.findAll();
 	}
 }

@@ -7,13 +7,6 @@
         <ol class="list-group list-group-numbered">
           <li *ngFor="let item of order.cart" class="list-group-item">{{ item.product.name }}</li>
         </ol>
-        <!-- <a
-          *ngFor="let item of order.cart"
-          class="list-group-item list-group-item-action"
-          [routerLink]="['./']"
-          fragment="item-{{ order.id }}-{{ item.id }}"
-          >{{ item.product.name }}</a
-        > -->
       </div>
       <h6 class="mt-auto text-muted">
         Total: {{ order.price | currency : "INR" }} by {{ order.paymentMethod }}
@@ -51,48 +44,10 @@
               <h6>Brand: {{ item.product.brand }}</h6>
               <h6>Quantity: {{ item.quantity }}</h6>
               <p>Current Price: {{ item.product.price | currency:"INR"}}</p>
-              <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi debitis ducimus inventore quae, minima architecto exercitationem delectus aspernatur! Praesentium earum laudantium ratione sequi ad dolorem nemo totam magnam asperiores excepturi reprehenderit vel repellat dignissimos repudiandae, est velit corrupti consectetur. Eum odit, alias distinctio ex repudiandae facilis doloremque facere libero earum dolorum ab sequi tempora.</p> -->
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- <div *ngFor="let order of allOrders" class="peach rounded p-2 my-2">
-    <div class="d-flex justify-content-between">
-      <h6>Placed on: {{order.timestamp | date: 'medium'}}</h6>
-      <h6>{{order.price | currency: 'INR'}} by {{order.paymentMethod}}</h6>
-      <h6>Ship To: {{order.customer.address.houseNo | titlecase}}, {{order.customer.address.addressLine1 | titlecase}},{{order.customer.address.addressLine2 | titlecase}}, {{order.customer.address.city | titlecase}}, {{order.customer.address.state | titlecase}}-{{order.customer.address.pincode}}.</h6>
-    </div>
-    <div class="accordion" id="accordionExample-{{order.id}}">
-      <div *ngFor="let item of order.cart">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="heading-{{order.id}}-{{item.id}}">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              attr.data-bs-target="#collapse-{{order.id}}-{{item.id}}"
-              aria-expanded="false"
-              attr.aria-controls="collapse-{{order.id}}-{{item.id}}"
-            >
-              {{item.product.name}}
-            </button>
-          </h2>
-          <div
-            id="collapse-{{order.id}}-{{item.id}}"
-            class="accordion-collapse collapse"
-            attr.aria-labelledby="heading-{{order.id}}-{{item.id}}"
-            attr.data-bs-parent="#accordionExample-{{order.id}}"
-          >
-            <div class="accordion-body">
-              <h5>Brand: {{item.product.brand}}</h5>
-              <p class="text-muted">Quantity: {{item.quantity}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>

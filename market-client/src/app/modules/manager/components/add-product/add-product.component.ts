@@ -43,7 +43,7 @@ export class AddProductComponent implements OnInit {
       let formData = new FormData();
 
       formData.set('name', this.productForm.value.name);
-      formData.set('brand', this.productForm.value.brand);
+      formData.set('brand', this.productForm.value.brand===" "?"BigMart":this.productForm.value.brand);
       formData.set('categoryName', this.productForm.value.category);
       formData.set('price', this.productForm.value.price);
 

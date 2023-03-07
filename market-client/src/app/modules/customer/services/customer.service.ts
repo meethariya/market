@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CartList } from 'src/app/models/cart-list';
+import { Category } from 'src/app/models/category';
 import { Customer } from 'src/app/models/customer';
 import { Inventory } from 'src/app/models/inventory';
 import { Order } from 'src/app/models/order';
@@ -27,6 +28,10 @@ export class CustomerService {
 
   getInventory(): Observable<Inventory[]> {
     return this.generalService.getInventory();
+  }
+
+  getCategory(): Observable<Category[]> {
+    return this.generalService.getCategory();
   }
 
   addToCart(cartData: FormData) {

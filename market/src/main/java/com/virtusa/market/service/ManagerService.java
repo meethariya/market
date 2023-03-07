@@ -294,7 +294,4 @@ public class ManagerService {
 		return orderDao.findAll();
 	}
 	
-	public List<Category> getAllCategory(){
-		return categoryDao.findAll();
-	}
 }

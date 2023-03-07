@@ -25,12 +25,7 @@ export class ManagerService {
   }
 
   getCategory(): Observable<Category[]> {
-    return this.http.get<Category[]>(
-      this.generalService.serverPath + '/manager/category',
-      {
-        headers: this.generalService.headerGenerator(),
-      }
-    );
+    return this.generalService.getCategory();
   }
 
   getInventory(): Observable<Inventory[]> {

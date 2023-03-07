@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, lastValueFrom, Observable, take, throwError } from 'rxjs';
+import { Category } from '../models/category';
 import { Inventory } from '../models/inventory';
 import { Product } from '../models/product';
 
@@ -55,6 +56,12 @@ export class GeneralService {
 
   getInventory(): Observable<Inventory[]> {
     return this.http.get<Inventory[]>(this.serverPath + '/inventory', {
+      headers: this.headerGenerator(),
+    });
+  }
+
+  getCategory(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.serverPath + '/category', {
       headers: this.headerGenerator(),
     });
   }

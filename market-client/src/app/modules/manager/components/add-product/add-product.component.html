@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container w-50 my-5">
   <h2 class="text-center">Add New Product</h2>
   <br />
   <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successAdded">
@@ -59,16 +59,19 @@
     </div>
     <div class="col-md-6">
       <label for="price" class="form-label">Price</label>
-      <input
-        type="number"
-        class="form-control"
-        id="price"
-        step="0.01"
-        min="1"
-        placeholder="500.00"
-        required
-        formControlName="price"
-      />
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1">{{"₹"}}</span>
+        <input
+          type="number"
+          class="form-control"
+          id="price"
+          step="0.01"
+          min="1"
+          placeholder="500.00"
+          required
+          formControlName="price"
+        />
+      </div>
       <div *ngIf="f.price.touched && f.price.invalid">
         <div *ngIf="f.price.errors?.['required']" class="form-text text-danger">Price is required.</div>
         <div *ngIf="f.price.errors?.['min']" class="form-text text-danger">Price can not be less than 1.</div>
@@ -91,7 +94,9 @@
     </div>
     <div class="col-12">
       <h6 class="text-success" *ngIf="productForm.valid">Looks good.</h6>
-      <button type="submit" class="btn btn-primary" [disabled]="!productForm.valid">Add Product</button>
+      <div class="d-grid rounded peach">
+        <button type="submit" class="btn border border-0" [disabled]="!productForm.valid">Add Product</button>
+      </div>
     </div>
   </form>
 </div>

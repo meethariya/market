@@ -5,10 +5,18 @@ import { CustomerService } from '../../services/customer.service';
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styles: [],
+  styles: [
+    `
+      .my-pagination ::ng-deep .ngx-pagination .current {
+        background: #64baaa;
+        border-radius: 20px;
+      }
+    `,
+  ],
 })
 export class CartComponent implements OnInit {
-  cart: CartList[] = []
+  p: number = 1;
+  cart: CartList[] = [];
   itemRemoved: boolean = false;
 
   constructor(private customerService: CustomerService) {}
@@ -20,8 +28,8 @@ export class CartComponent implements OnInit {
     });
   }
 
-  removeItem(item: CartList){
-    this.cart = this.cart.filter(i => i.id !== item.id);
+  removeItem(item: CartList) {
+    this.cart = this.cart.filter((i) => i.id !== item.id);
     this.itemRemoved = true;
   }
 }

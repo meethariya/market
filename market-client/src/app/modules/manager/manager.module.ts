@@ -12,6 +12,7 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { OrderComponent } from './components/order/order.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { FacetModule } from '../facet/facet.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { FacetModule } from '../facet/facet.module';
     FormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    FacetModule
+    FacetModule,
+    NgxPaginationModule
   ]
 })
 export class ManagerModule { }

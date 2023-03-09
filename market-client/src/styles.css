@@ -1,20 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
-.purple{
-    background-color: #712cf9;
+.purple {
+  background-color: #712cf9;
 }
 
-.blue{
-    background-color: #A28BBE;
+.blue {
+  background-color: #a28bbe;
 }
 
-.peach{
-    background-color: #64BAAA;
+.peach {
+  background-color: #64baaa;
 }
 
-.yellow{
-    background-color: #FBEAFF;
+.yellow {
+  background-color: #fbeaff;
 }
 
-.new-font{
-    font-family: 'Roboto Condensed', sans-serif;
+.new-font {
+  font-family: "Roboto Condensed", sans-serif;
 }

@@ -49,12 +49,13 @@
       *ngIf="products != null && products.length !== 0; else noProducts"
     >
       <div class="row">
-        <div *ngFor="let product of products" class="col-sm-4 my-2">
+        <div *ngFor="let product of products | paginate: {itemsPerPage: 6, currentPage: p}" class="col-sm-4 my-2">
           <app-product
             [product]="product"
             (addToCartSuccessEmitter)="addedToCart = !addedToCart"
           ></app-product>
         </div>
+        <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>
       </div>
     </div>
     <!--if no products are available-->

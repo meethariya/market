@@ -5,9 +5,17 @@ import { ManagerService } from '../../services/manager.service';
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
-  styles: [],
+  styles: [
+    `
+      .my-pagination ::ng-deep .ngx-pagination .current {
+        background: #64baaa;
+        border-radius: 20px;
+      }
+    `,
+  ],
 })
 export class OrderComponent implements OnInit {
+  p: number = 1;
   order: Order[] = [];
 
   constructor(private managerService: ManagerService) {}

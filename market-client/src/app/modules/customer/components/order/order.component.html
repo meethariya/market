@@ -1,7 +1,7 @@
 <div class="container my-5">
   <h3 class="text-center">Your Orders</h3>
 
-  <div class="row border-bottom my-2" *ngFor="let order of allOrders">
+  <div class="row border-bottom my-2" *ngFor="let order of allOrders| paginate: {itemsPerPage: 5, currentPage: p}">
     <div class="col-4 my-1 d-flex flex-column border-end">
       <div id="list-{{ order.id }}" class="list-group">
         <ol class="list-group list-group-numbered">
@@ -50,4 +50,5 @@
       </div>
     </div>
   </div>
+  <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>
 </div>

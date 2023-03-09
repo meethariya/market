@@ -17,10 +17,16 @@ import { ManagerService } from '../../services/manager.service';
       #addProductButton:hover #onHoverShow {
         display: block;
       }
+
+      .my-pagination ::ng-deep .ngx-pagination .current {
+        background: #64baaa;
+        border-radius: 20px;
+      }
     `,
   ],
 })
 export class ManagerHomeComponent implements OnInit {
+  p: number = 1;
   inventory: Inventory[] = [];
   fixedInventory: Inventory[] = [];
   products: Product[] = [];
@@ -77,17 +83,17 @@ export class ManagerHomeComponent implements OnInit {
     this.products = allProducts;
     this.productListForSearching = allProducts;
   }
-  
+
   searchedProducts(allProducts: Product[]) {
     this.inventoryModifer(allProducts);
     this.products = allProducts;
   }
-  
-  inventoryModifer(allProducts: Product[]){
+
+  inventoryModifer(allProducts: Product[]) {
     this.inventory = [];
     allProducts.forEach((p) => {
       let temp = this.fixedInventory.find((i) => i.product.id === p.id);
       if (temp != null) this.inventory.push(temp);
-    })
+    });
   }
 }

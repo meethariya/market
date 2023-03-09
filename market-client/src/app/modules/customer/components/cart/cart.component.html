@@ -17,16 +17,17 @@
       (click)="itemRemoved = !itemRemoved"
     ></button>
   </div>
-  <div class="mx-5" *ngFor="let cartItem of cart">
+  <div class="mx-5" *ngFor="let cartItem of cart| paginate: {itemsPerPage: 5, currentPage: p}">
     <app-cart-item
       [item]="cartItem"
       (deleteFromCart)="removeItem($event)"
     ></app-cart-item>
   </div>
+  <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>
   <!-- Place order -->
   <div class="d-flex flex-row-reverse">
     <div class="rounded blue mx-5">
-      <button type="button" class="btn" routerLink="/customer/cart/place-order">
+      <button type="button" class="btn text-white" routerLink="/customer/cart/place-order">
         Place order
       </button>
     </div>

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { FacetModule } from '../facet/facet.module';
 import { AddToCartComponent } from './components/add-to-cart/add-to-cart.component';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
@@ -30,7 +31,8 @@ import { CustomerRoutingModule } from './customer-routing.module';
     FontAwesomeModule,
     FormsModule,
     NgSelectModule,
-    FacetModule
+    FacetModule,
+    NgxPaginationModule
   ],
   exports: [
     CustomerHomeComponent,

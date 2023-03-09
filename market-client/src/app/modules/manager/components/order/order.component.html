@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr *ngFor="let i of order">
+        <tr *ngFor="let i of order| paginate: {itemsPerPage: 10, currentPage: p}">
           <th scope="row">{{ i.id }}</th>
           <td>{{ i.customer.user.name | titlecase }}</td>
           <td>{{ i.timestamp | date : "medium" }}</td>
@@ -36,6 +36,11 @@
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <th colspan="7" class="text-center">
+          <pagination-controls (pageChange)="p = $event" class="my-pagination my-2"></pagination-controls>
+        </th>
+      </tfoot>
     </table>
   </div>
 </div>

@@ -7,9 +7,17 @@ import { CustomerService } from '../../services/customer.service';
 @Component({
   selector: 'app-customer-home',
   templateUrl: './customer-home.component.html',
-  styles: [],
+  styles: [
+    `
+      .my-pagination ::ng-deep .ngx-pagination .current {
+        background: #64baaa;
+        border-radius: 20px;
+      }
+    `,
+  ],
 })
 export class CustomerHomeComponent implements OnInit {
+  p: number = 1;
   products: Product[] = [];
   fixedProducts: Product[] = [];
   productListForSearching: Product[] = [];

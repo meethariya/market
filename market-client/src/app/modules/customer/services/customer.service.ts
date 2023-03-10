@@ -99,4 +99,14 @@ export class CustomerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
+
+  editProfile(id: number, formData: FormData) : Observable<Customer> {
+    return this.http.put<Customer>(
+      this.generalService.serverPath + '/customer/profile/' + id,
+      formData,
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
+  }
 }

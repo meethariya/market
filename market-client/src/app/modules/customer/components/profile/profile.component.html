@@ -1,0 +1,452 @@
+<div class="container my-5">
+  <!--Alerts-->
+  <div
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+    *ngIf="editSuccess"
+  >
+    <strong>Success!</strong> Profile has been updated.
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div
+    class="alert alert-danger alert-dismissible fade show"
+    role="alert"
+    *ngIf="editError"
+  >
+    <strong>Error!</strong> Unable to edit Profile due to, {{ errorMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  <form [formGroup]="formData" (ngSubmit)="submitForm()">
+    <div class="row" *ngIf="customer != null">
+      <div class="col-md-4">
+        <img
+          src="{{
+            profilePicture !== null
+              ? profilePicture
+              : customer.user.profilePicPath.split('/src')[1]
+          }}"
+          alt="profilePic"
+          class="img-fluid rounded-circle"
+        />
+        <div class="mb-3" id="profilePicEditButton" style="display: none">
+          <label for="formFile" class="form-label">Edit Profile Picture</label>
+          <input
+            class="form-control"
+            type="file"
+            id="formFile"
+            accept="image/*"
+            formControlName="profilePic"
+            (change)="onFileChange($event)"
+          />
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="d-flex flex-row-reverse">
+          <div id="editButton">
+            <div class="d-inline-flex p-2 rounded-circle peach mx-2">
+              <button
+                class="btn text-white"
+                data-bs-toggle="tooltip"
+                title="Edit Profile"
+                (click)="editProfile()"
+              >
+                <fa-icon [icon]="pencil"></fa-icon>
+              </button>
+            </div>
+          </div>
+          <div id="onEdit" style="display: none">
+            <div
+              id="cancelButton"
+              class="d-inline-flex p-2 rounded-circle blue mx-2"
+            >
+              <button
+                class="btn text-white"
+                data-bs-toggle="tooltip"
+                title="Cancel"
+                (click)="cancelEdit()"
+              >
+                <fa-icon [icon]="cancel"></fa-icon>
+              </button>
+            </div>
+            <div
+              id="checkButton"
+              class="d-inline-flex p-2 rounded-circle peach mx-2"
+            >
+              <button
+                type="submit"
+                class="btn text-white border border-0"
+                data-bs-toggle="tooltip"
+                title="Modify"
+                (click)="submitForm()"
+                [disabled]="!formData.valid"
+              >
+                <fa-icon [icon]="check"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <h3 class="my-2">Profile</h3>
+
+        <div class="row mb-2">
+          <!--Name-->
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="name" class="col-sm-2 col-form-label">Name:</label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  readonly
+                  class="form-control-plaintext"
+                  id="name"
+                  formControlName="name"
+                  required
+                />
+                <div *ngIf="f.name.touched && f.name.invalid">
+                  <div
+                    *ngIf="f.name.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    Name is required.
+                  </div>
+                  <div
+                    *ngIf="f.name.errors?.['maxlength']"
+                    class="form-text text-danger"
+                  >
+                    Name should be less than 30 character.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Email-->
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="email" class="col-sm-2 col-form-label">Email:</label>
+              <div class="col-sm-10">
+                <input
+                  type="email"
+                  class="form-control-plaintext"
+                  id="email"
+                  data-bs-toggle="tooltip"
+                  title="Cant Modify Email"
+                  value="{{ customer.user.email }}"
+                  readonly
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <!--Phone-->
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="phone" class="col-sm-2 col-form-label">Phone:</label>
+              <div class="col-sm-10">
+                <input
+                  type="number"
+                  readonly
+                  class="form-control-plaintext"
+                  id="phone"
+                  formControlName="phone"
+                  required
+                />
+                <div *ngIf="f.phone.touched && f.phone.invalid">
+                  <div
+                    *ngIf="f.phone.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    Phone Number is required.
+                  </div>
+                  <div
+                    *ngIf="f.phone.errors?.['min']"
+                    class="form-text text-danger"
+                  >
+                    Phone Number should be of 10 digits
+                  </div>
+                  <div
+                    *ngIf="f.phone.errors?.['max']"
+                    class="form-text text-danger"
+                  >
+                    Phone Number should be of 10 digits
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Date of Birth-->
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="dob" class="col-sm-3 col-form-label"
+                >Date of Birth:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="date"
+                  readonly
+                  class="form-control-plaintext"
+                  id="dob"
+                  formControlName="dob"
+                  required
+                />
+                <div *ngIf="f.dob.touched && f.dob.invalid">
+                  <div
+                    *ngIf="f.dob.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    Date of Birth is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <!--Gender-->
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="gender" class="form-label">Gender:</label>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    value="male"
+                    [checked]="customer.gender"
+                    disabled
+                  />
+                  <label class="form-check-label" for="male">Male</label>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="female"
+                    [checked]="!customer.gender"
+                    disabled
+                  />
+                  <label class="form-check-label" for="female">Female</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="my-2">Address</h3>
+
+        <div class="row mb-2">
+          <!--House Number-->
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="houseNo" class="col-sm-3 col-form-label"
+                >House No:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  readonly
+                  class="form-control-plaintext"
+                  id="houseNo"
+                  formControlName="houseNo"
+                  required
+                />
+                <div *ngIf="f.houseNo.touched && f.houseNo.invalid">
+                  <div
+                    *ngIf="f.houseNo.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    House No. is required.
+                  </div>
+                  <div
+                    *ngIf="f.houseNo.errors?.['maxlength']"
+                    class="form-text text-danger"
+                  >
+                    House no. can not exceed 30 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <!--Address Line 1-->
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="addressLine1" class="col-sm-3 col-form-label"
+                >Address Line1:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  readonly
+                  class="form-control-plaintext"
+                  id="addressLine1"
+                  formControlName="addressLine1"
+                  required
+                />
+                <div *ngIf="f.addressLine1.touched && f.addressLine1.invalid">
+                  <div
+                    *ngIf="f.addressLine1.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    Address Line 1 is required.
+                  </div>
+                  <div
+                    *ngIf="f.addressLine1.errors?.['maxlength']"
+                    class="form-text text-danger"
+                  >
+                    Address Line 1 can not exceed 50 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Address Line 2-->
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="addressLine2" class="col-sm-3 col-form-label"
+                >Address Line2:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  readonly
+                  class="form-control-plaintext"
+                  id="addressLine2"
+                  formControlName="addressLine2"
+                />
+                <div *ngIf="f.addressLine2.touched && f.addressLine2.invalid">
+                  <div
+                    *ngIf="f.addressLine2.errors?.['maxlength']"
+                    class="form-text text-danger"
+                  >
+                    Address Line 2 can not exceed 50 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <!--City-->
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="city" class="col-sm-3 col-form-label">City:</label>
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  readonly
+                  class="form-control-plaintext"
+                  id="city"
+                  formControlName="city"
+                  required
+                />
+                <div *ngIf="f.city.touched && f.city.invalid">
+                  <div
+                    *ngIf="f.city.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    City is required.
+                  </div>
+                  <div
+                    *ngIf="f.city.errors?.['maxlength']"
+                    class="form-text text-danger"
+                  >
+                    City can not exceed 30 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--State-->
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="state" class="col-sm-3 col-form-label">State:</label>
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  readonly
+                  class="form-control-plaintext"
+                  id="state"
+                  formControlName="state"
+                  required
+                />
+                <div *ngIf="f.state.touched && f.state.invalid">
+                  <div
+                    *ngIf="f.state.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    State is required.
+                  </div>
+                  <div
+                    *ngIf="f.state.errors?.['maxlength']"
+                    class="form-text text-danger"
+                  >
+                    State can not exceed 30 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Pincode-->
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="pincode" class="col-sm-3 col-form-label"
+                >Pincode:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="number"
+                  readonly
+                  class="form-control-plaintext"
+                  id="pincode"
+                  min="100000"
+                  max="999999"
+                  step="1"
+                  formControlName="pincode"
+                  required
+                />
+                <div *ngIf="f.pincode.touched && f.pincode.invalid">
+                  <div
+                    *ngIf="f.pincode.errors?.['required']"
+                    class="form-text text-danger"
+                  >
+                    Pincode is required.
+                  </div>
+                  <div
+                    *ngIf="f.pincode.errors?.['maxlength'] || f.pincode.errors?.['minlength']"
+                    class="form-text text-danger"
+                  >
+                    Pincode should be of 6 digits.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -14,6 +14,7 @@ import { OrderComponent } from './components/order/order.component';
 import { PlaceOrderComponent } from './components/place-order/place-order.component';
 import { ProductComponent } from './components/product/product.component';
 import { CustomerRoutingModule } from './customer-routing.module';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CustomerRoutingModule } from './customer-routing.module';
     ProductComponent,
     AddToCartComponent,
     CartItemComponent,
-    PlaceOrderComponent
+    PlaceOrderComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,8 @@ import { CustomerRoutingModule } from './customer-routing.module';
     FormsModule,
     NgSelectModule,
     FacetModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ReactiveFormsModule
   ],
   exports: [
     CustomerHomeComponent,

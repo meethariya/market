@@ -3,6 +3,7 @@
  */
 package com.virtusa.market.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.virtusa.market.dto.CartDto;
+import com.virtusa.market.dto.CustomerEditDto;
 import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
@@ -68,10 +71,10 @@ public class CustomerController {
 	 * @throws CustomerNotFoundException
 	 */
 	@GetMapping("/profile")
-	public ResponseEntity<Customer> getProfile(Authentication auth){
-		return new ResponseEntity<>(customerService.getProfile(auth.getName()),HttpStatus.OK);
+	public ResponseEntity<Customer> getProfile(Authentication auth) {
+		return new ResponseEntity<>(customerService.getProfile(auth.getName()), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Adds product to cartlist
 	 * 
@@ -120,7 +123,8 @@ public class CustomerController {
 	@PutMapping("/cart")
 	public ResponseEntity<CartList> editCartItemQuantity(@RequestParam("cartListId") long id,
 			@RequestParam("quantity") long quantityDiff, Authentication auth) {
-		return new ResponseEntity<>(customerService.modifyCartItem(id, quantityDiff, auth.getName()), HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(customerService.modifyCartItem(id, quantityDiff, auth.getName()),
+				HttpStatus.ACCEPTED);
 	}
 
 	/**
@@ -184,5 +188,21 @@ public class CustomerController {
 	@GetMapping("/order/{id}")
 	public ResponseEntity<Order> findOrder(@PathVariable("id") long orderId, Authentication auth) {
 		return new ResponseEntity<>(customerService.findOrder(orderId, auth.getName()), HttpStatus.OK);
+	}
+
+	/**
+	 * Modifies Customer.
+	 * 
+	 * @param customerId
+	 * @param customerEditDto
+	 * @param image
+	 * @return Customer
+	 * @throws IOException
+	 * @throws CustomerNotFoundException
+	 */
+	@PutMapping("/profile/{id}")
+	public ResponseEntity<Customer> editProfile(@PathVariable("id") long customerId,
+			@ModelAttribute("customer") CustomerEditDto customerEditDto, @RequestParam(name = "images", required = false) MultipartFile image) throws IOException {
+		return new ResponseEntity<>(customerService.editProfile(customerId, customerEditDto, image), HttpStatus.OK);
 	}
 }

@@ -3,36 +3,26 @@
  */
 package com.virtusa.market.dto;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.Random;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.context.MessageSource;
 
 import com.virtusa.market.model.Address;
 import com.virtusa.market.model.Customer;
 import com.virtusa.market.model.User;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * All fields of {@link Customer}, {@link User} & {@link Address}.<br>
- * Generates proper models from raw input.<br>
- * Contains all backend validation annotations.
  * @author meet
- * @since 11-Feb-2023
+ * @since 10-Mar-2023
  */
-public class CustomerDto {
+public class CustomerEditDto {
 
-	private static final Random RANDOM = new Random();
-	
 	@NotEmpty(message = "{NotEmpty.customer.gender}")
 	private String gender;
 
@@ -46,16 +36,6 @@ public class CustomerDto {
 	@NotEmpty(message = "{NotEmpty.customer.name}")
 	@Length(max = 30, message = "{Length.customer.name}")
 	private String name;
-
-	@NotEmpty(message = "{NotEmpty.customer.email}")
-	@Email(message = "{Email.customer.email}")
-	@Length(max = 50, message = "{Length.customer.email}")
-	private String email;
-
-	@NotEmpty(message = "{NotEmpty.customer.password}")
-	private String password;
-
-	private String profilePicPath;
 
 	@NotEmpty(message = "{NotEmpty.customer.houseNo}")
 	@Length(max = 30, message = "{Length.customer.houseNo}")
@@ -80,6 +60,8 @@ public class CustomerDto {
 	@Min(value = 100000, message = "{Min.customer.pincode}")
 	@Max(value = 999999, message = "{Max.customer.pincode}")
 	private int pincode;
+
+	private String profilePicPath;
 
 	private Address address = new Address();
 
@@ -141,60 +123,6 @@ public class CustomerDto {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
-	 * @return the profilePicPath
-	 */
-	public String getProfilePicPath() {
-		return profilePicPath;
-	}
-
-	/**
-	 * @param profilePicPath the profilePicPath to set
-	 */
-	public void setProfilePicPath(MessageSource source) {
-
-		String path = source.getMessage("profileFolder", null, Locale.ENGLISH)+"default/";
-		// appending folder name
-		if (getGender().equalsIgnoreCase("male")) {
-			path += "male/";
-		} else {
-			path += "female/";
-		}
-		// getting list of all images
-		String[] contents = new File(path).list();
-		// selecting random image
-		String random = contents[(RANDOM.nextInt(contents.length))];
-		this.profilePicPath = path+random;
 	}
 
 	/**
@@ -282,22 +210,24 @@ public class CustomerDto {
 	}
 
 	/**
+	 * @return the profilePicPath
+	 */
+	public String getProfilePicPath() {
+		return profilePicPath;
+	}
+
+	/**
+	 * @param profilePicPath the profilePicPath to set
+	 */
+	public void setProfilePicPath(String profilePicPath) {
+		this.profilePicPath = profilePicPath;
+	}
+
+	/**
 	 * @return the address
 	 */
 	public Address getAddress() {
 		return address;
-	}
-
-	/**
-	 * @param address the address to set
-	 */
-	public void setAddress() {
-		this.address.setHouseNo(getHouseNo());
-		this.address.setAddressLine1(getAddressLine1());
-		this.address.setAddressLine2(getAddressLine2());
-		this.address.setCity(getCity());
-		this.address.setState(getState());
-		this.address.setPincode(getPincode());
 	}
 
 	/**
@@ -308,17 +238,6 @@ public class CustomerDto {
 	}
 
 	/**
-	 * @param user the user to set
-	 */
-	public void setUser() {
-		this.user.setEmail(getEmail());
-		this.user.setName(getName());
-		this.user.setPassword(getPassword());
-		this.user.setRole("Customer");
-		this.user.setProfilePicPath(getProfilePicPath());
-	}
-
-	/**
 	 * @return the customer
 	 */
 	public Customer getCustomer() {
@@ -326,19 +245,42 @@ public class CustomerDto {
 	}
 
 	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(Address temp) {
+		temp.setHouseNo(houseNo);
+		temp.setAddressLine1(addressLine1);
+		temp.setAddressLine2(addressLine2);
+		temp.setCity(city);
+		temp.setState(state);
+		temp.setPincode(pincode);
+		address = temp;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User temp) {
+		temp.setName(name);
+		if (profilePicPath != null)
+			temp.setProfilePicPath(profilePicPath);
+		user = temp;
+	}
+
+	/**
 	 * @param customer the customer to set
 	 */
-	public void setCustomer() {
-		this.customer.setAddress(getAddress());		
-		this.customer.setGender(getGender().equalsIgnoreCase("male"));
-
-		this.customer.setPhone(getPhone());
-		this.customer.setUser(getUser());
+	public void setCustomer(Customer customer) {
+		customer.setGender(gender.equalsIgnoreCase("male"));
+		customer.setPhone(phone);
+		customer.setAddress(address);
+		customer.setUser(user);
 		try {
-			this.customer.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(getDob()));
+			this.customer.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		this.customer = customer;
 	}
 
 }

@@ -3,14 +3,21 @@
  */
 package com.virtusa.market.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.virtusa.market.dao.CartListDao;
 import com.virtusa.market.dao.CustomerDao;
@@ -19,6 +26,7 @@ import com.virtusa.market.dao.OrderDao;
 import com.virtusa.market.dao.ProductDao;
 import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CartDto;
+import com.virtusa.market.dto.CustomerEditDto;
 import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
@@ -42,6 +50,9 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class CustomerService {
+
+	@Autowired
+	private MessageSource source;
 
 	@Autowired
 	private ProductDao productDao;
@@ -172,8 +183,9 @@ public class CustomerService {
 		Customer customer = customerValidator(customerEmail);
 
 		// Checks if any items exists in cart or not.
-		if(customer.getCart().isEmpty()) throw new CartListNotFoundException("Cart Empty");
-		
+		if (customer.getCart().isEmpty())
+			throw new CartListNotFoundException("Cart Empty");
+
 		// create new order and set its attributes
 		Order order = new Order();
 
@@ -321,20 +333,17 @@ public class CustomerService {
 		// check if the Cart Item is of the same customer
 		for (CartList i : customer.getCart())
 			if (i.getId() == id) {
-				customer.setCart(
-						new HashSet<>(customer.getCart().stream()
-														.filter(t -> t.getId() != id)
-														.toList())
-				);
+				customer.setCart(new HashSet<>(customer.getCart().stream().filter(t -> t.getId() != id).toList()));
 				customerDao.save(customer);
 				cartListDao.deleteById(id);
 				return id;
 			}
 		throw new CartListNotFoundException("Invalid cartList ID");
 	}
-	
+
 	/**
 	 * Get Customer profile using authenticated email
+	 * 
 	 * @param email
 	 * @return Customer
 	 * @throws UserNotFoundException
@@ -342,5 +351,68 @@ public class CustomerService {
 	 */
 	public Customer getProfile(String email) {
 		return customerValidator(email);
+	}
+
+	/**
+	 * Finds Customer using ID.<br>
+	 * If no Customer found then throws error.<br>
+	 * Finds Customer by new Phone number. If Exists and not same Customer then throws error.<br>
+	 * If Image is uploaded, concatenate customer id with its extension and save image in profile picture folder.<br>
+	 * Sets Address, User, and Customer object using newly uploaded and existing data.<br>
+	 * Saves Customer.<br>
+	 * 
+	 * @param customerId
+	 * @param customerEditDto
+	 * @param image
+	 * @return Customer
+	 * @throws IOException
+	 */
+	public Customer editProfile(long customerId, CustomerEditDto customerEditDto, MultipartFile image)
+			throws IOException {
+		Optional<Customer> findById = customerDao.findById(customerId);
+
+		// If Customer not found then throw error
+		if (findById.isEmpty())
+			throw new CustomerNotFoundException();
+		Customer customer = findById.get();
+		
+		// If new Phone Number already Exist by another Customer then throw error
+		Customer findByPhone = customerDao.findByPhone(customerEditDto.getPhone());
+		if (findByPhone != null && findByPhone.getId() != customerId) {
+			throw new IncorrectFormDetailsException("Phone number is already taken");
+		}
+		
+		// If Customer has changed Profile Picture
+		if (image != null) {
+			String path = source.getMessage("profileFolder", null, Locale.ENGLISH);
+			// Image Name used for its extension
+			String imageName = image.getOriginalFilename();
+			if (imageName == null) {
+				throw new IOException("Invalid File name");
+			}
+
+			// generating name using file index and its extension
+			String name = customerId + "." + imageName.split("[.]")[1];
+
+			// generating file complete path to save file and save path in db
+			String filePath = path + File.separator + name;
+
+			// deletes file if exists
+			Files.deleteIfExists(Paths.get(filePath));
+
+			// saves file
+			Files.copy(image.getInputStream(), Paths.get(filePath));
+
+			customerEditDto.setProfilePicPath(filePath);
+		}
+
+		// Modify Address using the new and existing customer's Address
+		customerEditDto.setAddress(customer.getAddress());
+		// Modify User using the new and existing customer's User
+		customerEditDto.setUser(customer.getUser());
+		// Modify Customer using the new and existing Customer
+		customerEditDto.setCustomer(customer);
+
+		return customerDao.save(customerEditDto.getCustomer());
 	}
 }

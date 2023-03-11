@@ -17,6 +17,7 @@ export class ProfileComponent implements OnInit {
   cancel = faXmark;
   check = faCheck;
   profilePicture: string | null = null;
+  image: any = null;
   editSuccess = false;
   editError = false;
   errorMessage: string = '';
@@ -46,7 +47,6 @@ export class ProfileComponent implements OnInit {
       Validators.minLength(6),
       Validators.maxLength(6),
     ]),
-    profilePic: new FormControl(''),
   });
 
   constructor(private customerService: CustomerService) {}
@@ -105,15 +105,15 @@ export class ProfileComponent implements OnInit {
       data.set('gender', gender);
 
       if (this.profilePicture != null) {
-        for (let i = 0; i < this.profilePicture.length; i++) {
-          data.append('images', this.profilePicture[i]);
-        }
+        data.append('images', this.image);
       }
 
       this.customerService.editProfile(this.customer.id, data).subscribe({
         next: (customerData) => {
           this.customer = customerData;
           this.setFormData(customerData);
+          this.editSuccess = true;
+          document.getElementById('cancel')!.click();
         },
         error: (err) => {
           this.editError = true;
@@ -163,16 +163,14 @@ export class ProfileComponent implements OnInit {
   onFileChange(event: any) {
     const reader = new FileReader();
     if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
+      const file = event.target.files[0];
       reader.readAsDataURL(file);
 
       reader.onload = () => {
         this.profilePicture = reader.result as string;
-
-        this.formData.patchValue({
-          profilePic: reader.result as string,
-        });
       };
+
+      this.image = file;
     }
   }
 
@@ -202,7 +200,6 @@ export class ProfileComponent implements OnInit {
       city: customer.address.city,
       state: customer.address.state,
       pincode: customer.address.pincode.toString(),
-      profilePic: '',
     });
   }
 }

@@ -1,12 +1,27 @@
 <div class="container w-50 mt-5">
-  <form class="g-3 needs-validation" (ngSubmit)="register()">
+  <form
+    class="g-3 needs-validation"
+    [formGroup]="registerForm"
+    (ngSubmit)="register()"
+  >
     <h1 class="text-center">Register</h1>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="failedStatus">
-      <fa-icon [icon]="notOk"></fa-icon><strong>Failed!</strong> {{errorMessage}}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+      *ngIf="failedStatus"
+    >
+      <fa-icon [icon]="notOk"></fa-icon><strong>Failed!</strong>
+      {{ errorMessage }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
     </div>
     <div class="alert alert-success" role="alert" *ngIf="successStatus">
-      <fa-icon [icon]="ok"></fa-icon>Registered Successfully <a href="/" class="alert-link">Click here to login</a>.
+      <fa-icon [icon]="ok"></fa-icon>Registered Successfully
+      <a href="/" class="alert-link">Click here to login</a>.
     </div>
     <div class="row mb-2">
       <div class="col-md-6">
@@ -14,23 +29,38 @@
         <input
           type="text"
           class="form-control"
-          [(ngModel)]="firstName"
+          [ngClass]="
+            f.firstName.touched
+              ? f.firstName.invalid
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
+          formControlName="firstName"
           id="firstName"
           name="firstName"
           placeholder="Mark"
           required
-          autofocus
           maxlength="15"
         />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in First name.</div>
+        <div *ngIf="f.firstName.errors?.['required']" class="invalid-feedback">
+          First Name is required.
+        </div>
       </div>
       <div class="col-md-6">
         <label for="lastName" class="form-label">Last name</label>
         <input
           type="text"
           class="form-control"
-          [(ngModel)]="lastName"
+          [ngClass]="
+            f.lastName.touched
+              ? f.lastName.invalid
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
+          formControlName="lastName"
           id="lastName"
           name="lastName"
           placeholder="Otto"
@@ -38,7 +68,9 @@
           maxlength="15"
         />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in last name.</div>
+        <div *ngIf="f.lastName.errors?.['required']" class="invalid-feedback">
+          Last Name is required.
+        </div>
       </div>
     </div>
     <div class="row mb-2">
@@ -47,7 +79,10 @@
         <input
           type="number"
           class="form-control"
-          [(ngModel)]="phone"
+          [ngClass]="
+            f.phone.touched ? (f.phone.invalid ? 'is-invalid' : 'is-valid') : ''
+          "
+          formControlName="phone"
           id="phone"
           name="phone"
           required
@@ -57,13 +92,33 @@
         />
         <div class="form-text">10 digits number</div>
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please enter a valid Phone Number.</div>
+        <div *ngIf="f.phone.errors?.['required']" class="invalid-feedback">
+          Phone number is required.
+        </div>
+        <div *ngIf="f.phone.errors?.['min']" class="invalid-feedback">
+          Phone number should be of 10 digits
+        </div>
+        <div *ngIf="f.phone.errors?.['max']" class="invalid-feedback">
+          Phone number should be of 10 digits
+        </div>
       </div>
       <div class="col-md-4">
         <label for="dob" class="form-label">Date of Birth</label>
-        <input type="date" class="form-control" id="dob" name="dob" [(ngModel)]="dob" required />
+        <input
+          type="date"
+          class="form-control"
+          [ngClass]="
+            f.dob.touched ? (f.dob.invalid ? 'is-invalid' : 'is-valid') : ''
+          "
+          id="dob"
+          name="dob"
+          formControlName="dob"
+          required
+        />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please enter Date of Birth.</div>
+        <div *ngIf="f.dob.errors?.['required']" class="invalid-feedback">
+          Date of Birth is required.
+        </div>
       </div>
       <div class="col-md-4">
         <label for="gender" class="form-label">Gender</label><br />
@@ -73,7 +128,6 @@
             type="radio"
             id="male"
             name="gender"
-            [(ngModel)]="gender"
             value="male"
             checked
           />
@@ -85,7 +139,6 @@
             type="radio"
             id="female"
             name="gender"
-            [(ngModel)]="gender"
             value="female"
           />
           <label class="form-check-label" for="female">Female</label>
@@ -98,24 +151,42 @@
         <input
           type="email"
           class="form-control"
+          [ngClass]="
+            f.email.touched ? (f.email.invalid ? 'is-invalid' : 'is-valid') : ''
+          "
           id="userEmail"
           name="email"
-          [(ngModel)]="email"
+          formControlName="email"
           placeholder="Mark12@mail.com"
           required
           maxlength="50"
         />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in email.</div>
+        <div *ngIf="f.email.errors?.['required']" class="invalid-feedback">
+          Email is required.
+        </div>
+        <div *ngIf="f.email.errors?.['email']" class="invalid-feedback">
+          Enter valid email.
+        </div>
+        <div *ngIf="f.email.errors?.['maxLength']" class="invalid-feedback">
+          Email should not exceed 50 characters.
+        </div>
       </div>
       <div class="col-md-6">
         <label for="userPassword" class="form-label">Password</label>
         <input
           type="password"
           class="form-control"
+          [ngClass]="
+            f.password.touched
+              ? f.password.invalid
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           id="userPassword"
           name="password"
-          [(ngModel)]="password"
+          formControlName="password"
           required
           minlength="8"
         />
@@ -124,7 +195,16 @@
           numbers, and special characters greater than 8 characters.
         </div>
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please enter a valid password.</div>
+        <div *ngIf="f.password.errors?.['required']" class="invalid-feedback">
+          Password is required
+        </div>
+        <div *ngIf="f.password.errors?.['minLength']" class="invalid-feedback">
+          Minimun password should be at least 8 characters
+        </div>
+        <div *ngIf="f.password.errors?.['pattern']" class="invalid-feedback">
+          1 upper-case, 1 lower-case, 1 numbers & 1 special character of minimum
+          8 characters required
+        </div>
       </div>
     </div>
     <div class="row mb-2">
@@ -133,30 +213,60 @@
         <input
           type="text"
           class="form-control"
+          [ngClass]="
+            f.houseNo.touched
+              ? f.houseNo.invalid
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           id="houseNo"
           name="houseNo"
-          [(ngModel)]="houseNo"
+          formControlName="houseNo"
           placeholder="A-123, White House"
           required
           maxlength="30"
         />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in House no.</div>
+        <div *ngIf="f.houseNo.errors?.['required']" class="invalid-feedback">
+          House Number is required.
+        </div>
+        <div *ngIf="f.houseNo.errors?.['maxLength']" class="invalid-feedback">
+          House Number should not exceed 30 characters.
+        </div>
       </div>
       <div class="col-md-8">
         <label for="addressLine1" class="form-label">Address Line 1</label>
         <input
           type="text"
           class="form-control"
+          [ngClass]="
+            f.houseNo.touched
+              ? f.houseNo.invalid
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           id="addressLine1"
           name="addressLine1"
-          [(ngModel)]="addressLine1"
+          formControlName="addressLine1"
           placeholder="Abc road, near tower"
           required
           maxlength="50"
         />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in address line.</div>
+        <div
+          *ngIf="f.addressLine1.errors?.['required']"
+          class="invalid-feedback"
+        >
+          Address Line 1 is required.
+        </div>
+        <div
+          *ngIf="f.addressLine1.errors?.['maxLength']"
+          class="invalid-feedback"
+        >
+          Address Line 1 should not exceed 50 characters.
+        </div>
       </div>
     </div>
     <div class="row mb-2">
@@ -165,11 +275,24 @@
         <input
           type="text"
           class="form-control"
+          [ngClass]="
+            f.addressLine2.touched
+              ? f.addressLine2.invalid
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           id="addressLine2"
           name="addressLine2"
-          [(ngModel)]="addressLine2"
+          formControlName="addressLine2"
           maxlength="50"
         />
+      </div>
+      <div
+        *ngIf="f.addressLine2.errors?.['maxLength']"
+        class="invalid-feedback"
+      >
+        Address Line 2 should not exceed 50 characters.
       </div>
     </div>
     <div class="row mb-2">
@@ -178,39 +301,62 @@
         <input
           type="text"
           class="form-control"
+          [ngClass]="
+            f.city.touched ? (f.city.invalid ? 'is-invalid' : 'is-valid') : ''
+          "
           id="city"
           name="city"
-          [(ngModel)]="city"
+          formControlName="city"
           required
           placeholder="Mumbai"
           maxlength="30"
         />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in City.</div>
+        <div *ngIf="f.city.errors?.['required']" class="invalid-feedback">
+          City is required.
+        </div>
+        <div *ngIf="f.city.errors?.['maxLength']" class="invalid-feedback">
+          City should not exceed 30 characters.
+        </div>
       </div>
       <div class="col-md-4">
         <label for="state" class="form-label">State</label>
         <input
           type="text"
           class="form-control"
+          [ngClass]="
+            f.state.touched ? (f.state.invalid ? 'is-invalid' : 'is-valid') : ''
+          "
           id="state"
           name="state"
-          [(ngModel)]="state"
+          formControlName="state"
           required
           placeholder="Maharashtra"
           maxlength="30"
         />
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in State.</div>
+        <div *ngIf="f.state.errors?.['required']" class="invalid-feedback">
+          State is required.
+        </div>
+        <div *ngIf="f.state.errors?.['maxLength']" class="invalid-feedback">
+          State should not exceed 30 characters.
+        </div>
       </div>
       <div class="col-md-4">
         <label for="pincode" class="form-label">Pincode</label>
         <input
           type="number"
           class="form-control"
+          [ngClass]="
+            f.pincode.touched
+              ? f.pincode.invalid
+                ? 'is-invalid'
+                : 'is-valid'
+              : ''
+          "
           id="pincode"
           name="pincode"
-          [(ngModel)]="pincode"
+          formControlName="pincode"
           min="100000"
           max="999999"
           required
@@ -218,7 +364,15 @@
         />
         <div class="form-text">6 Digits pincode</div>
         <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please fill in Pincode.</div>
+        <div *ngIf="f.pincode.errors?.['required']" class="invalid-feedback">
+          Pincode is required.
+        </div>
+        <div *ngIf="f.pincode.errors?.['min']" class="invalid-feedback">
+          Pincode should be of 6 digits
+        </div>
+        <div *ngIf="f.pincode.errors?.['max']" class="invalid-feedback">
+          Pincode should be of 6 digits
+        </div>
       </div>
     </div>
     <div class="row mb-2">
@@ -226,21 +380,33 @@
         <div class="form-check">
           <input
             class="form-check-input"
+            [ngClass]="
+              f.agreeTermsAndConditions.touched
+                ? f.agreeTermsAndConditions.invalid
+                  ? 'is-invalid'
+                  : 'is-valid'
+                : ''
+            "
             type="checkbox"
-            value=""
             id="invalidCheck"
+            formControlName="agreeTermsAndConditions"
             required
           />
           <label class="form-check-label" for="invalidCheck">
             Agree to terms and conditions
           </label>
-          <div class="invalid-feedback">You must agree before submitting.</div>
+          <div
+            *ngIf="f.agreeTermsAndConditions.errors?.['required']"
+            class="invalid-feedback"
+          >
+            Must agree to terms and condititons before submitting.
+          </div>
         </div>
       </div>
     </div>
     <div class="row mb-2">
       <div class="col-md-12 d-grid">
-        <button class="btn btn-success" type="submit">Register</button>
+        <button class="btn btn-success" type="submit" [disabled]="!registerForm.valid">Register</button>
       </div>
     </div>
   </form>

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  faExclamationTriangle,
+  faThumbsUp,
+} from '@fortawesome/free-solid-svg-icons';
 import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({
@@ -8,107 +12,99 @@ import { UserAuthService } from '../../services/user-auth.service';
   styles: [],
 })
 export class RegisterComponent {
-  firstName!: string;
-  lastName!: string;
-  fullName!: string;
-  phone!: string;
-  dob!: Date;
-  gender!: string;
-  email!: string;
-  password!: string;
-  houseNo!: string;
-  addressLine1!: string;
-  addressLine2!: string;
-  city!: string;
-  state!: string;
-  pincode!: number;
+  registerForm = new FormGroup({
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.min(1000000000),
+      Validators.max(9999999999),
+    ]),
+    dob: new FormControl('', [Validators.required]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.maxLength(50),
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(
+        `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$`
+      ),
+    ]),
+    houseNo: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30),
+    ]),
+    addressLine1: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(50),
+    ]),
+    addressLine2: new FormControl('', [Validators.maxLength(50)]),
+    city: new FormControl('', [Validators.required, Validators.maxLength(30)]),
+    state: new FormControl('', [Validators.required, Validators.maxLength(30)]),
+    pincode: new FormControl('', [
+      Validators.required,
+      Validators.min(100000),
+      Validators.max(999999),
+    ]),
+    agreeTermsAndConditions: new FormControl('', [Validators.required]),
+  });
 
-  validClass = 'form-control is-valid';
-  inValidClass = 'form-control is-invalid';
-  validForm = true;
-
-  errorMessage = "";
+  errorMessage = '';
   failedStatus = false;
   successStatus = false;
 
   ok = faThumbsUp;
   notOk = faExclamationTriangle;
 
-  constructor(private userAuthService: UserAuthService){}
+  constructor(private userAuthService: UserAuthService) {}
 
   register() {
     // validation
-    document.getElementById('firstName')!.className =
-      this.firstName == null || this.firstName.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-
-    document.getElementById('lastName')!.className =
-      this.lastName == null || this.lastName.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('phone')!.className =
-      this.phone == null || this.phone.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('dob')!.className =
-      this.dob == null
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('userEmail')!.className =
-      this.email == null || this.email.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('userPassword')!.className =
-      this.password == null || this.password.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('houseNo')!.className =
-      this.houseNo == null || this.houseNo.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('addressLine1')!.className =
-      this.addressLine1 == null || this.addressLine1.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('city')!.className =
-      this.city == null || this.city.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('state')!.className =
-      this.state == null || this.state.length === 0
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-    document.getElementById('pincode')!.className =
-      this.pincode == null || this.pincode <= 100000 || this.pincode > 999999
-        ? ((this.validForm = false), this.inValidClass)
-        : this.validClass;
-
-    if(this.validForm){
+    if (
+      this.registerForm.value.addressLine1 != null &&
+      this.registerForm.value.addressLine2 != null &&
+      this.registerForm.value.agreeTermsAndConditions != null &&
+      this.registerForm.value.city != null &&
+      this.registerForm.value.dob != null &&
+      this.registerForm.value.email != null &&
+      this.registerForm.value.firstName != null &&
+      this.registerForm.value.houseNo != null &&
+      this.registerForm.value.lastName != null &&
+      this.registerForm.value.password != null &&
+      this.registerForm.value.phone != null &&
+      this.registerForm.value.pincode != null &&
+      this.registerForm.value.state != null
+    ) {
       let formData: FormData = new FormData();
-      formData.set('gender', this.gender);
-      formData.set('phone', this.phone);
-      formData.set('dob', this.dob.toString());
-      formData.set('name', this.firstName+" "+this.lastName);
-      formData.set('email', this.email);
-      formData.set('password', this.password);
-      formData.set('houseNo', this.houseNo);
-      formData.set('addressLine1', this.addressLine1);
-      formData.set('addressLine2', this.addressLine2);
-      formData.set('city', this.city);
-      formData.set('state', this.state);
-      formData.set('pincode', this.pincode.toString());
-      console.log(this.dob);
+      let gender = (document.getElementById('male') as HTMLInputElement).checked;
+      formData.set('gender', gender ? 'male' : 'female');
+      formData.set('phone', this.registerForm.value.phone);
+      formData.set('dob', this.registerForm.value.dob);
+      formData.set('name', this.registerForm.value.firstName + ' ' + this.registerForm.value.lastName);
+      formData.set('email', this.registerForm.value.email);
+      formData.set('password', this.registerForm.value.password);
+      formData.set('houseNo', this.registerForm.value.houseNo);
+      formData.set('addressLine1', this.registerForm.value.addressLine1);
+      formData.set('addressLine2', this.registerForm.value.addressLine2);
+      formData.set('city', this.registerForm.value.city);
+      formData.set('state', this.registerForm.value.state);
+      formData.set('pincode', this.registerForm.value.pincode);
       this.userAuthService.register(formData).subscribe({
-        next: (data)=>{
+        next: (data) => {
           this.successStatus = true;
         },
-        error: (err)=>{
+        error: (err) => {
           this.errorMessage = err.error;
           this.failedStatus = true;
-        }
+        },
       });
     }
-    this.validForm = true;
+  }
+
+  get f() {
+    return this.registerForm.controls;
   }
 }

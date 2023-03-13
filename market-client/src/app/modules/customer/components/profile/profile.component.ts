@@ -182,12 +182,17 @@ export class ProfileComponent implements OnInit {
     if (customer == null) customer = this.customer;
 
     let customerDob = new Date(customer.dob);
-    let stringDob =
-      customerDob.getFullYear() +
-      '-' +
-      (customerDob.getMonth() + 1) +
-      '-' +
-      customerDob.getDate();
+    let date: number | string = customerDob.getDate();
+    if (date < 10) {
+      date = '0' + date.toString();
+    }
+
+    let month: number | string = customerDob.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month.toString();
+    }
+    
+    let stringDob = customerDob.getFullYear() + '-' + month + '-' + date;
 
     this.formData.setValue({
       gender: customer.gender ? 'male' : 'female',

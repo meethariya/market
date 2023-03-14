@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.virtusa.market.dto.CartDto;
 import com.virtusa.market.dto.CustomerEditDto;
+import com.virtusa.market.dto.ReviewDto;
 import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
@@ -38,6 +39,7 @@ import com.virtusa.market.exception.UserNotFoundException;
 import com.virtusa.market.model.CartList;
 import com.virtusa.market.model.Customer;
 import com.virtusa.market.model.Order;
+import com.virtusa.market.model.Review;
 import com.virtusa.market.service.CustomerService;
 
 import jakarta.validation.Valid;
@@ -202,7 +204,68 @@ public class CustomerController {
 	 */
 	@PutMapping("/profile/{id}")
 	public ResponseEntity<Customer> editProfile(@PathVariable("id") long customerId,
-			@ModelAttribute("customer") CustomerEditDto customerEditDto, @RequestParam(name = "images", required = false) MultipartFile image) throws IOException {
+			@Valid @ModelAttribute("customer") CustomerEditDto customerEditDto, Errors error,
+			@RequestParam(name = "images", required = false) MultipartFile image) throws IOException {
+
+		FieldError fieldError = error.getFieldError();
+		if (fieldError != null) {
+			throw new IncorrectFormDetailsException(fieldError.getDefaultMessage());
+		}
+
 		return new ResponseEntity<>(customerService.editProfile(customerId, customerEditDto, image), HttpStatus.OK);
+	}
+
+	/**
+	 * Get all the reviews given by the customer.
+	 * 
+	 * @param auth
+	 * @return List of Review
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	@GetMapping("/review")
+	public ResponseEntity<List<Review>> reviewByCustomer(Authentication auth) {
+		return new ResponseEntity<>(customerService.reviewByCustomer(auth.getName()), HttpStatus.OK);
+	}
+
+	/**
+	 * Saves new Review or if exists, modifies it.
+	 * 
+	 * @param reviewDto
+	 * @param error
+	 * @param images
+	 * @param auth
+	 * @return Review ID
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 * @throws ProductNotFoundException
+	 * @throws IOException
+	 */
+	@PostMapping("/review")
+	public ResponseEntity<Long> addEditReview(@Valid @ModelAttribute("review") ReviewDto reviewDto, Errors error,
+			@RequestParam(name = "images", required = false) MultipartFile[] images, Authentication auth) throws ProductNotFoundException, IOException {
+
+		FieldError fieldError = error.getFieldError();
+		if (fieldError != null) {
+			throw new IncorrectFormDetailsException(fieldError.getDefaultMessage());
+		}
+
+		return new ResponseEntity<>(customerService.addEditReview(reviewDto, auth.getName(), images), HttpStatus.CREATED);
+	}
+	
+	/**
+	 * Deletes a review.
+	 * 
+	 * @param reviewId
+	 * @param auth
+	 * @return ID of the deleted review.
+	 * @throws IOException 
+	 * @throws ReviewNotFoundException
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	@DeleteMapping("/review/{id}")
+	public ResponseEntity<Long> deleteReview(@PathVariable("id")Long reviewId, Authentication auth) throws IOException{
+		return new ResponseEntity<>(customerService.deleteReview(reviewId, auth.getName()), HttpStatus.OK);
 	}
 }

@@ -26,6 +26,7 @@ import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Category;
 import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Product;
+import com.virtusa.market.model.Review;
 import com.virtusa.market.model.User;
 import com.virtusa.market.service.GeneralService;
 
@@ -109,5 +110,17 @@ public class GeneralController {
 	@GetMapping("category")
 	public ResponseEntity<List<Category>> getAllCategory(){
 		return new ResponseEntity<>(service.getAllCategory(), HttpStatus.OK);		
+	}
+	
+	/**
+	 * Get all reviews of a product
+	 * 
+	 * @param productId
+	 * @return List of Review
+	 * @throws ProductNotFoundException
+	 */
+	@GetMapping("/review/{productId}")
+	public ResponseEntity<List<Review>> getProductReview(@PathVariable("productId") long productId) throws ProductNotFoundException{
+		return new ResponseEntity<>(service.getProductReview(productId), HttpStatus.OK);
 	}
 }

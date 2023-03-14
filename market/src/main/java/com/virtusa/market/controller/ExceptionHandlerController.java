@@ -21,6 +21,7 @@ import com.virtusa.market.exception.InvalidPaymentMethodException;
 import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.exception.ReviewNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
 
 /**
@@ -152,6 +153,17 @@ public class ExceptionHandlerController {
 	 */
 	@ExceptionHandler(CartListNotFoundException.class)
 	public ResponseEntity<String> handleCartListNotFoundException(CartListNotFoundException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+
+	/**
+	 * Handles error for ReviewNotFoundException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(ReviewNotFoundException.class)
+	public ResponseEntity<String> handleReviewNotFoundException(ReviewNotFoundException e){
 		log.error(e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}

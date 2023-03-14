@@ -21,7 +21,7 @@ public interface CategoryDao extends JpaRepository<Category,Long> {
 	/**
 	 * Finds category based on its name
 	 * @param categoryName
-	 * @return
+	 * @return Category
 	 */
 	public Category findByCategoryName(String categoryName);
 }

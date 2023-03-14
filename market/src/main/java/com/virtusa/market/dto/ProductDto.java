@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * All fields of {@link Product}, {@link Category}, {@link ProductImage}<br>
+ * All fields of {@link Product}, {@link Category}<br>
  * Generates proper models from raw input.<br>
  * Contains all backend validation annotations.
  * @author meet

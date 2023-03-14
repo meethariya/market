@@ -24,21 +24,25 @@ import com.virtusa.market.dao.CustomerDao;
 import com.virtusa.market.dao.InventoryDao;
 import com.virtusa.market.dao.OrderDao;
 import com.virtusa.market.dao.ProductDao;
+import com.virtusa.market.dao.ReviewDao;
 import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CartDto;
 import com.virtusa.market.dto.CustomerEditDto;
+import com.virtusa.market.dto.ReviewDto;
 import com.virtusa.market.exception.CartListNotFoundException;
 import com.virtusa.market.exception.CustomerNotFoundException;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.InsufficientStockException;
 import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.exception.ReviewNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
 import com.virtusa.market.model.CartList;
 import com.virtusa.market.model.Customer;
 import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Order;
 import com.virtusa.market.model.Product;
+import com.virtusa.market.model.Review;
 import com.virtusa.market.model.User;
 
 import jakarta.transaction.Transactional;
@@ -71,6 +75,9 @@ public class CustomerService {
 
 	@Autowired
 	private InventoryDao inventoryDao;
+
+	@Autowired
+	private ReviewDao reviewDao;
 
 	/**
 	 * Converts CartDto raw input to proper CartList.<br>
@@ -356,9 +363,12 @@ public class CustomerService {
 	/**
 	 * Finds Customer using ID.<br>
 	 * If no Customer found then throws error.<br>
-	 * Finds Customer by new Phone number. If Exists and not same Customer then throws error.<br>
-	 * If Image is uploaded, concatenate customer id with its extension and save image in profile picture folder.<br>
-	 * Sets Address, User, and Customer object using newly uploaded and existing data.<br>
+	 * Finds Customer by new Phone number. If Exists and not same Customer then
+	 * throws error.<br>
+	 * If Image is uploaded, concatenate customer id with its extension and save
+	 * image in profile picture folder.<br>
+	 * Sets Address, User, and Customer object using newly uploaded and existing
+	 * data.<br>
 	 * Saves Customer.<br>
 	 * 
 	 * @param customerId
@@ -375,13 +385,13 @@ public class CustomerService {
 		if (findById.isEmpty())
 			throw new CustomerNotFoundException();
 		Customer customer = findById.get();
-		
+
 		// If new Phone Number already Exist by another Customer then throw error
 		Customer findByPhone = customerDao.findByPhone(customerEditDto.getPhone());
 		if (findByPhone != null && findByPhone.getId() != customerId) {
 			throw new IncorrectFormDetailsException("Phone number is already taken");
 		}
-		
+
 		// If Customer has changed Profile Picture
 		if (image != null) {
 			String path = source.getMessage("profileFolder", null, Locale.ENGLISH);
@@ -414,5 +424,172 @@ public class CustomerService {
 		customerEditDto.setCustomer(customer);
 
 		return customerDao.save(customerEditDto.getCustomer());
+	}
+
+	/**
+	 * Validates customer using authenticated user email.<br>
+	 * Finds all reviews written by him and returns it.
+	 * 
+	 * @param customerEmail
+	 * @return List of Review
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 */
+	public List<Review> reviewByCustomer(String customerEmail) {
+		Customer customer = customerValidator(customerEmail);
+		return reviewDao.findByCustomer(customer);
+	}
+
+	/**
+	 * Verify if customer exists or not using authenticated user email. Throws error
+	 * if not exists.<br>
+	 * Finds product using id. Throws error if not exists.<br>
+	 * If user has uploaded images. Saves all image in
+	 * assets/reviewPic/productId/<br>
+	 * Checks if any review for same user and same product exists.<br>
+	 * <ul>
+	 * <li>If exists, modifies its rating, review and pictures.</li>
+	 * <li>If does not exists, creates new Review.</li>
+	 * </ul>
+	 * <br>
+	 * Creates/Modifies review, save it and return its ID.
+	 * 
+	 * @param reviewDto
+	 * @param customerEmail
+	 * @param images
+	 * @return Review ID
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 * @throws ProductNotFoundException
+	 * @throws IOException
+	 */
+	public Long addEditReview(ReviewDto reviewDto, String customerEmail, MultipartFile[] images)
+			throws ProductNotFoundException, IOException {
+		// finds customer using authenticated email. Throws error if not found
+		Customer customer = customerValidator(customerEmail);
+		reviewDto.setCustomer(customer);
+
+		// Finds Product using id
+		Optional<Product> findById = productDao.findById(reviewDto.getProductId());
+		if (findById.isEmpty())
+			throw new ProductNotFoundException("Product Not Found");
+		Product product = findById.get();
+		reviewDto.setProduct(product);
+
+		// If image is being uploaded
+		if (images != null && images.length > 0) {
+			Set<String> allImagePath = new HashSet<>();
+			// iterate through each image save it and add its path to a set.
+			for (int i = 0; i < images.length; i++) {
+				String imagePath = saveImage(i + 1, reviewDto.getProductId(), customer.getId(), images[i]);
+				allImagePath.add(imagePath);
+			}
+			reviewDto.setImagePath(allImagePath);
+		} else {
+			reviewDto.setImagePath(null);
+		}
+
+		// find unique review using customer and product. If found modify it, else
+		// create new
+		Review review = reviewDao.findByCustomerAndProduct(customer, product);
+		if (review == null) {
+			reviewDto.setReview();
+		} else {
+			reviewDto.setReview(review);
+		}
+
+		// save newly created/modified review
+		Review savedReview = reviewDao.save(reviewDto.getReview());
+
+		modifyRatingOfProduct(product);
+
+		return savedReview.getId();
+	}
+
+	/**
+	 * Creates path of review folder using messageSource and productId.<br>
+	 * Creates file name using customerId_fileIndex.extensionOfOriginalFile<br>
+	 * Creates directory if does not exists.<br>
+	 * Delete any existing file, if exists.<br>
+	 * Save image and return its path.<br>
+	 * 
+	 * @param index
+	 * @param productId
+	 * @param customerId
+	 * @param image
+	 * @return Path of saved image.
+	 * @throws IOException
+	 */
+	private String saveImage(int index, long productId, long customerId, MultipartFile image) throws IOException {
+		// fetching review path + productId
+		String path = source.getMessage("reviewFolder", null, Locale.ENGLISH) + productId;
+		// Image Name used for its extension
+		String originalName = image.getOriginalFilename();
+		if (originalName == null) {
+			throw new IOException("Invalid File name");
+		}
+
+		// generating name using customerId_index and its original extension
+		String name = customerId + "_" + index + "." + originalName.split("[.]")[1];
+
+		// generating file complete path to save file and save path in db
+		String filePath = path + File.separator + name;
+
+		// makes/uses folder based on path+name and saves image there
+		File dir = new File(path);
+		if (!dir.exists())
+			dir.mkdir();
+
+		// deletes file if exists
+		Files.deleteIfExists(Paths.get(filePath));
+
+		// saves file
+		Files.copy(image.getInputStream(), Paths.get(filePath));
+
+		return filePath;
+	}
+
+	/**
+	 * Checks if review exists or not. <br>
+	 * Whether the review was submitted by the authenticated user or not.<br>
+	 * Deletes the review and all its image if exists.<br>
+	 * Modifies avg rating of the product.
+	 * 
+	 * @param reviewId
+	 * @param customerEmail
+	 * @return id of the deleted review.
+	 * @throws ReviewNotFoundException
+	 * @throws UserNotFoundException
+	 * @throws CustomerNotFoundException
+	 * @throws IOException
+	 */
+	public Long deleteReview(long reviewId, String customerEmail) throws IOException {
+		Optional<Review> findById = reviewDao.findById(reviewId);
+		if (findById.isEmpty())
+			throw new ReviewNotFoundException("No such review");
+
+		Customer customer = customerValidator(customerEmail);
+		Review review = findById.get();
+		if (customer.getId() != review.getCustomer().getId())
+			throw new ReviewNotFoundException("This review was by other user");
+
+		Set<String> imagePaths = review.getImagePath();
+		if (imagePaths != null) {
+			for (String src : imagePaths) {
+				Files.deleteIfExists(Paths.get(src));
+			}
+		}
+		Product product = review.getProduct();
+		reviewDao.deleteById(reviewId);
+
+		modifyRatingOfProduct(product);
+		return reviewId;
+	}
+
+	private void modifyRatingOfProduct(Product product) {
+		// Fetch avg of rating for product and modify it in Product table.
+		Float avgRatingOfProduct = reviewDao.getAvgRatingOfProduct(product);
+		product.setRating(avgRatingOfProduct);
+		productDao.save(product);
 	}
 }

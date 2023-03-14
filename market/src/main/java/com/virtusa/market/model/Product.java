@@ -39,8 +39,8 @@ public class Product {
 	@Column(nullable = false, precision = 2)
 	private double price;
 	
-	@Column(nullable = false)
-	private byte rating;
+	@Column(nullable = false, precision = 1)
+	private float rating;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> imagePath;
@@ -148,14 +148,14 @@ public class Product {
 	/**
 	 * @return the rating
 	 */
-	public byte getRating() {
+	public float getRating() {
 		return rating;
 	}
 
 	/**
 	 * @param rating the rating to set
 	 */
-	public void setRating(byte rating) {
+	public void setRating(float rating) {
 		this.rating = rating;
 	}
 

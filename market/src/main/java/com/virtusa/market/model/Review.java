@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -34,11 +33,11 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne(cascade = CascadeType.DETACH)
+	@ManyToOne()
 	@JoinColumn(nullable = false)
 	private Customer customer;
 	
-	@ManyToOne(cascade = CascadeType.DETACH)
+	@ManyToOne()
 	@JoinColumn(nullable = false)
 	private Product product;
 	
@@ -166,6 +165,20 @@ public class Review {
 	 */
 	public void setImagePath(Set<String> imagePath) {
 		this.imagePath = imagePath;
+	}
+
+	/**
+	 * @return the modifiedOn
+	 */
+	public Date getModifiedOn() {
+		return modifiedOn;
+	}
+
+	/**
+	 * @param modifiedOn the modifiedOn to set
+	 */
+	public void setModifiedOn(Date modifiedOn) {
+		this.modifiedOn = modifiedOn;
 	}
 
 	/**

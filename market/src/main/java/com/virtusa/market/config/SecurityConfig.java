@@ -46,6 +46,7 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 				.requestMatchers("/postLogin").authenticated()
 				.requestMatchers("/product").authenticated()
 				.requestMatchers("/product/*").authenticated()
+				.requestMatchers("/review/*").authenticated()
 				.requestMatchers("/inventory").authenticated()
 				.requestMatchers("/category").authenticated()
 				.requestMatchers("/customer/**").hasAuthority("Customer")

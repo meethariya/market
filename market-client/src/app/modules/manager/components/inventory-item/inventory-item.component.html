@@ -1,11 +1,31 @@
 <div class="card">
-  <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successAdded">
+  <div
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+    *ngIf="successAdded"
+  >
     Stock Added successfully.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="successAdded=false"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+      (click)="successAdded = false"
+    ></button>
   </div>
-  <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="failAdded">
+  <div
+    class="alert alert-danger alert-dismissible fade show"
+    role="alert"
+    *ngIf="failAdded"
+  >
     Error adding stock, please retry after some time.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"(click)="failAdded=false"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+      (click)="failAdded = false"
+    ></button>
   </div>
   <div attr.id="carouselExample{{ item.product.id }}" class="carousel">
     <div class="carousel-inner">
@@ -43,15 +63,24 @@
     </button>
   </div>
   <div class="card-body">
-    <h6 class="card-subtitle mb-2 text-muted">
-      {{ item.product.category.categoryName | titlecase}}
-    </h6>
-    <h5 class="card-title">{{ item.product.name | titlecase}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ item.product.brand| titlecase}}</h6>
-    <div class="d-flex justify-content-between">
-      <p>{{ item.product.price | currency : "INR" }}</p>
-      <p>{{ item.product.rating }} stars</p>
-    </div>
+    <a
+      routerLink="/product/{{ item.product.id }}"
+      style="color: #000000; text-decoration: none"
+    >
+      <h6 class="card-subtitle mb-2 text-muted">
+        {{ item.product.category.categoryName | titlecase }}
+      </h6>
+      <h5 class="card-title">{{ item.product.name | titlecase }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+        {{ item.product.brand | titlecase }}
+      </h6>
+      <div class="d-flex justify-content-between">
+        <p>{{ item.product.price | currency : "INR" }}</p>
+        <p>
+          <app-star-rating [rating]="item.product.rating"> </app-star-rating>
+        </p>
+      </div>
+    </a>
     <div class="d-flex justify-content-between">
       <h6>Stock: {{ item.quantity }}</h6>
       <div class="d-grid text-center rounded peach">
@@ -68,7 +97,7 @@
     <app-add-inventory
       [item]="item"
       (successAddEmiiter)="successAddedFunction($event)"
-      (failAddEmiiter)="failAdded=true"
+      (failAddEmiiter)="failAdded = true"
     >
     </app-add-inventory>
   </div>
@@ -76,12 +105,22 @@
     <div class="d-flex justify-content-between">
       <p class="text-muted">
         <small>
-          Last Imported on: {{ item.lastImportDate == undefined? "----" : item.lastImportDate | date : "mediumDate" }}
+          Last Imported on:
+          {{
+            item.lastImportDate == undefined
+              ? "----"
+              : (item.lastImportDate | date : "mediumDate")
+          }}
         </small>
       </p>
       <p class="text-muted">
         <small>
-          Last Sold on: {{ item.lastSoldDate == undefined? "----" : item.lastSoldDate| date : "mediumDate" }}
+          Last Sold on:
+          {{
+            item.lastSoldDate == undefined
+              ? "----"
+              : (item.lastSoldDate | date : "mediumDate")
+          }}
         </small>
       </p>
     </div>

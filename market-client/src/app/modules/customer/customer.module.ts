@@ -16,6 +16,7 @@ import { ProductComponent } from './components/product/product.component';
 import { CustomerRoutingModule } from './customer-routing.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { MyReviewsComponent } from './components/my-reviews/my-reviews.component';
+import { ProductModule } from '../product/product.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MyReviewsComponent } from './components/my-reviews/my-reviews.component
     NgSelectModule,
     FacetModule,
     NgxPaginationModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ProductModule
   ],
   exports: [
     CustomerHomeComponent,

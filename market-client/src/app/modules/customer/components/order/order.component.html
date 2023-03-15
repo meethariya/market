@@ -52,14 +52,17 @@
                 src="{{ item.product.imagePath[0].split('src/')[1] }}"
                 alt="{{ item.product.id }}"
                 class="img-fluid rounded-start border"
+                style="object-fit: contain;"
               />
             </div>
             <div class="col-auto mx-2">
-              <h4>{{ item.product.name }}</h4>
-              <p class="text-muted">{{ item.product.category.categoryName }}</p>
-              <h6>Brand: {{ item.product.brand }}</h6>
-              <h6>Quantity: {{ item.quantity }}</h6>
-              <p>Current Price: {{ item.product.price | currency : "INR" }}</p>
+              <a routerLink="/product/{{ item.product.id }}" style="color: #000000;;text-decoration: none;">
+                <h4>{{ item.product.name }}</h4>
+                <p class="text-muted">{{ item.product.category.categoryName }}</p>
+                <h6>Brand: {{ item.product.brand }}</h6>
+                <h6>Quantity: {{ item.quantity }}</h6>
+                <p>Current Price: {{ item.product.price | currency : "INR" }}</p>
+              </a>
               <div
                 *ngIf="!reviewedProductId.includes(item.product.id)"
                 class="d-grid text-center rounded peach"
@@ -71,7 +74,7 @@
                   data-bs-target="#addReviewModal"
                   (click)="editModal(item.product)"
                 >
-                  Modify
+                  Review
                 </button>
               </div>
             </div>

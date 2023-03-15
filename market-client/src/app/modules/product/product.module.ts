@@ -16,6 +16,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CommonModule,
     FontAwesomeModule,
     NgxPaginationModule
+  ],
+  exports:[
+    StarRatingComponent
   ]
 })
 export class ProductModule { }

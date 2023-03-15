@@ -14,4 +14,8 @@ export class OrderDetailComponent implements OnInit {
   ngOnInit(): void {
     this.age = moment().diff(this.order.customer.dob, 'years');
   }
+
+  switchPage(id:number){
+    document.getElementById("closeModal"+id)?.click();
+  }
 }

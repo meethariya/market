@@ -1,6 +1,11 @@
 <h3 class="text-center">My reviews</h3>
 <div class="row">
-  <div class="col-md-4" *ngFor="let review of reviews| paginate: {itemsPerPage: 6, currentPage: p}">
+  <div
+    class="col-md-4"
+    *ngFor="
+      let review of reviews | paginate : { itemsPerPage: 6, currentPage: p }
+    "
+  >
     <h5></h5>
     <h6 class="text-muted"></h6>
 
@@ -47,54 +52,33 @@
       </div>
 
       <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <h5 class="card-title">{{ review.product.name | titlecase}}</h5>
-          <fa-icon
-            class="text-danger"
-            [icon]="trash"
-            data-bs-toggle="tooltip"
-            title="Delete Review"
-            (click)="deleteReview(review.id)"
-          ></fa-icon>
-        </div>
-        <h6 class="card-subtitle mb-2 text-muted">
-          {{ review.product.brand | titlecase }}
-        </h6>
-        <h5>
-          <span>
-            <!--Full stars-->
-            <fa-icon
-              class="golden-star"
-              *ngFor="let _ of [].constructor(review.rating)"
-              [icon]="fullStar"
-            >
-            </fa-icon>
-            <!--Half stars-->
-            <fa-icon
-              class="golden-star"
-              *ngIf="review.rating % 1 !== 0"
-              [icon]="halfStar"
-            >
-            </fa-icon>
-            <!--Empty stars-->
-            <fa-icon
-              class="golden-star"
-              *ngFor="
-                let _ of [].constructor(
-                  5 - (review.rating % 1 === 0 ? 0 : 1) - review.rating
-                )
-              "
-              [icon]="emptyStar"
-            >
-            </fa-icon>
-          </span>
-        </h5>
-        <p
-          class="card-text"
-          *ngIf="review.comment != null && review.comment.length > 0"
+        <a
+          routerLink="/product/{{ review.product.id }}"
+          style="color: #000000; text-decoration: none"
         >
-          {{ review.comment }}
-        </p>
+          <div class="d-flex justify-content-between">
+            <h5 class="card-title">{{ review.product.name | titlecase }}</h5>
+            <fa-icon
+              class="text-danger"
+              [icon]="trash"
+              data-bs-toggle="tooltip"
+              title="Delete Review"
+              (click)="deleteReview(review.id)"
+            ></fa-icon>
+          </div>
+          <h6 class="card-subtitle mb-2 text-muted">
+            {{ review.product.brand | titlecase }}
+          </h6>
+          <h5>
+            <app-star-rating [rating]="review.rating"> </app-star-rating>
+          </h5>
+          <p
+            class="card-text"
+            *ngIf="review.comment != null && review.comment.length > 0"
+          >
+            {{ review.comment }}
+          </p>
+        </a>
       </div>
       <div class="card-body">
         <!-- Button trigger modal -->
@@ -114,7 +98,10 @@
       </div>
     </div>
   </div>
-  <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>
+  <pagination-controls
+    (pageChange)="p = $event"
+    class="my-pagination my-2 d-flex justify-content-center"
+  ></pagination-controls>
 </div>
 
 <!-- Modal -->
@@ -138,13 +125,14 @@
         ></button>
       </div>
       <form [formGroup]="editReview" (ngSubmit)="modifyReview()">
-      <div class="modal-body">
+        <div class="modal-body">
           <label for="reviewRating" class="form-label">Rating</label>
           <select
             class="form-select mb-3"
             aria-label="Rating"
             id="reviewRating"
-            (change)="changeRating($event)" formControlName="rating"
+            (change)="changeRating($event)"
+            formControlName="rating"
           >
             <option value="5" selected>5(best)</option>
             <option value="4">4</option>
@@ -180,10 +168,20 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
             Close
           </button>
-          <button type="submit" class="btn btn-success" [disabled]="!editReview.valid">Save changes</button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!editReview.valid"
+          >
+            Save changes
+          </button>
         </div>
       </form>
     </div>

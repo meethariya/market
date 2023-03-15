@@ -35,7 +35,10 @@
     </button>
   </div>
   <div class="card-body">
-    <a routerLink="/product/{{ product.id }}" style="color: #000000;text-decoration: none;">
+    <a
+      routerLink="/product/{{ product.id }}"
+      style="color: #000000; text-decoration: none"
+    >
       <h6 class="card-subtitle mb-2 text-muted">
         {{ product.category.categoryName | titlecase }}
       </h6>
@@ -46,35 +49,7 @@
       <div class="d-flex justify-content-between">
         <p>{{ product.price | currency : "INR" }}</p>
         <p>
-          <span data-bs-toggle="tooltip" title="{{ product.rating }}/5">
-            <!--Full stars-->
-            <fa-icon
-              class="golden-star"
-              *ngFor="let _ of [].constructor(floatToInt(product.rating))"
-              [icon]="fullStar"
-            >
-            </fa-icon>
-            <!--Half stars-->
-            <fa-icon
-              class="golden-star"
-              *ngIf="product.rating % 1 !== 0"
-              [icon]="halfStar"
-            >
-            </fa-icon>
-            <!--Empty stars-->
-            <fa-icon
-              class="golden-star"
-              *ngFor="
-                let _ of [].constructor(
-                  5 -
-                    (product.rating % 1 === 0 ? 0 : 1) -
-                    floatToInt(product.rating)
-                )
-              "
-              [icon]="emptyStar"
-            >
-            </fa-icon>
-          </span>
+          <app-star-rating [rating]="product.rating"> </app-star-rating>
         </p>
       </div>
     </a>

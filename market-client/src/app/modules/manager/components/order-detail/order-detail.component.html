@@ -17,6 +17,7 @@
           class="btn-close"
           data-bs-dismiss="modal"
           aria-label="Close"
+          id="closeModal{{order.id}}"
         ></button>
       </div>
       <div class="modal-body">
@@ -53,7 +54,15 @@
             </thead>
             <tbody class="table-group-divider">
               <tr *ngFor="let p of order.cart">
-                <td>{{ p.product.name }}</td>
+                <td>
+                  <a
+                    routerLink="/product/{{ p.product.id }}"
+                    style="text-decoration: none"
+                    (click)="switchPage(order.id)"
+                  >
+                    {{ p.product.name }}
+                  </a>
+                </td>
                 <td>{{ p.product.brand }}</td>
                 <td>{{ p.product.category.categoryName }}</td>
                 <td>{{ p.quantity }}</td>

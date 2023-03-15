@@ -15,6 +15,7 @@ import { PlaceOrderComponent } from './components/place-order/place-order.compon
 import { ProductComponent } from './components/product/product.component';
 import { CustomerRoutingModule } from './customer-routing.module';
 import { ProfileComponent } from './components/profile/profile.component';
+import { MyReviewsComponent } from './components/my-reviews/my-reviews.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     AddToCartComponent,
     CartItemComponent,
     PlaceOrderComponent,
-    ProfileComponent
+    ProfileComponent,
+    MyReviewsComponent
   ],
   imports: [
     CommonModule,

@@ -7,6 +7,7 @@ import { Customer } from 'src/app/models/customer';
 import { Inventory } from 'src/app/models/inventory';
 import { Order } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
+import { Review } from 'src/app/models/review';
 import { GeneralService } from 'src/app/services/general.service';
 
 @Injectable({
@@ -100,13 +101,37 @@ export class CustomerService {
     );
   }
 
-  editProfile(id: number, formData: FormData) : Observable<Customer> {
+  editProfile(id: number, formData: FormData): Observable<Customer> {
     return this.http.put<Customer>(
       this.generalService.serverPath + '/customer/profile/' + id,
       formData,
       {
         headers: this.generalService.headerGenerator(),
       }
+    );
+  }
+
+  getMyReviews(): Observable<Review[]> {
+    return this.http.get<Review[]>(
+      this.generalService.serverPath + '/customer/review',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  postReview(formData: FormData) {
+    return this.http.post(
+      this.generalService.serverPath + '/customer/review',
+      formData,
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
+  }
+
+  deleteReview(reviewId: number) {
+    return this.http.delete(
+      this.generalService.serverPath + '/customer/review/' + reviewId,
+      { headers: this.generalService.headerGenerator() }
     );
   }
 }

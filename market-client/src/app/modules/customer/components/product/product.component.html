@@ -42,7 +42,35 @@
     <h6 class="card-subtitle mb-2 text-muted">{{ product.brand | titlecase}}</h6>
     <div class="d-flex justify-content-between">
       <p>{{ product.price | currency : "INR" }}</p>
-      <p>{{ product.rating }} stars</p>
+      <p>
+        <span>
+          <!--Full stars-->
+          <fa-icon
+            class="golden-star"
+            *ngFor="let _ of [].constructor(floatToInt(product.rating))"
+            [icon]="fullStar"
+          >
+          </fa-icon>
+          <!--Half stars-->
+          <fa-icon
+            class="golden-star"
+            *ngIf="product.rating % 1 !== 0"
+            [icon]="halfStar"
+          >
+          </fa-icon>
+          <!--Empty stars-->
+          <fa-icon
+            class="golden-star"
+            *ngFor="
+              let _ of [].constructor(
+                5 - (product.rating % 1 === 0 ? 0 : 1) - floatToInt(product.rating)
+              )
+            "
+            [icon]="emptyStar"
+          >
+          </fa-icon>
+        </span>
+      </p>
     </div>
     <app-add-to-cart
       *ngIf="product.inStock; else outOfStock"

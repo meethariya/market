@@ -52,7 +52,7 @@ export class SortComponent {
       });
         break;
       case '5':
-        this.products.sort((a, b) => a.rating - b.rating);
+        this.products.sort((a, b) => b.rating - a.rating);
         break;
       default:
         break;

@@ -589,6 +589,8 @@ public class CustomerService {
 	private void modifyRatingOfProduct(Product product) {
 		// Fetch avg of rating for product and modify it in Product table.
 		Float avgRatingOfProduct = reviewDao.getAvgRatingOfProduct(product);
+		if (avgRatingOfProduct == null)
+			avgRatingOfProduct = 0F;
 		product.setRating(avgRatingOfProduct);
 		productDao.save(product);
 	}

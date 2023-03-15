@@ -1,11 +1,27 @@
 <div class="container my-5">
+  <!--Alerts-->
+  <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successReviewAdded">
+    <strong>Success!</strong> Review Added successfully.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="failReviewAdded">
+    <strong>Failure!</strong> Unable to add review currently.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
   <h3 class="text-center">Your Orders</h3>
 
-  <div class="row border-bottom my-2" *ngFor="let order of allOrders| paginate: {itemsPerPage: 5, currentPage: p}">
+  <div
+    class="row border-bottom my-2"
+    *ngFor="
+      let order of allOrders | paginate : { itemsPerPage: 5, currentPage: p }
+    "
+  >
     <div class="col-4 my-1 d-flex flex-column border-end">
       <div id="list-{{ order.id }}" class="list-group">
         <ol class="list-group list-group-numbered">
-          <li *ngFor="let item of order.cart" class="list-group-item">{{ item.product.name }}</li>
+          <li *ngFor="let item of order.cart" class="list-group-item">
+            {{ item.product.name }}
+          </li>
         </ol>
       </div>
       <h6 class="mt-auto text-muted">
@@ -43,12 +59,113 @@
               <p class="text-muted">{{ item.product.category.categoryName }}</p>
               <h6>Brand: {{ item.product.brand }}</h6>
               <h6>Quantity: {{ item.quantity }}</h6>
-              <p>Current Price: {{ item.product.price | currency:"INR"}}</p>
+              <p>Current Price: {{ item.product.price | currency : "INR" }}</p>
+              <div
+                *ngIf="!reviewedProductId.includes(item.product.id)"
+                class="d-grid text-center rounded peach"
+              >
+                <!-- Button trigger modal -->
+                <button
+                  class="btn text-white"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addReviewModal"
+                  (click)="editModal(item.product)"
+                >
+                  Modify
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>
+  <pagination-controls
+    (pageChange)="p = $event"
+    class="my-pagination my-2 d-flex justify-content-center"
+  ></pagination-controls>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="addReviewModal"
+  tabindex="-1"
+  aria-labelledby="addReviewModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addReviewModalLabel"></h1>
+        <button
+          type="button"
+          id="reviewCloseButton"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="addReview" (ngSubmit)="submitReview()">
+        <div class="modal-body">
+          <label for="reviewRating" class="form-label">Rating</label>
+          <select
+            class="form-select mb-3"
+            aria-label="Rating"
+            id="reviewRating"
+            (change)="changeRating($event)"
+            formControlName="rating"
+          >
+            <option value="5" selected>5(best)</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1(worst)</option>
+          </select>
+          <div class="mb-3">
+            <label for="reviewComment" class="form-label"
+              >Review <span class="text-muted">(Optional)</span></label
+            >
+            <textarea
+              class="form-control"
+              id="reviewComment"
+              rows="3"
+              placeholder="Your Opinion about the product"
+              maxlength="65535"
+              formControlName="comment"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="reviewImages" class="form-label"
+              >Product Images <span class="text-muted">(Optional)</span></label
+            >
+            <input
+              class="form-control"
+              type="file"
+              id="reviewImages"
+              accept="image/*"
+              multiple
+              (change)="onImageChange($event)"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!addReview.valid"
+          >
+            Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

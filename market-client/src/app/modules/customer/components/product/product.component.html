@@ -43,7 +43,8 @@
     <div class="d-flex justify-content-between">
       <p>{{ product.price | currency : "INR" }}</p>
       <p>
-        <span>
+        <span data-bs-toggle="tooltip"
+        title="{{product.rating}}/5">
           <!--Full stars-->
           <fa-icon
             class="golden-star"

@@ -10,9 +10,17 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-my-reviews',
   templateUrl: './my-reviews.component.html',
-  styles: [],
+  styles: [
+    `
+      .my-pagination ::ng-deep .ngx-pagination .current {
+        background: #64baaa;
+        border-radius: 20px;
+      }
+    `,
+  ],
 })
 export class MyReviewsComponent implements OnInit {
+  p: number = 1;
   reviews: Review[] = [];
   reviewImages: string[] = [];
 
@@ -71,7 +79,7 @@ export class MyReviewsComponent implements OnInit {
         next: (data) => {
           document.getElementById('reviewCloseButton')?.click();
           this.loadReviews();
-          alert("Review Modified");
+          alert('Review Modified');
         },
         error(err) {
           console.log(err);
@@ -94,8 +102,11 @@ export class MyReviewsComponent implements OnInit {
 
   deleteReview(reviewId: number) {
     this.customerService.deleteReview(reviewId).subscribe({
-      next: (data) => alert("Review Deleted"),
-      error: (err) => alert("Failed! "+err.error)
+      next: (data) => {
+        this.loadReviews();
+        alert('Review Deleted');
+      },
+      error: (err) => alert('Failed! ' + err.error),
     });
   }
 }

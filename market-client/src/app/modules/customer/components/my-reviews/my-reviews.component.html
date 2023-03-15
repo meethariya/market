@@ -1,0 +1,190 @@
+<h3 class="text-center">My reviews</h3>
+<div class="row">
+  <div class="col-md-4" *ngFor="let review of reviews">
+    <h5></h5>
+    <h6 class="text-muted"></h6>
+
+    <div class="card">
+      <!--all images-->
+      <div
+        attr.id="carouselExample{{ review.id }}"
+        class="carousel"
+        *ngIf="review.imagePath != null && review.imagePath.length > 0"
+      >
+        <div class="carousel-inner">
+          <div
+            *ngFor="let image of review.imagePath; let i = index"
+            [attr.data-index]="i"
+          >
+            <div class="carousel-item" [ngClass]="i === 0 ? 'active' : ''">
+              <img
+                src="{{ image.split('src/')[1] }}"
+                class="card-img-top img-fluid"
+                alt="{{ i }}"
+                style="width: 100%; height: 250px; object-fit: cover"
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          attr.data-bs-target="#carouselExample{{ review.id }}"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          attr.data-bs-target="#carouselExample{{ review.id }}"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title">{{ review.product.name | titlecase}}</h5>
+          <fa-icon
+            class="text-danger"
+            [icon]="trash"
+            data-bs-toggle="tooltip"
+            title="Delete Review"
+            (click)="deleteReview(review.id)"
+          ></fa-icon>
+        </div>
+        <h6 class="card-subtitle mb-2 text-muted">
+          {{ review.product.brand | titlecase }}
+        </h6>
+        <h5>
+          <span>
+            <!--Full stars-->
+            <fa-icon
+              class="golden-star"
+              *ngFor="let _ of [].constructor(review.rating)"
+              [icon]="fullStar"
+            >
+            </fa-icon>
+            <!--Half stars-->
+            <fa-icon
+              class="golden-star"
+              *ngIf="review.rating % 1 !== 0"
+              [icon]="halfStar"
+            >
+            </fa-icon>
+            <!--Empty stars-->
+            <fa-icon
+              class="golden-star"
+              *ngFor="
+                let _ of [].constructor(
+                  5 - (review.rating % 1 === 0 ? 0 : 1) - review.rating
+                )
+              "
+              [icon]="emptyStar"
+            >
+            </fa-icon>
+          </span>
+        </h5>
+        <p
+          class="card-text"
+          *ngIf="review.comment != null && review.comment.length > 0"
+        >
+          {{ review.comment }}
+        </p>
+      </div>
+      <div class="card-body">
+        <!-- Button trigger modal -->
+        <div class="d-grid text-center rounded peach">
+          <button
+            class="btn text-white"
+            data-bs-toggle="modal"
+            data-bs-target="#modifyReviewModal"
+            (click)="editModal(review)"
+          >
+            Modify
+          </button>
+        </div>
+      </div>
+      <div class="card-footer text-muted text-center">
+        Modified on: {{ review.modifiedOn | date : "longDate" }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="modifyReviewModal"
+  tabindex="-1"
+  aria-labelledby="modifyReviewModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modifyReviewModalLabel"></h1>
+        <button
+          type="button"
+          id="reviewCloseButton"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="editReview" (ngSubmit)="modifyReview()">
+      <div class="modal-body">
+          <label for="reviewRating" class="form-label">Rating</label>
+          <select
+            class="form-select mb-3"
+            aria-label="Rating"
+            id="reviewRating"
+            (change)="changeRating($event)" formControlName="rating"
+          >
+            <option value="5" selected>5(best)</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1(worst)</option>
+          </select>
+          <div class="mb-3">
+            <label for="reviewComment" class="form-label"
+              >Review <span class="text-muted">(Optional)</span></label
+            >
+            <textarea
+              class="form-control"
+              id="reviewComment"
+              rows="3"
+              placeholder="Your Opinion about the product"
+              maxlength="65535"
+              formControlName="comment"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="reviewImages" class="form-label"
+              >Product Images <span class="text-muted">(Optional)</span></label
+            >
+            <input
+              class="form-control"
+              type="file"
+              id="reviewImages"
+              accept="image/*"
+              multiple
+              (change)="onImageChange($event)"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" class="btn btn-success" [disabled]="!editReview.valid">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

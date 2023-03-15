@@ -1,0 +1,27 @@
+<span data-bs-toggle="tooltip" title="{{ rating }}/5">
+  <!--Full stars-->
+  <fa-icon
+    class="golden-star"
+    *ngFor="let _ of [].constructor(floatToInt(rating))"
+    [icon]="fullStar"
+  >
+  </fa-icon>
+  <!--Half stars-->
+  <fa-icon
+    class="golden-star"
+    *ngIf="rating % 1 !== 0"
+    [icon]="halfStar"
+  >
+  </fa-icon>
+  <!--Empty stars-->
+  <fa-icon
+    class="golden-star"
+    *ngFor="
+      let _ of [].constructor(
+        5 - (rating % 1 === 0 ? 0 : 1) - floatToInt(rating)
+      )
+    "
+    [icon]="emptyStar"
+  >
+  </fa-icon>
+</span>

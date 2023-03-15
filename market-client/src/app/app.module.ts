@@ -16,6 +16,9 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ProductModule } from './modules/product/product.module';
+import { ManagerModule } from './modules/manager/manager.module';
+import { FacetModule } from './modules/facet/facet.module';
 
 const loaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#ada2ff', //purple
@@ -59,9 +62,12 @@ const loaderConfig: NgxUiLoaderConfig = {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    UserAuthModule,
     FontAwesomeModule,
+    UserAuthModule,
     CustomerModule,
+    ProductModule,
+    ManagerModule,
+    FacetModule,
     NgxUiLoaderModule.forRoot(loaderConfig),
     NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
   ],

@@ -10,7 +10,7 @@
             src="{{ image.split('src/')[1] }}"
             class="card-img-top img-fluid"
             alt="{{ i }}"
-            style="width: 100%; height: 250px; object-fit: cover"
+            style="width: 100%; height: 250px; object-fit: scale-down"
           />
         </div>
       </div>
@@ -35,44 +35,49 @@
     </button>
   </div>
   <div class="card-body">
-    <h6 class="card-subtitle mb-2 text-muted">
-      {{ product.category.categoryName | titlecase }}
-    </h6>
-    <h5 class="card-title">{{ product.name | titlecase}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ product.brand | titlecase}}</h6>
-    <div class="d-flex justify-content-between">
-      <p>{{ product.price | currency : "INR" }}</p>
-      <p>
-        <span data-bs-toggle="tooltip"
-        title="{{product.rating}}/5">
-          <!--Full stars-->
-          <fa-icon
-            class="golden-star"
-            *ngFor="let _ of [].constructor(floatToInt(product.rating))"
-            [icon]="fullStar"
-          >
-          </fa-icon>
-          <!--Half stars-->
-          <fa-icon
-            class="golden-star"
-            *ngIf="product.rating % 1 !== 0"
-            [icon]="halfStar"
-          >
-          </fa-icon>
-          <!--Empty stars-->
-          <fa-icon
-            class="golden-star"
-            *ngFor="
-              let _ of [].constructor(
-                5 - (product.rating % 1 === 0 ? 0 : 1) - floatToInt(product.rating)
-              )
-            "
-            [icon]="emptyStar"
-          >
-          </fa-icon>
-        </span>
-      </p>
-    </div>
+    <a routerLink="/product/{{ product.id }}" style="color: #000000;text-decoration: none;">
+      <h6 class="card-subtitle mb-2 text-muted">
+        {{ product.category.categoryName | titlecase }}
+      </h6>
+      <h5 class="card-title">{{ product.name | titlecase }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+        {{ product.brand | titlecase }}
+      </h6>
+      <div class="d-flex justify-content-between">
+        <p>{{ product.price | currency : "INR" }}</p>
+        <p>
+          <span data-bs-toggle="tooltip" title="{{ product.rating }}/5">
+            <!--Full stars-->
+            <fa-icon
+              class="golden-star"
+              *ngFor="let _ of [].constructor(floatToInt(product.rating))"
+              [icon]="fullStar"
+            >
+            </fa-icon>
+            <!--Half stars-->
+            <fa-icon
+              class="golden-star"
+              *ngIf="product.rating % 1 !== 0"
+              [icon]="halfStar"
+            >
+            </fa-icon>
+            <!--Empty stars-->
+            <fa-icon
+              class="golden-star"
+              *ngFor="
+                let _ of [].constructor(
+                  5 -
+                    (product.rating % 1 === 0 ? 0 : 1) -
+                    floatToInt(product.rating)
+                )
+              "
+              [icon]="emptyStar"
+            >
+            </fa-icon>
+          </span>
+        </p>
+      </div>
+    </a>
     <app-add-to-cart
       *ngIf="product.inStock; else outOfStock"
       [productId]="product.id"
@@ -80,7 +85,9 @@
     ></app-add-to-cart>
     <ng-template #outOfStock>
       <div class="d-grid text-center rounded peach mb-3">
-        <button class="text-white btn border border-0" disabled>Out Of Stock, Stay Tuned.</button>
+        <button class="text-white btn border border-0" disabled>
+          Out Of Stock, Stay Tuned.
+        </button>
       </div>
     </ng-template>
   </div>

@@ -30,7 +30,7 @@
   <form [formGroup]="formData" (ngSubmit)="submitForm()">
     <div class="row" *ngIf="customer != null">
       <!--Profile Picture-->
-      <div class="col-md-4">
+      <div class="col-md-4 text-center p-5">
         <img
           src="{{
             profilePicture !== null
@@ -39,6 +39,7 @@
           }}"
           alt="profilePic"
           class="img-fluid rounded-circle"
+          style="height: 350px; width: 400px; object-fit: cover;"
         />
         <div class="mb-3" id="profilePicEditButton" style="display: none">
           <label for="formFile" class="form-label">Edit Profile Picture</label>

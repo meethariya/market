@@ -1,6 +1,10 @@
 <h3 class="text-center">My reviews</h3>
 <div class="d-flex flex-row-reverse">
-  <app-review-sort class="d-inline-flex" [reviews]="reviews" (reviewSortEmitter)="sortReviews($event)"></app-review-sort>
+  <app-review-sort
+    class="d-inline-flex"
+    [reviews]="reviews"
+    (reviewSortEmitter)="sortReviews($event)"
+  ></app-review-sort>
 </div>
 <div class="row">
   <div
@@ -9,8 +13,6 @@
       let review of reviews | paginate : { itemsPerPage: 6, currentPage: p }
     "
   >
-    <h5></h5>
-    <h6 class="text-muted"></h6>
 
     <div class="card">
       <!--all images-->
@@ -55,33 +57,33 @@
       </div>
 
       <div class="card-body">
-        <a
-          routerLink="/product/{{ review.product.id }}"
-          style="color: #000000; text-decoration: none"
-        >
-          <div class="d-flex justify-content-between">
-            <h5 class="card-title">{{ review.product.name | titlecase }}</h5>
-            <fa-icon
-              class="text-danger"
-              [icon]="trash"
-              data-bs-toggle="tooltip"
-              title="Delete Review"
-              (click)="deleteReview(review.id)"
-            ></fa-icon>
-          </div>
-          <h6 class="card-subtitle mb-2 text-muted">
-            {{ review.product.brand | titlecase }}
-          </h6>
-          <h5>
-            <app-star-rating [rating]="review.rating"> </app-star-rating>
-          </h5>
-          <p
-            class="card-text"
-            *ngIf="review.comment != null && review.comment.length > 0"
+        <div class="d-flex justify-content-between">
+          <a
+            routerLink="/product/{{ review.product.id }}"
+            style="color: #000000; text-decoration: none"
           >
-            {{ review.comment }}
-          </p>
-        </a>
+            <h5 class="card-title">{{ review.product.name | titlecase }}</h5>
+          </a>
+          <fa-icon
+            class="text-danger"
+            [icon]="trash"
+            data-bs-toggle="tooltip"
+            title="Delete Review"
+            (click)="deleteReview(review.id)"
+          ></fa-icon>
+        </div>
+        <h6 class="card-subtitle mb-2 text-muted">
+          {{ review.product.brand | titlecase }}
+        </h6>
+        <h5>
+          <app-star-rating [rating]="review.rating"> </app-star-rating>
+        </h5>
+        <p
+          class="card-text"
+          *ngIf="review.comment != null && review.comment.length > 0"
+        >
+          {{ review.comment }}
+        </p>
       </div>
       <div class="card-body">
         <!-- Button trigger modal -->

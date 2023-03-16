@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { Review } from 'src/app/models/review';
 import { ProductService } from '../../services/product.service';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-detail-product',
@@ -28,6 +29,7 @@ export class DetailProductComponent implements OnInit {
   editSuccess: boolean = false;
   editFail: boolean = false;
   editFailMessage: string = '';
+  pencil=faPencil;
 
   constructor(
     private productService: ProductService,

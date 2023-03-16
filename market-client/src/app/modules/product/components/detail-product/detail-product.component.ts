@@ -24,6 +24,10 @@ export class DetailProductComponent implements OnInit {
   reviews: Review[] = [];
   // array for indivial star rating count 1 star=0th index, 2 star=1st index,....
   starCountArray = [0, 0, 0, 0, 0];
+  activeRole: string = '';
+  editSuccess: boolean = false;
+  editFail: boolean = false;
+  editFailMessage: string = '';
 
   constructor(
     private productService: ProductService,
@@ -44,9 +48,24 @@ export class DetailProductComponent implements OnInit {
       },
       error: (err) => console.log(err),
     });
+    this.activeRole = this.productService.getActiveRole();
   }
 
-  sortReviews(reviews:Review[]){
+  sortReviews(reviews: Review[]) {
     this.reviews = reviews;
+  }
+
+  editStatus(status: boolean) {
+    if (status) {
+      this.editSuccess = true;
+    } else {
+      this.editFail = true;
+    }
+  }
+  modifyErrorMessage(message: string) {
+    this.editFailMessage = message;
+  }
+  modifiedProduct(product: Product) {
+    this.product = product;
   }
 }

@@ -1,4 +1,32 @@
 <div class="container my-5">
+  <!--alerts-->
+  <div
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+    *ngIf="editSuccess"
+  >
+    <strong>Success!</strong> Product Modified Successfully
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div
+    class="alert alert-danger alert-dismissible fade show"
+    role="alert"
+    *ngIf="editFail"
+  >
+    <strong>Failed!</strong> {{ editFailMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+
   <div class="row">
     <!--Product Images-->
     <div class="col-md-6">
@@ -46,11 +74,13 @@
       <h5 class="mb-3">{{ product.name | titlecase }}</h5>
       <h6 class="text-muted mb-3">{{ product.brand | titlecase }}</h6>
       <h5 class="mb-3">Price: {{ product.price | currency : "INR" }}</h5>
+      <!--Stars-->
       <p class="text-muted mb-3">
         <app-star-rating [rating]="product.rating"> </app-star-rating>
         ({{ reviews.length }})
       </p>
-      <div class="progress-stacked" *ngIf="reviews.length > 0">
+      <!--Rating bar-->
+      <div class="progress-stacked mb-3" *ngIf="reviews.length > 0">
         <div
           class="progress"
           role="progressbar"
@@ -117,6 +147,25 @@
           <div class="progress-bar bg-success">5 ★</div>
         </div>
       </div>
+      <!--Edit Product-->
+      <div *ngIf="activeRole === 'Manager'" class="d-inline-flex rounded peach">
+        <!--Modal Button-->
+        <button
+          class="text-white btn"
+          data-bs-toggle="modal"
+          data-bs-target="#editProductModal"
+        >
+          Edit
+        </button>
+
+        <!--Modal-->
+        <app-edit-product
+          [product]="product"
+          (productEditData)="modifiedProduct($event)"
+          (productEditMessage)="modifyErrorMessage($event)"
+          (productEditStatus)="editStatus($event)"
+        ></app-edit-product>
+      </div>
     </div>
   </div>
 
@@ -124,7 +173,11 @@
   <div class="my-3" *ngIf="reviews.length > 0">
     <h4 class="text-center">Reviews</h4>
     <div class="d-flex flex-row-reverse">
-      <app-review-sort class="d-inline-flex" [reviews]="reviews" (reviewSortEmitter)="sortReviews($event)"></app-review-sort>
+      <app-review-sort
+        class="d-inline-flex"
+        [reviews]="reviews"
+        (reviewSortEmitter)="sortReviews($event)"
+      ></app-review-sort>
     </div>
     <div class="row">
       <div

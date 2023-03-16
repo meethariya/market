@@ -5,18 +5,22 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FacetModule } from '../facet/facet.module';
+import { EditProductComponent } from './components/edit-product/edit-product.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [
     DetailProductComponent,
-    StarRatingComponent
+    StarRatingComponent,
+    EditProductComponent
   ],
   imports: [
     CommonModule,
     FontAwesomeModule,
     FacetModule,
+    ReactiveFormsModule,
     NgxPaginationModule
   ],
   exports:[

@@ -110,6 +110,11 @@ public class ManagerService {
 			productDto.setCategory(category);
 		}
 
+		// if empty Brand name, set default to appName
+		if (productDto.getBrand() == null || productDto.getBrand().trim().equals("")) {
+			productDto.setBrand(source.getMessage("appName", null, Locale.ENGLISH));
+		}
+
 		// saving all images to resources and setting its path in Dto
 		List<String> allImagePath = new ArrayList<>();
 		if (files == null || files.length == 0) {
@@ -200,14 +205,14 @@ public class ManagerService {
 	 * @return Updated Product
 	 * @throws ProductAlreadyExistsException
 	 * @throws IOException
-	 * @throws ProductNotFoundException 
+	 * @throws ProductNotFoundException
 	 */
 	public Product editProduct(long id, ProductDto productDto, MultipartFile[] files)
 			throws ProductAlreadyExistsException, IOException, ProductNotFoundException {
 
 		// checks if Product with that id exists or not
 		Optional<Product> productById = productDao.findById(id);
-		if(productById.isEmpty())
+		if (productById.isEmpty())
 			throw new ProductNotFoundException("No Such Product Found");
 		Product dbProduct = productById.get();
 
@@ -217,13 +222,18 @@ public class ManagerService {
 			throw new ProductAlreadyExistsException(
 					productDto.getName() + " of " + productDto.getBrand() + " already exists.");
 		}
-		
+
 		// finds category, id found uses existing or else creates new
 		Category existingCategory = categoryDao.findByCategoryName(productDto.getCategoryName());
 		if (existingCategory != null) {
 			productDto.setCategory(existingCategory);
 		} else {
 			productDto.setCategory();
+		}
+
+		// if empty Brand name, set default to appName
+		if (productDto.getBrand() == null || productDto.getBrand().trim().equals("")) {
+			productDto.setBrand(source.getMessage("appName", null, Locale.ENGLISH));
 		}
 
 		// saving all images to resources and setting its path in Dto
@@ -310,7 +320,7 @@ public class ManagerService {
 	public List<Order> getAllOrders() {
 		return orderDao.findAll();
 	}
-	
+
 	/**
 	 * @return path of product picture folder
 	 */

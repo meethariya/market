@@ -87,11 +87,12 @@ public class ManagerController {
 	 * @return updated Product
 	 * @throws ProductAlreadyExistsException
 	 * @throws IOException
+	 * @throws ProductNotFoundException 
 	 */
 	@PutMapping("/product/{id}")
 	public ResponseEntity<Product> editProduct(@PathVariable(value = "id") int id,
 			@Valid @ModelAttribute("product") ProductDto productDto, Errors error,
-			@RequestParam("images") MultipartFile[] files) throws ProductAlreadyExistsException, IOException {
+			@RequestParam(name = "images", required = false) MultipartFile[] files) throws ProductAlreadyExistsException, IOException, ProductNotFoundException {
 
 		FieldError fieldError = error.getFieldError();
 		if (fieldError != null) {

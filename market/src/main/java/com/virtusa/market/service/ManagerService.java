@@ -54,7 +54,7 @@ public class ManagerService {
 
 	@Autowired
 	private InventoryDao inventoryDao;
-	
+
 	@Autowired
 	private OrderDao orderDao;
 
@@ -112,10 +112,10 @@ public class ManagerService {
 
 		// saving all images to resources and setting its path in Dto
 		List<String> allImagePath = new ArrayList<>();
-		if(files==null || files.length==0) {
-			String path = source.getMessage("productFolder", null, Locale.ENGLISH) + "default/product.png";
+		if (files == null || files.length == 0) {
+			String path = getProductPicFolderPath() + "default/product.png";
 			allImagePath.add(path);
-		}else {			
+		} else {
 			for (int i = 0; i < files.length; i++) {
 				String imagePath = saveImage(i + 1, productDto.getName().concat(productDto.getBrand()), files[i]);
 				allImagePath.add(imagePath);
@@ -146,7 +146,7 @@ public class ManagerService {
 	 */
 	private String saveImage(int index, String name, MultipartFile image) throws IOException {
 		// fetching product path + name(product name & brand)
-		String path = source.getMessage("productFolder", null, Locale.ENGLISH).concat(name);
+		String path = getProductPicFolderPath().concat(name);
 		// Image Name used for its extension
 		String imageName = image.getOriginalFilename();
 		if (imageName == null) {
@@ -189,7 +189,7 @@ public class ManagerService {
 	 * <li>Creates List of paths using savedImage and returned path.</li>
 	 * <li>Sets list in Product.</li>
 	 * </ul>
-	 * <li>Sets ID in Product.</li>
+	 * <li>Sets Product.</li>
 	 * <li>Updates Product.</li>
 	 * <li>Finally returns the Id of the Product that is saved.</li>
 	 * </ul>
@@ -200,9 +200,16 @@ public class ManagerService {
 	 * @return Updated Product
 	 * @throws ProductAlreadyExistsException
 	 * @throws IOException
+	 * @throws ProductNotFoundException 
 	 */
 	public Product editProduct(long id, ProductDto productDto, MultipartFile[] files)
-			throws ProductAlreadyExistsException, IOException {
+			throws ProductAlreadyExistsException, IOException, ProductNotFoundException {
+
+		// checks if Product with that id exists or not
+		Optional<Product> productById = productDao.findById(id);
+		if(productById.isEmpty())
+			throw new ProductNotFoundException("No Such Product Found");
+		Product dbProduct = productById.get();
 
 		// finds product by name and brand, if already exists then throws exception
 		Product existing = productDao.findByNameAndBrand(productDto.getName(), productDto.getBrand());
@@ -210,7 +217,7 @@ public class ManagerService {
 			throw new ProductAlreadyExistsException(
 					productDto.getName() + " of " + productDto.getBrand() + " already exists.");
 		}
-
+		
 		// finds category, id found uses existing or else creates new
 		Category existingCategory = categoryDao.findByCategoryName(productDto.getCategoryName());
 		if (existingCategory != null) {
@@ -220,19 +227,29 @@ public class ManagerService {
 		}
 
 		// saving all images to resources and setting its path in Dto
-		List<String> allImagePath = new ArrayList<>();
-		for (int i = 0; i < files.length; i++) {
-			String imagePath = saveImage(i + 1, productDto.getName().concat(productDto.getBrand()), files[i]);
-			allImagePath.add(imagePath);
+		if (files != null && files.length > 0) {
+			List<String> allImagePath = new ArrayList<>();
+			// If files are being uploaded
+			for (int i = 0; i < files.length; i++) {
+				String imagePath = saveImage(i + 1, productDto.getName().concat(productDto.getBrand()), files[i]);
+				allImagePath.add(imagePath);
+			}
+			productDto.setImagePath(allImagePath);
+		} else {
+			// else user existing ones
+			productDto.setImagePath(dbProduct.getImagePath());
 		}
-		productDto.setImagePath(allImagePath);
 
-		// sets product and updates its id and saves it
+		// sets product, updates it and saves its
 		productDto.setProduct();
 		Product updated = productDto.getProduct();
-		updated.setId(id);
+		dbProduct.setBrand(updated.getBrand());
+		dbProduct.setCategory(updated.getCategory());
+		dbProduct.setImagePath(updated.getImagePath());
+		dbProduct.setName(updated.getName());
+		dbProduct.setPrice(updated.getPrice());
 
-		return productDao.save(updated);
+		return productDao.save(dbProduct);
 	}
 
 	/**
@@ -286,12 +303,19 @@ public class ManagerService {
 		Inventory save = inventoryDao.save(inventoryDto.getInventory());
 		return save.getId();
 	}
-	
+
 	/**
 	 * @return List of Orders
 	 */
-	public List<Order> getAllOrders(){
+	public List<Order> getAllOrders() {
 		return orderDao.findAll();
 	}
 	
+	/**
+	 * @return path of product picture folder
+	 */
+	private String getProductPicFolderPath() {
+		return source.getMessage("productFolder", null, Locale.ENGLISH);
+	}
+
 }

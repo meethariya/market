@@ -45,4 +45,8 @@ export class DetailProductComponent implements OnInit {
       error: (err) => console.log(err),
     });
   }
+
+  sortReviews(reviews:Review[]){
+    this.reviews = reviews;
+  }
 }

@@ -46,9 +46,11 @@ export class MyReviewsComponent implements OnInit {
     (document.getElementById('reviewRating') as HTMLInputElement).value =
       review.rating.toString();
     this.editReview.patchValue({ rating: review.rating.toString() });
-    if (review.comment != null)
+    if (review.comment != null) {
       (document.getElementById('reviewComment') as HTMLInputElement).value =
         review.comment;
+      this.editReview.patchValue({ comment: review.comment });
+    }
     this.editReview.patchValue({ productId: review.product.id.toString() });
   }
 
@@ -108,5 +110,9 @@ export class MyReviewsComponent implements OnInit {
       },
       error: (err) => alert('Failed! ' + err.error),
     });
+  }
+
+  sortReviews(reviews: Review[]) {
+    this.reviews = reviews;
   }
 }

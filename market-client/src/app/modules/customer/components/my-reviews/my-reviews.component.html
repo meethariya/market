@@ -1,4 +1,7 @@
 <h3 class="text-center">My reviews</h3>
+<div class="d-flex flex-row-reverse">
+  <app-review-sort class="d-inline-flex" [reviews]="reviews" (reviewSortEmitter)="sortReviews($event)"></app-review-sort>
+</div>
 <div class="row">
   <div
     class="col-md-4"

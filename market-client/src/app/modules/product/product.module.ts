@@ -4,6 +4,7 @@ import { DetailProductComponent } from './components/detail-product/detail-produ
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { FacetModule } from '../facet/facet.module';
 
 
 
@@ -15,6 +16,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
   imports: [
     CommonModule,
     FontAwesomeModule,
+    FacetModule,
     NgxPaginationModule
   ],
   exports:[

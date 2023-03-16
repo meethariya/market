@@ -26,92 +26,161 @@
       aria-label="Close"
     ></button>
   </div>
-  <h3 class="text-center">Your Orders</h3>
 
-  <div
-    class="row border-bottom my-2"
-    *ngFor="
-      let order of allOrders | paginate : { itemsPerPage: 5, currentPage: p }
-    "
-  >
-    <div class="col-4 my-1 d-flex flex-column border-end">
-      <div id="list-{{ order.id }}" class="list-group">
-        <ol class="list-group list-group-numbered">
-          <li *ngFor="let item of order.cart" class="list-group-item">
-            {{ item.product.name }}
-          </li>
-        </ol>
-      </div>
-      <h6 class="mt-auto text-muted">
-        Total: {{ order.price | currency : "INR" }} by {{ order.paymentMethod }}
-      </h6>
-      <h6 class="text-muted">
-        Placed on: {{ order.timestamp | date : "medium" }}
-      </h6>
-    </div>
-
-    <div class="col-8 my-1 scrollspy-body">
-      <div
-        data-bs-spy="scroll"
-        attr.data-bs-target="#list-{{ order.id }}"
-        data-bs-smooth-scroll="true"
-        class="scrollspy-example-2"
-        tabindex="0"
-        style="overflow-y: auto; height: 200px; scroll-behavior: smooth"
-      >
-        <div
-          id="item-{{ order.id }}-{{ item.id }}"
-          *ngFor="let item of order.cart"
-          class="p-2"
+  <div class="table-responsive">
+    <table class="table align-middle text-center table-hover caption-top">
+      <caption>
+        Your Orders
+      </caption>
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Order Id</th>
+          <th scope="col">Placed On</th>
+          <th scope="col">Price</th>
+          <th scope="col">Payment Method</th>
+          <th scope="col">Products</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <tr
+          *ngFor="
+            let i of allOrders | paginate : { itemsPerPage: 10, currentPage: p }
+          "
         >
-          <div class="row g-0">
-            <div class="col-sm-4 mx-2">
-              <img
-                src="{{ item.product.imagePath[0].split('src/')[1] }}"
-                alt="{{ item.product.id }}"
-                class="img-fluid rounded-start border"
-                style="object-fit: contain"
-              />
-            </div>
-            <div class="col-auto mx-2">
-              <a
-                routerLink="/product/{{ item.product.id }}"
-                style="color: #000000; text-decoration: none"
-              >
-                <h4>{{ item.product.name }}</h4>
-                <p class="text-muted">
-                  {{ item.product.category.categoryName }}
-                </p>
-                <h6>Brand: {{ item.product.brand }}</h6>
-                <h6>Quantity: {{ item.quantity }}</h6>
-                <p>
-                  Current Price: {{ item.product.price | currency : "INR" }}
-                </p>
-              </a>
+          <th scope="row">{{ i.id }}</th>
+          <td>{{ i.timestamp | date : "medium" }}</td>
+          <td>{{ i.price | currency : "INR" }}</td>
+          <td>{{ i.paymentMethod }}</td>
+          <td class="text-start text-truncate" style="max-width: 100px;" >
+            <span *ngFor="let p of i.cart">
+              {{p.product.name}} 
+            </span>
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              attr.data-bs-target="#orderModal{{ i.id }}"
+            >
+              More
+            </button>
+
+            <!-- Vertically centered scrollable modal -->
+            <div
+              class="modal fade text-start"
+              id="orderModal{{ i.id }}"
+              tabindex="-1"
+              attr.aria-labelledby="modalLabel{{ i.id }}"
+              aria-hidden="true"
+            >
               <div
-                *ngIf="!reviewedProductId.includes(item.product.id)"
-                class="d-grid text-center rounded peach"
+                class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
               >
-                <!-- Button trigger modal -->
-                <button
-                  class="btn text-white"
-                  data-bs-toggle="modal"
-                  data-bs-target="#addReviewModal"
-                  (click)="editModal(item.product)"
-                >
-                  Review
-                </button>
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalLabel{{ i.id }}">
+                      Order ID: {{ i.id }}
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      id="moreCloseModal{{ i.id }}"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <h6>
+                      Shipped To:
+                      {{ i.customer.address.houseNo | titlecase }} ,
+                      {{ i.customer.address.addressLine1 | titlecase }} ,
+                      {{ i.customer.address.addressLine2 | titlecase }} ,
+                      {{ i.customer.address.city | titlecase }} ,
+                      {{ i.customer.address.state | titlecase }} -
+                      {{ i.customer.address.pincode }}
+                    </h6>
+                    <h3 class="text-center">Items</h3>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Product Brand</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                          <tr *ngFor="let p of i.cart">
+                            <td>
+                              <a
+                                routerLink="/product/{{ p.product.id }}"
+                                style="text-decoration: none"
+                                (click)="switchPage(i.id)"
+                              >
+                                {{ p.product.name }}
+                              </a>
+                            </td>
+                            <td>{{ p.product.brand }}</td>
+                            <td>{{ p.product.category.categoryName }}</td>
+                            <td>{{ p.quantity }}</td>
+                            <td>
+                              <div
+                                *ngIf="
+                                  !reviewedProductId.includes(p.product.id)
+                                "
+                                class="d-grid text-center rounded peach"
+                              >
+                                <!-- Button trigger modal -->
+                                <button
+                                  class="btn text-white"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#addReviewModal"
+                                  (click)="editModal(p.product)"
+                                >
+                                  Review
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <h6>
+                      Total: {{ i.price | currency : "INR" }} by
+                      {{ i.paymentMethod }}
+                    </h6>
+                    <h6>Placed On: {{ i.timestamp | date : "medium" }}</h6>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <th colspan="7" class="text-center">
+          <pagination-controls
+            (pageChange)="p = $event"
+            class="my-pagination my-2"
+          ></pagination-controls>
+        </th>
+      </tfoot>
+    </table>
   </div>
-  <pagination-controls
-    (pageChange)="p = $event"
-    class="my-pagination my-2 d-flex justify-content-center"
-  ></pagination-controls>
+
 </div>
 
 <!-- Modal -->

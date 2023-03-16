@@ -101,4 +101,8 @@ export class OrderComponent implements OnInit {
       error: (err) => console.log(err),
     });
   }
+
+  switchPage(id:number){
+    document.getElementById("moreCloseModal"+id)?.click();
+  }
 }

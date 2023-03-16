@@ -23,6 +23,7 @@ export class MyReviewsComponent implements OnInit {
   p: number = 1;
   reviews: Review[] = [];
   reviewImages: string[] = [];
+  ratingStar:number = 5;
 
   editReview = new FormGroup({
     productId: new FormControl(''),
@@ -45,6 +46,7 @@ export class MyReviewsComponent implements OnInit {
       review.product.name;
     (document.getElementById('reviewRating') as HTMLInputElement).value =
       review.rating.toString();
+      this.ratingStar = review.rating;
     this.editReview.patchValue({ rating: review.rating.toString() });
     if (review.comment != null) {
       (document.getElementById('reviewComment') as HTMLInputElement).value =
@@ -93,6 +95,7 @@ export class MyReviewsComponent implements OnInit {
 
   changeRating(event: any) {
     this.editReview.patchValue({ rating: event.target.value });
+    this.ratingStar = event.target.value;
   }
 
   loadReviews() {

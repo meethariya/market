@@ -1,12 +1,30 @@
 <div class="container my-5">
   <!--Alerts-->
-  <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successReviewAdded">
+  <div
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+    *ngIf="successReviewAdded"
+  >
     <strong>Success!</strong> Review Added successfully.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
   </div>
-  <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="failReviewAdded">
+  <div
+    class="alert alert-danger alert-dismissible fade show"
+    role="alert"
+    *ngIf="failReviewAdded"
+  >
     <strong>Failure!</strong> Unable to add review currently.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
   </div>
   <h3 class="text-center">Your Orders</h3>
 
@@ -52,16 +70,23 @@
                 src="{{ item.product.imagePath[0].split('src/')[1] }}"
                 alt="{{ item.product.id }}"
                 class="img-fluid rounded-start border"
-                style="object-fit: contain;"
+                style="object-fit: contain"
               />
             </div>
             <div class="col-auto mx-2">
-              <a routerLink="/product/{{ item.product.id }}" style="color: #000000;;text-decoration: none;">
+              <a
+                routerLink="/product/{{ item.product.id }}"
+                style="color: #000000; text-decoration: none"
+              >
                 <h4>{{ item.product.name }}</h4>
-                <p class="text-muted">{{ item.product.category.categoryName }}</p>
+                <p class="text-muted">
+                  {{ item.product.category.categoryName }}
+                </p>
                 <h6>Brand: {{ item.product.brand }}</h6>
                 <h6>Quantity: {{ item.quantity }}</h6>
-                <p>Current Price: {{ item.product.price | currency : "INR" }}</p>
+                <p>
+                  Current Price: {{ item.product.price | currency : "INR" }}
+                </p>
               </a>
               <div
                 *ngIf="!reviewedProductId.includes(item.product.id)"
@@ -112,19 +137,22 @@
       <form [formGroup]="addReview" (ngSubmit)="submitReview()">
         <div class="modal-body">
           <label for="reviewRating" class="form-label">Rating</label>
-          <select
-            class="form-select mb-3"
-            aria-label="Rating"
+          <app-star-rating [rating]="ratingStar"></app-star-rating>
+          <div class="d-flex justify-content-between">
+            <p>1(Low)</p>
+            <p>5(High)</p>
+          </div>
+          <input
+            type="range"
+            class="form-range"
+            min="1"
+            max="5"
+            step="1"
             id="reviewRating"
-            (change)="changeRating($event)"
+            aria-label="Rating"
             formControlName="rating"
-          >
-            <option value="5" selected>5(best)</option>
-            <option value="4">4</option>
-            <option value="3">3</option>
-            <option value="2">2</option>
-            <option value="1">1(worst)</option>
-          </select>
+            (change)="changeRating($event)"
+          />
           <div class="mb-3">
             <label for="reviewComment" class="form-label"
               >Review <span class="text-muted">(Optional)</span></label

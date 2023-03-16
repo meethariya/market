@@ -25,6 +25,7 @@ export class OrderComponent implements OnInit {
   reviewImages: string[] = [];
   successReviewAdded = false;
   failReviewAdded = false;
+  ratingStar:number = 5;
 
   addReview = new FormGroup({
     productId: new FormControl(''),
@@ -73,6 +74,7 @@ export class OrderComponent implements OnInit {
 
   changeRating(event: any) {
     this.addReview.patchValue({ rating: event.target.value });
+    this.ratingStar = Number(event.target.value);
   }
 
   onImageChange(event: any) {

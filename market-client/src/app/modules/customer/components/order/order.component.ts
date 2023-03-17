@@ -4,6 +4,7 @@ import { Order } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
 import { Review } from 'src/app/models/review';
 import { CustomerService } from '../../services/customer.service';
+import { faSort } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-order',
@@ -26,6 +27,10 @@ export class OrderComponent implements OnInit {
   successReviewAdded = false;
   failReviewAdded = false;
   ratingStar:number = 5;
+
+  orderVariable: string = "id";
+  orderReverse:boolean = true;
+  sortIcon = faSort;
 
   addReview = new FormGroup({
     productId: new FormControl(''),
@@ -104,5 +109,10 @@ export class OrderComponent implements OnInit {
 
   switchPage(id:number){
     document.getElementById("moreCloseModal"+id)?.click();
+  }
+
+  sortBy(value:string){
+    this.orderVariable = value;
+    this.orderReverse = !this.orderReverse;
   }
 }

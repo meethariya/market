@@ -13,6 +13,7 @@ import { OrderDetailComponent } from './components/order-detail/order-detail.com
 import { FacetModule } from '../facet/facet.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ProductModule } from '../product/product.module';
+import { OrderModule } from 'ngx-order-pipe';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { ProductModule } from '../product/product.module';
     FontAwesomeModule,
     FacetModule,
     ProductModule,
+    OrderModule,
     NgxPaginationModule
   ]
 })

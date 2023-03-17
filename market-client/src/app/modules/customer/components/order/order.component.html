@@ -34,18 +34,18 @@
       </caption>
       <thead class="table-dark">
         <tr>
-          <th scope="col">Order Id</th>
-          <th scope="col">Placed On</th>
-          <th scope="col">Price</th>
-          <th scope="col">Payment Method</th>
-          <th scope="col">Products</th>
+          <th scope="col" (click)="sortBy('id')" >Order Id &nbsp; <fa-icon [icon]="sortIcon"></fa-icon> </th>
+          <th scope="col" (click)="sortBy('timestamp')" >Placed On &nbsp; <fa-icon [icon]="sortIcon"></fa-icon> </th>
+          <th scope="col" (click)="sortBy('price')" >Price &nbsp; <fa-icon [icon]="sortIcon"></fa-icon> </th>
+          <th scope="col" (click)="sortBy('paymentMethod')" >Payment Method &nbsp; <fa-icon [icon]="sortIcon"></fa-icon> </th>
+          <th scope="col"> Products </th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody class="table-group-divider">
         <tr
           *ngFor="
-            let i of allOrders | paginate : { itemsPerPage: 10, currentPage: p }
+            let i of allOrders | paginate : { itemsPerPage: 10, currentPage: p } | orderBy: orderVariable:orderReverse
           "
         >
           <th scope="row">{{ i.id }}</th>

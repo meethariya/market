@@ -6,17 +6,35 @@
       </caption>
       <thead class="table-dark">
         <tr>
-          <th scope="col">Order Id</th>
-          <th scope="col">Customer Name</th>
-          <th scope="col">Placed On</th>
-          <th scope="col">Price</th>
-          <th scope="col">Payment Method</th>
-          <th scope="col">Number of Products</th>
+          <th scope="col" (click)="sortBy('id')">
+            Order Id &nbsp; <fa-icon [icon]="sortIcon"></fa-icon>
+          </th>
+          <th scope="col" (click)="sortBy('customer.user.name')">
+            Customer Name &nbsp; <fa-icon [icon]="sortIcon"></fa-icon>
+          </th>
+          <th scope="col" (click)="sortBy('timestamp')">
+            Placed On &nbsp; <fa-icon [icon]="sortIcon"></fa-icon>
+          </th>
+          <th scope="col" (click)="sortBy('price')">
+            Price &nbsp; <fa-icon [icon]="sortIcon"></fa-icon>
+          </th>
+          <th scope="col" (click)="sortBy('paymentMethod')">
+            Payment Method &nbsp; <fa-icon [icon]="sortIcon"></fa-icon>
+          </th>
+          <th scope="col" (click)="sortBy('cart.length')">
+            Number of Products &nbsp; <fa-icon [icon]="sortIcon"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr *ngFor="let i of order| paginate: {itemsPerPage: 10, currentPage: p}">
+        <tr
+          *ngFor="
+            let i of order
+              | paginate : { itemsPerPage: 10, currentPage: p }
+              | orderBy : orderVariable : orderReverse
+          "
+        >
           <th scope="row">{{ i.id }}</th>
           <td>{{ i.customer.user.name | titlecase }}</td>
           <td>{{ i.timestamp | date : "medium" }}</td>
@@ -38,7 +56,10 @@
       </tbody>
       <tfoot>
         <th colspan="7" class="text-center">
-          <pagination-controls (pageChange)="p = $event" class="my-pagination my-2"></pagination-controls>
+          <pagination-controls
+            (pageChange)="p = $event"
+            class="my-pagination my-2"
+          ></pagination-controls>
         </th>
       </tfoot>
     </table>

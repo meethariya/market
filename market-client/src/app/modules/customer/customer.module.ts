@@ -17,6 +17,7 @@ import { CustomerRoutingModule } from './customer-routing.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { MyReviewsComponent } from './components/my-reviews/my-reviews.component';
 import { ProductModule } from '../product/product.module';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ProductModule } from '../product/product.module';
     FacetModule,
     NgxPaginationModule,
     ReactiveFormsModule,
-    ProductModule
+    ProductModule,
+    OrderModule
   ],
   exports: [
     CustomerHomeComponent,

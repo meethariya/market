@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, lastValueFrom, Observable, take, throwError } from 'rxjs';
+import { lastValueFrom, Observable, take } from 'rxjs';
 import { Category } from '../models/category';
 import { Inventory } from '../models/inventory';
 import { Product } from '../models/product';

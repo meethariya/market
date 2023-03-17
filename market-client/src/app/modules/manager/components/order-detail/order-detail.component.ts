@@ -10,7 +10,7 @@ import { Order } from 'src/app/models/order';
 export class OrderDetailComponent implements OnInit {
   @Input() order!: Order;
   age!: number;
-  constructor() {}
+  
   ngOnInit(): void {
     this.age = moment().diff(this.order.customer.dob, 'years');
   }

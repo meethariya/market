@@ -61,8 +61,8 @@ export class EditProductComponent implements OnInit {
       formData.set('price', this.productForm.value.price);
 
       if (this.productImages.length > 0)
-        for (let i = 0; i < this.productImages.length; i++)
-          formData.append('images', this.productImages[i]);
+        for (const element of this.productImages)
+          formData.append('images', element);
 
       this.productService.editProduct(this.product.id, formData).subscribe({
         next: (p) => {

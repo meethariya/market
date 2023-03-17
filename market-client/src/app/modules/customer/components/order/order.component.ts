@@ -60,8 +60,8 @@ export class OrderComponent implements OnInit {
       if (this.addReview.value.comment.length > 0)
         formData.set('comment', this.addReview.value.comment);
 
-      for (let i = 0; i < this.reviewImages.length; i++) {
-        formData.append('images', this.reviewImages[i]);
+      for (const element of this.reviewImages) {
+        formData.append('images', element);
       }
 
       this.customerService.postReview(formData).subscribe({

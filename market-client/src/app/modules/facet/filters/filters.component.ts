@@ -18,19 +18,19 @@ export class FiltersComponent {
   onCategoryChange() {
     this.products = [];
     this.brands = [];
-    for (let i = 0; i < this.categories.length; i++) {
+    for (const cat of this.categories) {
       if (
         (
           document.getElementById(
-            'check-category-' + this.categories[i].id
+            'check-category-' + cat.id
           ) as HTMLInputElement
         ).checked
       ) {
-        for (let j = 0; j < this.fixedProducts.length; j++) {
-          if (this.fixedProducts[j].category.id === this.categories[i].id) {
-            this.products.push(this.fixedProducts[j]);
-            if (!this.brands.includes(this.fixedProducts[j].brand))
-              this.brands.push(this.fixedProducts[j].brand);
+        for (const fixPro of this.fixedProducts) {
+          if (fixPro.category.id === cat.id) {
+            this.products.push(fixPro);
+            if (!this.brands.includes(fixPro.brand))
+              this.brands.push(fixPro.brand);
           }
         }
       }
@@ -41,16 +41,16 @@ export class FiltersComponent {
 
   onBrandChange() {
     this.products = [];
-    for (let i = 0; i < this.brands.length; i++) {
+    for (const element of this.brands) {
       if (
         (
           document.getElementById(
-            'check-brand-' + this.brands[i]
+            'check-brand-' + element
           ) as HTMLInputElement
         ).checked
       ) {
         this.products = this.products.concat(
-          this.fixedProducts.filter((p) => p.brand === this.brands[i])
+          this.fixedProducts.filter((p) => p.brand === element)
         );
       }
     }

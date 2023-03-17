@@ -41,14 +41,16 @@ export class SortComponent {
         this.products.sort((a, b) => {
           let textA:string = a.name.toUpperCase();
           let textB:string = b.name.toUpperCase();
-          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          let temp = (textA > textB) ? 1 : 0;
+          return (textA < textB) ? -1 : temp;
       });
         break;
       case '4':
         this.products.sort((a, b) => {
           let textA:string = a.name.toUpperCase();
           let textB:string = b.name.toUpperCase();
-          return (textB < textA) ? -1 : (textB > textA) ? 1 : 0;
+          let temp = (textB > textA) ? 1 : 0;
+          return (textB < textA) ? -1 : temp;
       });
         break;
       case '5':

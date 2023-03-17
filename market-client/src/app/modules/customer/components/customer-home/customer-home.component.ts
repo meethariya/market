@@ -38,30 +38,27 @@ export class CustomerHomeComponent implements OnInit {
 
     this.customerService.getAllProducts().subscribe({
       next: (allProducts) => {
-        this.products = allProducts;
-        this.fixedProducts = allProducts;
-        this.productListForSearching = allProducts;
+        this.products =
+          this.fixedProducts =
+          this.productListForSearching =
+            allProducts;
 
         this.customerService.getInventory().subscribe({
           next: (inv) => {
             this.inventory = inv;
 
-            for (let p = 0; p < this.products.length; p++) {
-              if (!this.brands.includes(this.products[p].brand))
-                this.brands.push(this.products[p].brand);
-
+            for (const product of this.products) {
+              this.fillBrand(product.brand);
+              
               let found = false;
-              for (let i = 0; i < this.inventory.length; i++) {
-                if (
-                  this.products[p].id === this.inventory[i].product.id &&
-                  this.inventory[i].quantity !== 0
-                ) {
-                  this.products[p].inStock = true;
+              for (const inv of this.inventory) {
+                if (product.id === inv.product.id && inv.quantity !== 0) {
+                  product.inStock = true;
                   found = true;
                   break;
                 }
               }
-              if (!found) this.products[p].inStock = false;
+              if (!found) product.inStock = false;
             }
           },
 
@@ -80,5 +77,9 @@ export class CustomerHomeComponent implements OnInit {
 
   searchedProducts(allProducts: Product[]) {
     this.products = allProducts;
+  }
+
+  fillBrand(brand: string) {
+    if (!this.brands.includes(brand)) this.brands.push(brand);
   }
 }

@@ -52,10 +52,10 @@ export class ManagerHomeComponent implements OnInit {
               if (!this.brand.includes(i.brand)) this.brand.push(i.brand);
 
               let found = false;
-              for (let inv = 0; inv < data.length; inv++) {
-                if (data[inv].product.id === i.id) {
+              for (const element of data) {
+                if (element.product.id === i.id) {
                   found = true;
-                  data[inv].product.inStock = data[inv].quantity > 0;
+                  element.product.inStock = element.quantity > 0;
                   break;
                 }
               }

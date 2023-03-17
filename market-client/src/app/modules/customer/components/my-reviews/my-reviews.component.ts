@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Review } from 'src/app/models/review';
 import { CustomerService } from '../../services/customer.service';
-import { faStar as fullStar } from '@fortawesome/free-solid-svg-icons';
-import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons';
-import { faStarHalfStroke as halfStar } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -30,9 +27,6 @@ export class MyReviewsComponent implements OnInit {
     comment: new FormControl('', [Validators.maxLength(65535)]),
     rating: new FormControl(''),
   });
-  fullStar = fullStar;
-  emptyStar = emptyStar;
-  halfStar = halfStar;
   trash = faTrash;
 
   constructor(private customerService: CustomerService) {}
@@ -75,8 +69,8 @@ export class MyReviewsComponent implements OnInit {
       if (this.editReview.value.comment.length > 0)
         formData.set('comment', this.editReview.value.comment);
 
-      for (let i = 0; i < this.reviewImages.length; i++) {
-        formData.append('images', this.reviewImages[i]);
+      for (const element of this.reviewImages) {
+        formData.append('images', element);
       }
 
       this.customerService.postReview(formData).subscribe({

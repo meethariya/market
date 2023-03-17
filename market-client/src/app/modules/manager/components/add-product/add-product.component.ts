@@ -47,8 +47,8 @@ export class AddProductComponent implements OnInit {
       formData.set('categoryName', this.productForm.value.category);
       formData.set('price', this.productForm.value.price);
 
-      for (let i = 0; i < this.productImages.length; i++) {
-        formData.append('images', this.productImages[i]);
+      for (const element of this.productImages) {
+        formData.append('images', element);
       }
 
       this.managerService.addProduct(formData).subscribe({

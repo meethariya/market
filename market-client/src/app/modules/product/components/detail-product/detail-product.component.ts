@@ -29,7 +29,7 @@ export class DetailProductComponent implements OnInit {
   editSuccess: boolean = false;
   editFail: boolean = false;
   editFailMessage: string = '';
-  pencil=faPencil;
+  pencil = faPencil;
 
   constructor(
     private productService: ProductService,

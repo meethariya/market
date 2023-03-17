@@ -26,6 +26,7 @@ import com.virtusa.market.dao.OrderDao;
 import com.virtusa.market.dao.ProductDao;
 import com.virtusa.market.dto.InventoryDto;
 import com.virtusa.market.dto.ProductDto;
+import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Category;
@@ -213,7 +214,7 @@ public class ManagerService {
 		// checks if Product with that id exists or not
 		Optional<Product> productById = productDao.findById(id);
 		if (productById.isEmpty())
-			throw new ProductNotFoundException("No Such Product Found");
+			throw new ProductNotFoundException();
 		Product dbProduct = productById.get();
 
 		// finds product by name and brand, if already exists then throws exception
@@ -274,7 +275,7 @@ public class ManagerService {
 		Optional<Product> optionalProduct = productDao.findById(id);
 
 		if (optionalProduct.isEmpty())
-			throw new ProductNotFoundException("No such Product found");
+			throw new ProductNotFoundException();
 
 		// deletes entire folder of images
 		Product product = optionalProduct.get();
@@ -312,6 +313,36 @@ public class ManagerService {
 		inventoryDto.setInventory();
 		Inventory save = inventoryDao.save(inventoryDto.getInventory());
 		return save.getId();
+	}
+
+	/**
+	 * Checks if product with that Id exist, else throws
+	 * ProductNotFoundException.<br>
+	 * Checks if that product exists in inventory database. Throws error if not exists.
+	 * Checks stock < to be removed quantity. If true throws error.
+	 * Else deducts the stock quantity and return id.
+	 * 
+	 * @param inventoryDto
+	 * @return Id of the inventory modified.
+	 * @throws ProductNotFoundException
+	 * @throws IncorrectFormDetailsException
+	 */
+	public Long removeFromInventory(InventoryDto inventoryDto) throws ProductNotFoundException {
+		Optional<Product> dbProduct = productDao.findById(inventoryDto.getId());
+		if(dbProduct.isEmpty())
+			throw new ProductNotFoundException();
+		
+		Inventory inventoryByProduct = inventoryDao.findByProduct(dbProduct.get());
+		if (inventoryByProduct == null)
+			throw new ProductNotFoundException("Product is not added to Inventory.");
+		
+		if(inventoryByProduct.getQuantity() < inventoryDto.getQuantity())
+			throw new IncorrectFormDetailsException("Stock can not go below 0");
+		
+		inventoryByProduct.setQuantity(inventoryByProduct.getQuantity() - inventoryDto.getQuantity());
+		inventoryByProduct.setLastImportDate(new Date());
+		inventoryDao.save(inventoryByProduct);
+		return inventoryByProduct.getId();
 	}
 
 	/**

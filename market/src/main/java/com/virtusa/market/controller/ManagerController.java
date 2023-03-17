@@ -139,6 +139,26 @@ public class ManagerController {
 	}
 	
 	/**
+	 * Reduces Stock quantity.
+	 * 
+	 * @param inventoryDto
+	 * @param error
+	 * @return Id of the inventory created
+	 * @throws ProductNotFoundException
+	 */
+	@PostMapping("/reduceInventory")
+	public ResponseEntity<Long> removeFromInventory(@Valid @ModelAttribute("inventory") InventoryDto inventoryDto,
+			Errors error) throws ProductNotFoundException{
+		
+		FieldError fieldError = error.getFieldError();
+		if (fieldError != null) {
+			throw new IncorrectFormDetailsException(fieldError.getDefaultMessage());
+		}
+		
+		return new ResponseEntity<>(managerService.removeFromInventory(inventoryDto), HttpStatus.OK);
+	}
+	
+	/**
 	 * @return list of Order
 	 */
 	@GetMapping("order")

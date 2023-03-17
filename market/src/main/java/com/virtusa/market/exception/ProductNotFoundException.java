@@ -13,10 +13,11 @@ public class ProductNotFoundException extends Exception {
 	private static final long serialVersionUID = 2589880048248436159L;
 
 	/**
-	 * Default constructor
+	 * Default constructor.<br>
+	 * Default Message: <i>No such Product Found</i>
 	 */
 	public ProductNotFoundException() {
-		super();
+		super("No such product found");
 	}
 
 	/**

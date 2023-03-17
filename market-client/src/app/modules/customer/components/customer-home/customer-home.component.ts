@@ -3,6 +3,7 @@ import { Category } from 'src/app/models/category';
 import { Inventory } from 'src/app/models/inventory';
 import { Product } from 'src/app/models/product';
 import { CustomerService } from '../../services/customer.service';
+import { Toast } from 'bootstrap';
 
 @Component({
   selector: 'app-customer-home',
@@ -26,7 +27,10 @@ export class CustomerHomeComponent implements OnInit {
   categories: Category[] = [];
   brands: string[] = [];
 
-  addedToCart: boolean = false;
+  toastTitle: string = '';
+  toastMessage: string = '';
+  toastColorClass: string = '';
+  toastReady: boolean = false;
 
   constructor(private customerService: CustomerService) {}
 
@@ -49,7 +53,7 @@ export class CustomerHomeComponent implements OnInit {
 
             for (const product of this.products) {
               this.fillBrand(product.brand);
-              
+
               let found = false;
               for (const inv of this.inventory) {
                 if (product.id === inv.product.id && inv.quantity !== 0) {
@@ -81,5 +85,18 @@ export class CustomerHomeComponent implements OnInit {
 
   fillBrand(brand: string) {
     if (!this.brands.includes(brand)) this.brands.push(brand);
+  }
+
+  showToast(data: { status: boolean; message: string }) {
+    console.log(data);
+    if (data.status) {
+      this.toastTitle = 'Success';
+      this.toastColorClass = 'success';
+    } else {
+      this.toastTitle = 'Failed';
+      this.toastColorClass = 'danger';
+    }
+    this.toastMessage = data.message;
+    this.toastReady = true;
   }
 }

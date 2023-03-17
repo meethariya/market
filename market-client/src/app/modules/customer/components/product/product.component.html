@@ -56,7 +56,7 @@
     <app-add-to-cart
       *ngIf="product.inStock; else outOfStock"
       [productId]="product.id"
-      (cartSuccessEmitter)="successEmit()"
+      (cartEmitter)="successEmit($event)"
     ></app-add-to-cart>
     <ng-template #outOfStock>
       <div class="d-grid text-center rounded peach mb-3">

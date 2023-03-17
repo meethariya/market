@@ -14,7 +14,10 @@ import { CustomerService } from '../../services/customer.service';
 })
 export class AddToCartComponent {
   @Input() productId!: number;
-  @Output() cartSuccessEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() cartEmitter: EventEmitter<{
+    status: boolean;
+    message: string;
+  }> = new EventEmitter();
 
   constructor(private customerService: CustomerService) {}
 
@@ -30,13 +33,20 @@ export class AddToCartComponent {
     let cartData: FormData = new FormData();
     cartData.set('productId', this.productId.toString());
     cartData.set('quantity', this.quantity.toString());
+
     this.customerService.addToCart(cartData).subscribe({
-      next: (id) => {
-        console.log(id);
-        this.cartSuccessEmitter.emit();
-        document.getElementById('close' + this.productId)!.click();
-      },
-      error: (err) => console.log(err),
+      next: (id) =>
+        this.cartEmitter.emit({
+          status: true,
+          message: 'Product has been successfully added to your cart',
+        }),
+      error: (err) =>
+        this.cartEmitter.emit({
+          status: false,
+          message: err.error,
+        }),
     });
+    
+    document.getElementById('close' + this.productId)!.click();
   }
 }

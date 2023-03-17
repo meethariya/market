@@ -8,10 +8,10 @@ import { Product } from 'src/app/models/product';
 })
 export class ProductComponent {
   @Input() product!: Product;
-  @Output() addToCartSuccessEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() addToCartEmitter: EventEmitter<{status: boolean; message: string}> = new EventEmitter();
 
-  successEmit() {
-    this.addToCartSuccessEmitter.emit();
+  successEmit(data: {status: boolean; message: string}) {
+    this.addToCartEmitter.emit(data);
   }
 
   floatToInt(rating:number):number{

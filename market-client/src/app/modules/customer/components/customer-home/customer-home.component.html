@@ -1,20 +1,14 @@
 <!-- all products -->
 <div class="container my-5">
   <!--Alerts-->
-  <div
-    class="alert alert-success alert-dismissible fade show"
-    role="alert"
-    *ngIf="addedToCart"
-  >
-    <strong>Success!</strong> Item added to cart. You can check your cart.
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-      (click)="addedToCart = !addedToCart"
-    ></button>
-  </div>
+  <app-toaster
+    [title]="toastTitle"
+    [message]="toastMessage"
+    [colorClass]="toastColorClass"
+    [ready]="toastReady"
+    (setReadyFalse)="this.toastReady=false"
+  ></app-toaster>
+
   <div class="row">
     <!--Blank-->
     <div class="col-md-4"></div>
@@ -49,13 +43,22 @@
       *ngIf="products != null && products.length !== 0; else noProducts"
     >
       <div class="row">
-        <div *ngFor="let product of products | paginate: {itemsPerPage: 6, currentPage: p}" class="col-sm-4 my-2">
+        <div
+          *ngFor="
+            let product of products
+              | paginate : { itemsPerPage: 6, currentPage: p }
+          "
+          class="col-sm-4 my-2"
+        >
           <app-product
             [product]="product"
-            (addToCartSuccessEmitter)="addedToCart = !addedToCart"
+            (addToCartEmitter)="showToast($event)"
           ></app-product>
         </div>
-        <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>
+        <pagination-controls
+          (pageChange)="p = $event"
+          class="my-pagination my-2 d-flex justify-content-center"
+        ></pagination-controls>
       </div>
     </div>
     <!--if no products are available-->

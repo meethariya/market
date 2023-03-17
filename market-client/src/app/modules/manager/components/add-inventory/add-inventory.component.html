@@ -18,7 +18,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <form (ngSubmit)="addItem()">
+      <form (ngSubmit)="modifyItem()">
         <div class="modal-body">
           <div class="mb-3">
             <label for="quantity" class="col-form-label">Quantity:</label>
@@ -33,6 +33,13 @@
               required
             />
           </div>
+          <div class="d-inline-flex mb-3">
+              <h6 class="form-check-label mx-1">Reduce Stock</h6>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="addOrReduce" (click)="modifySwitch($event)" checked>
+                <label class="form-check-label" for="addOrReduce">Add Stock</label>
+              </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button
@@ -44,7 +51,7 @@
             Close
           </button>
           <div class="blue rounded">
-            <button type="submit" class="text-white btn">Add</button>
+            <button type="submit" class="text-white btn">Modify</button>
           </div>
         </div>
       </form>

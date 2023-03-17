@@ -42,6 +42,16 @@ export class ManagerService {
     );
   }
 
+  reduceInventory(formData: FormData) {
+    return this.http.post(
+      this.generalService.serverPath + '/manager/reduceInventory',
+      formData,
+      {
+        headers: this.generalService.headerGenerator(),
+      }
+    );
+  }
+
   addProduct(formData: FormData) {
     return this.http.post(
       this.generalService.serverPath + '/manager/product',

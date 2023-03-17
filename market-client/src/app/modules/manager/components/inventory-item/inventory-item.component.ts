@@ -10,12 +10,19 @@ import { Inventory } from 'src/app/models/inventory';
 export class InventoryItemComponent {
   successAdded: boolean = false;
   failAdded: boolean = false;
+  successReduced: boolean = false;
+  failReduced: boolean = false;
 
   @Input() item!: Inventory;
   
   successAddedFunction(q:number){
     this.successAdded = true;
     this.item.quantity+=q;
+    this.item.lastImportDate = new Date();
+  }
+  successReducedFunction(q:number){
+    this.successReduced = true;
+    this.item.quantity-=q;
     this.item.lastImportDate = new Date();
   }
 }

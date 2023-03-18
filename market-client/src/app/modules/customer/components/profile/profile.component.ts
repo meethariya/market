@@ -16,9 +16,11 @@ export class ProfileComponent implements OnInit {
   check = faCheck;
   profilePicture: string | null = null;
   image: any = null;
-  editSuccess = false;
-  editError = false;
-  errorMessage: string = '';
+
+  toastTitle: string = '';
+  toastMessage: string = '';
+  toastColorClass: string = '';
+  toastReady: boolean = false;
 
   formData = new FormGroup({
     gender: new FormControl(''),
@@ -55,7 +57,7 @@ export class ProfileComponent implements OnInit {
         this.customer = data;
         this.setFormData(data);
       },
-      error: (err) => console.log(err),
+      error: (err) => this.toastLoader(false, err.error),
     });
   }
 
@@ -110,12 +112,11 @@ export class ProfileComponent implements OnInit {
         next: (customerData) => {
           this.customer = customerData;
           this.setFormData(customerData);
-          this.editSuccess = true;
           document.getElementById('cancel')!.click();
+          this.toastLoader(true,"Profile has been updated.")
         },
         error: (err) => {
-          this.editError = true;
-          this.errorMessage = err.error;
+          this.toastLoader(false, err.error);
         },
       });
     }
@@ -204,5 +205,21 @@ export class ProfileComponent implements OnInit {
       state: customer.address.state,
       pincode: customer.address.pincode.toString(),
     });
+  }
+
+  toastLoader(status:boolean, message:string) {
+    if (status) {
+      this.toastTitle = 'Success';
+      this.toastColorClass = 'success';
+    } else {
+      this.toastTitle = 'Failed';
+      this.toastColorClass = 'danger';
+    }
+    this.toastMessage = message;
+    this.toastReady = true;
+  }
+
+  reviewToToaster(data: {status: boolean, message: string}){
+    this.toastLoader(data.status, data.message);
   }
 }

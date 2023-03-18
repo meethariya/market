@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Review } from 'src/app/models/review';
 import { CustomerService } from '../../services/customer.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -17,10 +17,15 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   ],
 })
 export class MyReviewsComponent implements OnInit {
+  @Output() reviewEmitter: EventEmitter<{
+    status: boolean;
+    message: string;
+  }> = new EventEmitter();
+
   p: number = 1;
   reviews: Review[] = [];
   reviewImages: string[] = [];
-  ratingStar:number = 5;
+  ratingStar: number = 5;
 
   editReview = new FormGroup({
     productId: new FormControl(''),
@@ -40,7 +45,7 @@ export class MyReviewsComponent implements OnInit {
       review.product.name;
     (document.getElementById('reviewRating') as HTMLInputElement).value =
       review.rating.toString();
-      this.ratingStar = review.rating;
+    this.ratingStar = review.rating;
     this.editReview.patchValue({ rating: review.rating.toString() });
     if (review.comment != null) {
       (document.getElementById('reviewComment') as HTMLInputElement).value =
@@ -77,12 +82,16 @@ export class MyReviewsComponent implements OnInit {
         next: (data) => {
           document.getElementById('reviewCloseButton')?.click();
           this.loadReviews();
-          alert('Review Modified');
+          this.reviewEmitter.emit({
+            status: true,
+            message: 'Review has been updated',
+          });
         },
-        error(err) {
-          console.log(err);
-          alert(err.error);
-        },
+        error: (err) =>
+          this.reviewEmitter.emit({
+            status: false,
+            message: err.error,
+          }),
       });
     }
   }
@@ -95,7 +104,8 @@ export class MyReviewsComponent implements OnInit {
   loadReviews() {
     this.customerService.getMyReviews().subscribe({
       next: (data) => (this.reviews = data),
-      error: (err) => console.log(err),
+      error: (err) =>
+        this.reviewEmitter.emit({ status: false, message: err.error }),
     });
   }
 
@@ -103,9 +113,12 @@ export class MyReviewsComponent implements OnInit {
     this.customerService.deleteReview(reviewId).subscribe({
       next: (data) => {
         this.loadReviews();
-        alert('Review Deleted');
+        this.reviewEmitter.emit({
+          status: true,
+          message: 'Review has been deleted',
+        });
       },
-      error: (err) => alert('Failed! ' + err.error),
+      error: (err) => this.reviewEmitter.emit({ status: false, message: err.error }),
     });
   }
 

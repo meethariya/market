@@ -10,10 +10,12 @@ import { ManagerService } from '../../services/manager.service';
 export class AddInventoryComponent {
   @Input() item!: Inventory;
   @Input() remove!: boolean;
-  @Output() successAddEmiiter: EventEmitter<any> = new EventEmitter();
-  @Output() failAddEmiiter: EventEmitter<void> = new EventEmitter();
-  @Output() successRemoveEmiiter: EventEmitter<any> = new EventEmitter();
-  @Output() failRemoveEmiiter: EventEmitter<void> = new EventEmitter();
+  @Output() modifyInventoryEmitter: EventEmitter<{
+    status: boolean;
+    message: string;
+    quantity?: number;
+  }> = new EventEmitter();
+
   quantity: number = 1;
   addOrRemove: boolean = true;
 
@@ -25,8 +27,17 @@ export class AddInventoryComponent {
     formData.set('quantity', this.quantity.toString());
 
     this.managerService.addInventory(formData).subscribe({
-      next: (data) => this.successAddEmiiter.emit(this.quantity),
-      error: (err) => this.failAddEmiiter.emit(),
+      next: (data) =>
+        this.modifyInventoryEmitter.emit({
+          status: true,
+          message:
+            this.quantity +
+            ' unit added to stock. Total stock available: ' +
+            (this.item.quantity + this.quantity),
+          quantity: this.quantity,
+        }),
+      error: (err) =>
+        this.modifyInventoryEmitter.emit({ status: false, message: err.error }),
     });
     document.getElementById('close' + this.item.product.id)!.click();
   }
@@ -37,8 +48,15 @@ export class AddInventoryComponent {
     formData.set('quantity', this.quantity.toString());
 
     this.managerService.reduceInventory(formData).subscribe({
-      next: (data) => this.successRemoveEmiiter.emit(this.quantity),
-      error: (err) => this.failRemoveEmiiter.emit(),
+      next: (data) => this.modifyInventoryEmitter.emit({
+        status: true,
+        message:
+          this.quantity +
+          ' unit reduced from stock. Total stock available: ' +
+          (this.item.quantity - this.quantity),
+        quantity: this.quantity*-1,
+      }),
+      error: (err) => this.modifyInventoryEmitter.emit({ status: false, message: err.error }),
     });
     document.getElementById('close' + this.item.product.id)!.click();
   }

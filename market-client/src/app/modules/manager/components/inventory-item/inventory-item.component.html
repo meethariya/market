@@ -1,66 +1,4 @@
 <div class="card">
-  <!--Alerts-->
-
-  <!--Success Added-->
-  <div
-    class="alert alert-success alert-dismissible fade show"
-    role="alert"
-    *ngIf="successAdded"
-  >
-    Stock Added successfully.
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-      (click)="successAdded = false"
-    ></button>
-  </div>
-  <!--Fail Added-->
-  <div
-    class="alert alert-danger alert-dismissible fade show"
-    role="alert"
-    *ngIf="failAdded"
-  >
-    Error adding stock, please retry after some time.
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-      (click)="failAdded = false"
-    ></button>
-  </div>
-  <!--Success Reduced-->
-  <div
-    class="alert alert-success alert-dismissible fade show"
-    role="alert"
-    *ngIf="successReduced"
-  >
-    Stock Reduced successfully.
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-      (click)="successReduced = false"
-    ></button>
-  </div>
-  <!--Fail Reduced-->
-  <div
-    class="alert alert-danger alert-dismissible fade show"
-    role="alert"
-    *ngIf="failReduced"
-  >
-    Error reducing stock, please retry after some time.
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-      (click)="failReduced = false"
-    ></button>
-  </div>
   <div attr.id="carouselExample{{ item.product.id }}" class="carousel">
     <div class="carousel-inner">
       <div
@@ -130,10 +68,7 @@
     <!-- Modal -->
     <app-add-inventory
       [item]="item"
-      (successAddEmiiter)="successAddedFunction($event)"
-      (failAddEmiiter)="failAdded = true"
-      (successRemoveEmiiter)="successReducedFunction($event)"
-      (failRemoveEmiiter)="failReduced = true"
+      (modifyInventoryEmitter)="modifyInventoryQuantity($event)"
     >
     </app-add-inventory>
   </div>

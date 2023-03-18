@@ -1,4 +1,13 @@
 <div class="container my-5">
+  <!--Alerts-->
+  <app-toaster
+    [title]="toastTitle"
+    [message]="toastMessage"
+    [colorClass]="toastColorClass"
+    [ready]="toastReady"
+    (setReadyFalse)="this.toastReady=false"
+  ></app-toaster>
+
   <h3 class="text-center">Inventory</h3>
   <!-- Add Product -->
   <div class="d-flex flex-row-reverse">
@@ -43,7 +52,7 @@
     <div class="col-md-9" *ngIf="inventory != null && inventory.length !== 0; else noProducts">
       <div class="row">
         <div class="col-md-4 my-2" *ngFor="let i of inventory| paginate: {itemsPerPage: 6, currentPage: p}">
-          <app-inventory-item [item]="i"></app-inventory-item>
+          <app-inventory-item [item]="i" (stockModifyEmitter)="stockQuantityToToast($event)"></app-inventory-item>
         </div>
       </div>
       <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>

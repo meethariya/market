@@ -36,6 +36,11 @@ export class ManagerHomeComponent implements OnInit {
   brand: string[] = [];
   plus = faPlus;
 
+  toastTitle: string = '';
+  toastMessage: string = '';
+  toastColorClass: string = '';
+  toastReady: boolean = false;
+
   constructor(private managerService: ManagerService) {}
 
   ngOnInit(): void {
@@ -71,10 +76,10 @@ export class ManagerHomeComponent implements OnInit {
             this.fixedProducts = this.products;
             this.productListForSearching = this.products;
           },
-          error: (err) => console.log(err),
+          error: (err) => this.toastLoader(false, err.error),
         });
       },
-      error: (err) => console.log(err),
+      error: (err) => this.toastLoader(false, err.error),
     });
   }
 
@@ -95,5 +100,21 @@ export class ManagerHomeComponent implements OnInit {
       let temp = this.fixedInventory.find((i) => i.product.id === p.id);
       if (temp != null) this.inventory.push(temp);
     });
+  }
+
+  stockQuantityToToast(data: {status:boolean, message:string}){
+    this.toastLoader(data.status, data.message);
+  }
+
+  toastLoader(status:boolean, message:string) {
+    if (status) {
+      this.toastTitle = 'Success';
+      this.toastColorClass = 'success';
+    } else {
+      this.toastTitle = 'Failed';
+      this.toastColorClass = 'danger';
+    }
+    this.toastMessage = message;
+    this.toastReady = true;
   }
 }

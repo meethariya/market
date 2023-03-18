@@ -1,28 +1,31 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Inventory } from 'src/app/models/inventory';
 
 @Component({
   selector: 'app-inventory-item',
   templateUrl: './inventory-item.component.html',
-  styles: [
-  ]
+  styles: [],
 })
 export class InventoryItemComponent {
-  successAdded: boolean = false;
-  failAdded: boolean = false;
-  successReduced: boolean = false;
-  failReduced: boolean = false;
 
   @Input() item!: Inventory;
-  
-  successAddedFunction(q:number){
-    this.successAdded = true;
-    this.item.quantity+=q;
-    this.item.lastImportDate = new Date();
-  }
-  successReducedFunction(q:number){
-    this.successReduced = true;
-    this.item.quantity-=q;
-    this.item.lastImportDate = new Date();
+  @Output() stockModifyEmitter: EventEmitter<{
+    status: boolean;
+    message: string;
+  }> = new EventEmitter();
+
+  modifyInventoryQuantity(data: {
+    status: boolean;
+    message: string;
+    quantity?: number;
+  }) {
+    if (data.status) {
+      this.item.quantity += data.quantity!;
+      if (data.quantity! > 1) this.item.lastImportDate = new Date();
+    }
+    this.stockModifyEmitter.emit({
+      status: data.status,
+      message: data.message,
+    });
   }
 }

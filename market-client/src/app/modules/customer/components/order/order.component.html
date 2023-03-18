@@ -1,31 +1,12 @@
 <div class="container my-5">
   <!--Alerts-->
-  <div
-    class="alert alert-success alert-dismissible fade show"
-    role="alert"
-    *ngIf="successReviewAdded"
-  >
-    <strong>Success!</strong> Review Added successfully.
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div
-    class="alert alert-danger alert-dismissible fade show"
-    role="alert"
-    *ngIf="failReviewAdded"
-  >
-    <strong>Failure!</strong> Unable to add review currently.
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
+  <app-toaster
+    [title]="toastTitle"
+    [message]="toastMessage"
+    [colorClass]="toastColorClass"
+    [ready]="toastReady"
+    (setReadyFalse)="this.toastReady=false"
+  ></app-toaster>
 
   <div class="table-responsive">
     <table class="table align-middle text-center table-hover caption-top">

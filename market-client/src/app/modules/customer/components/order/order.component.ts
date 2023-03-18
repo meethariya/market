@@ -24,13 +24,16 @@ export class OrderComponent implements OnInit {
   myReviews: Review[] = [];
   reviewedProductId: number[] = [];
   reviewImages: string[] = [];
-  successReviewAdded = false;
-  failReviewAdded = false;
   ratingStar:number = 5;
 
   orderVariable: string = "id";
   orderReverse:boolean = true;
   sortIcon = faSort;
+
+  toastTitle: string = '';
+  toastMessage: string = '';
+  toastColorClass: string = '';
+  toastReady: boolean = false;
 
   addReview = new FormGroup({
     productId: new FormControl(''),
@@ -43,7 +46,7 @@ export class OrderComponent implements OnInit {
   ngOnInit(): void {
     this.customerService.getOrder().subscribe({
       next: (data) => (this.allOrders = data),
-      error: (err) => console.log(err),
+      error: (err) => this.toastLoader(false, err.error),
     });
     this.reviewLoader();
   }
@@ -67,11 +70,11 @@ export class OrderComponent implements OnInit {
       this.customerService.postReview(formData).subscribe({
         next: (data) => {
           document.getElementById('reviewCloseButton')?.click();
-          this.successReviewAdded = true;
+          this.toastLoader(true, "Review added successfully");
           this.reviewLoader();
         },
         error: (err) => {
-          this.failReviewAdded = true;
+          this.toastLoader(false, err.error);
         },
       });
     }
@@ -104,7 +107,7 @@ export class OrderComponent implements OnInit {
         this.myReviews = data;
         this.reviewedProductId = data.map((p) => p.product.id);
       },
-      error: (err) => console.log(err),
+      error: (err) => this.toastLoader(false, err.error),
     });
   }
 
@@ -115,5 +118,17 @@ export class OrderComponent implements OnInit {
   sortBy(value:string){
     this.orderVariable = value;
     this.orderReverse = !this.orderReverse;
+  }
+
+  toastLoader(status:boolean, message:string) {
+    if (status) {
+      this.toastTitle = 'Success';
+      this.toastColorClass = 'success';
+    } else {
+      this.toastTitle = 'Failed';
+      this.toastColorClass = 'danger';
+    }
+    this.toastMessage = message;
+    this.toastReady = true;
   }
 }

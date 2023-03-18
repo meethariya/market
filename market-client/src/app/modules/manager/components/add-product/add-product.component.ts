@@ -10,7 +10,11 @@ import { ManagerService } from '../../services/manager.service';
 export class AddProductComponent implements OnInit {
   productImages: string[] = [];
   categories: string[] = [];
-  successAdded: boolean = false;
+
+  toastTitle: string = '';
+  toastMessage: string = '';
+  toastColorClass: string = '';
+  toastReady: boolean = false;
 
   productForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(30)]),
@@ -20,7 +24,7 @@ export class AddProductComponent implements OnInit {
       Validators.maxLength(30),
     ]),
     price: new FormControl('', [Validators.required, Validators.min(1)]),
-    images: new FormControl('', [Validators.required]),
+    images: new FormControl(''),
   });
 
   constructor(private managerService: ManagerService) {}
@@ -43,7 +47,7 @@ export class AddProductComponent implements OnInit {
       let formData = new FormData();
 
       formData.set('name', this.productForm.value.name);
-      formData.set('brand', this.productForm.value.brand===" "?"BigMart":this.productForm.value.brand);
+      formData.set('brand', this.productForm.value.brand.trim()===""?"BigMart":this.productForm.value.brand);
       formData.set('categoryName', this.productForm.value.category);
       formData.set('price', this.productForm.value.price);
 
@@ -52,12 +56,12 @@ export class AddProductComponent implements OnInit {
       }
 
       this.managerService.addProduct(formData).subscribe({
-        next: (i) => console.log(i),
-        error: (err) => console.log(err),
+        next: (i) => {
+          this.toastLoader(true, "Product Added successfully");
+          this.productForm.reset();
+        },
+        error: (err) => this.toastLoader(false, err.error),
       });
-
-      this.successAdded=true;
-      this.productForm.reset();
 
     }
   }
@@ -70,5 +74,17 @@ export class AddProductComponent implements OnInit {
   }
   get f() {
     return this.productForm.controls;
+  }
+
+  toastLoader(status:boolean, message:string) {
+    if (status) {
+      this.toastTitle = 'Success';
+      this.toastColorClass = 'success';
+    } else {
+      this.toastTitle = 'Failed';
+      this.toastColorClass = 'danger';
+    }
+    this.toastMessage = message;
+    this.toastReady = true;
   }
 }

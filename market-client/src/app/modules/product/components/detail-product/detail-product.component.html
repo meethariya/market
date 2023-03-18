@@ -1,31 +1,12 @@
 <div class="container my-5">
-  <!--alerts-->
-  <div
-    class="alert alert-success alert-dismissible fade show"
-    role="alert"
-    *ngIf="editSuccess"
-  >
-    <strong>Success!</strong> Product Modified Successfully
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div
-    class="alert alert-danger alert-dismissible fade show"
-    role="alert"
-    *ngIf="editFail"
-  >
-    <strong>Failed!</strong> {{ editFailMessage }}
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
+  <!--Alerts-->
+  <app-toaster
+    [title]="toastTitle"
+    [message]="toastMessage"
+    [colorClass]="toastColorClass"
+    [ready]="toastReady"
+    (setReadyFalse)="this.toastReady=false"
+  ></app-toaster>
 
   <div class="row">
     <!--Product Images-->
@@ -94,9 +75,7 @@
         <!--Modal-->
         <app-edit-product
           [product]="product"
-          (productEditData)="modifiedProduct($event)"
-          (productEditMessage)="modifyErrorMessage($event)"
-          (productEditStatus)="editStatus($event)"
+          (modifyProductEmitter)="productToToaster($event)"
         ></app-edit-product>
       </div>
       </div>

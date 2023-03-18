@@ -26,10 +26,12 @@ export class DetailProductComponent implements OnInit {
   // array for indivial star rating count 1 star=0th index, 2 star=1st index,....
   starCountArray = [0, 0, 0, 0, 0];
   activeRole: string = '';
-  editSuccess: boolean = false;
-  editFail: boolean = false;
-  editFailMessage: string = '';
   pencil = faPencil;
+
+  toastTitle: string = '';
+  toastMessage: string = '';
+  toastColorClass: string = '';
+  toastReady: boolean = false;
 
   constructor(
     private productService: ProductService,
@@ -57,17 +59,23 @@ export class DetailProductComponent implements OnInit {
     this.reviews = reviews;
   }
 
-  editStatus(status: boolean) {
+  toastLoader(status:boolean, message:string) {
     if (status) {
-      this.editSuccess = true;
+      this.toastTitle = 'Success';
+      this.toastColorClass = 'success';
     } else {
-      this.editFail = true;
+      this.toastTitle = 'Failed';
+      this.toastColorClass = 'danger';
     }
+    this.toastMessage = message;
+    this.toastReady = true;
   }
-  modifyErrorMessage(message: string) {
-    this.editFailMessage = message;
-  }
-  modifiedProduct(product: Product) {
-    this.product = product;
+
+  productToToaster(data: {status: boolean, message: string, product?: Product}){
+    if(data.status){
+      this.product = data.product!;
+    }
+
+    this.toastLoader(data.status, data.message);
   }
 }

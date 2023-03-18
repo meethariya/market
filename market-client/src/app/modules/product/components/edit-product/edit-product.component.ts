@@ -10,9 +10,11 @@ import { ProductService } from '../../services/product.service';
 })
 export class EditProductComponent implements OnInit {
   @Input() product!: Product;
-  @Output() productEditStatus: EventEmitter<boolean> = new EventEmitter();
-  @Output() productEditData: EventEmitter<Product> = new EventEmitter();
-  @Output() productEditMessage: EventEmitter<string> = new EventEmitter();
+  @Output() modifyProductEmitter: EventEmitter<{
+    status: boolean;
+    message: string;
+    product?: Product;
+  }> = new EventEmitter();
 
   productImages: string[] = [];
   categories: string[] = [];
@@ -67,16 +69,16 @@ export class EditProductComponent implements OnInit {
       this.productService.editProduct(this.product.id, formData).subscribe({
         next: (p) => {
           this.product = p;
-          this.productEditData.emit(p);
-          this.productEditStatus.emit(true);
+          this.modifyProductEmitter.emit({
+            status: true,
+            message: 'Product updated successfully',
+            product: this.product,
+          });
         },
-        error: (err) => {
-          console.log(err);
-          this.productEditStatus.emit(false);
-          this.productEditMessage.emit(err.error);
-        }
+        error: (err) =>
+          this.modifyProductEmitter.emit({ status: false, message: err.error }),
       });
-      document.getElementById("editProductModalCloseButton")?.click();
+      document.getElementById('editProductModalCloseButton')?.click();
     }
   }
 

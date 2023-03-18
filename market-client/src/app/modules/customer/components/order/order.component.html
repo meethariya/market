@@ -119,7 +119,7 @@
                               <a
                                 routerLink="/product/{{ p.product.id }}"
                                 style="text-decoration: none"
-                                (click)="switchPage(i.id)"
+                                (click)="closeMoreModal(i.id)"
                               >
                                 {{ p.product.name }}
                               </a>
@@ -139,7 +139,7 @@
                                   class="btn text-white"
                                   data-bs-toggle="modal"
                                   data-bs-target="#addReviewModal"
-                                  (click)="editModal(p.product)"
+                                  (click)="editModal(p.product, i.id)"
                                 >
                                   Review
                                 </button>

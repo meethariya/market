@@ -89,12 +89,13 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  editModal(product: Product) {
+  editModal(product: Product, orderId:number) {
     document.getElementById('addReviewModalLabel')!.innerText = product.name;
     (document.getElementById('reviewRating') as HTMLInputElement).value =
       Number(5).toString();
     this.addReview.patchValue({ rating: Number(5).toString() });
     this.addReview.patchValue({ productId: product.id.toString() });
+    this.closeMoreModal(orderId);
   }
 
   reviewLoader(){
@@ -107,7 +108,7 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  switchPage(id:number){
+  closeMoreModal(id:number){
     document.getElementById("moreCloseModal"+id)?.click();
   }
 

@@ -21,6 +21,20 @@ export class GeneralService {
     return localStorage.getItem('role');
   }
 
+  /**
+   * @returns profilePic of logged in user or null if not logged in
+   */
+  getProfilePic(): string | null {
+    return localStorage.getItem('profilePic');
+  }
+
+  /**
+   * @returns name of logged in user or null if not logged in
+   */
+  getName(): string | null{
+    return localStorage.getItem('name');
+  }
+
   isAuthenticated(): boolean {
     let token = this.getToken();
     return token != null;

@@ -37,6 +37,22 @@ export class UserAuthService {
   }
 
   /**
+   * sets name to local storage
+   * @param name 
+   */
+  setName(name: string): void {
+    localStorage.setItem('name', name);
+  }
+
+  /**
+   * sets profile pic url to local storage
+   * @param profilePic 
+  */
+ setProfilePic(profilePic: string): void {
+   localStorage.setItem('profilePic', profilePic);
+  }
+
+  /**
    * fetchs token from local storage
    * @returns token
    */

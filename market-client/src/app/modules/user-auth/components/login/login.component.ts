@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user';
 import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({
@@ -16,7 +17,11 @@ export class LoginComponent {
     private userAuthService: UserAuthService,
     private router: Router
   ) {}
-  @Output() loginEmitter: EventEmitter<string> = new EventEmitter();
+  @Output() loginEmitter: EventEmitter<{
+    role: string;
+    name: string;
+    profilePic: string;
+  }> = new EventEmitter();
 
   /**
    * creates token using email and password.
@@ -34,12 +39,17 @@ export class LoginComponent {
     let token = window.btoa(this.email + ':' + this.password);
 
     this.userAuthService.login(formData, token).subscribe({
-      next: (user) => {
+      next: (user: User) => {
         this.userAuthService.setToken(token);
         this.userAuthService.setRole(user.role);
+        this.userAuthService.setName(user.name);
+        this.userAuthService.setProfilePic(user.profilePicPath);
         this.failedLogin = false;
-        this.loginEmitter.emit(user.role);
-
+        this.loginEmitter.emit({
+          role: user.role,
+          name: user.name,
+          profilePic: user.profilePicPath,
+        });
         this.router.navigate([user.role.toLowerCase()]);
         document.getElementById('closeButton')!.click();
       },

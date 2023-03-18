@@ -29,7 +29,7 @@ const loaderConfig: NgxUiLoaderConfig = {
   blur: 0,
   delay: 0,
   fastFadeOut: false,
-  fgsColor: '#ada2ff', //purple
+  fgsColor: '#00B8A9', //purple
   fgsPosition: 'center-center',
   fgsSize: 0,
   fgsType: 'wandering-cubes',
@@ -40,12 +40,12 @@ const loaderConfig: NgxUiLoaderConfig = {
   masterLoaderId: 'master',
   overlayBorderRadius: '0',
   overlayColor: 'rgba(40,40,40,0)',
-  pbColor: '#FFE5F1', //peach
+  pbColor: '#F0B70E', //accent
   pbDirection: 'ltr',
   pbThickness: 3,
   hasProgressBar: true,
   text: '',
-  textColor: '#ada2ff', //purple
+  textColor: '#00B8A9', //purple
   textPosition: 'center-center',
   maxTime: -1,
   minTime: 50,

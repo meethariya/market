@@ -64,8 +64,17 @@
       </div>
       <!-- model -->
       <app-login (loginEmitter)="loggedIn($event)"></app-login>
-      <div class="text-center rounded accent" *ngIf="authenticated">
-        <app-logout class="d-grid" (logoutEmitter)="loggedOut()"></app-logout>
+      <div class = "d-flex flex-row" *ngIf="authenticated">
+        <h6 class="text-white pt-2 mx-2">Hello, {{name}}</h6>
+        <img
+          src="{{ profilePicPath!.split('/src')[1] }}"
+          alt="profilePic"
+          class="img-fluid rounded-circle me-4"
+          style="object-fit: cover; height: 40px; width: 40px;"
+        />
+        <div class="text-center rounded accent">
+          <app-logout class="d-grid" (logoutEmitter)="loggedOut()"></app-logout>
+        </div>
       </div>
     </div>
   </div>

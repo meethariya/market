@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  faExclamationTriangle,
-  faThumbsUp,
-} from '@fortawesome/free-solid-svg-icons';
 import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({
@@ -52,12 +48,10 @@ export class RegisterComponent {
     agreeTermsAndConditions: new FormControl('', [Validators.required]),
   });
 
-  errorMessage = '';
-  failedStatus = false;
-  successStatus = false;
-
-  ok = faThumbsUp;
-  notOk = faExclamationTriangle;
+  toastTitle: string = '';
+  toastMessage: string = '';
+  toastColorClass: string = '';
+  toastReady: boolean = false;
 
   constructor(private userAuthService: UserAuthService) {}
 
@@ -93,18 +87,25 @@ export class RegisterComponent {
       formData.set('state', this.registerForm.value.state);
       formData.set('pincode', this.registerForm.value.pincode);
       this.userAuthService.register(formData).subscribe({
-        next: (data) => {
-          this.successStatus = true;
-        },
-        error: (err) => {
-          this.errorMessage = err.error;
-          this.failedStatus = true;
-        },
+        next: (data) => this.toastLoader(true,"Account registered successfully. Login with your email and password"),
+        error: (err) => this.toastLoader(false,err.error),
       });
     }
   }
 
   get f() {
     return this.registerForm.controls;
+  }
+
+  toastLoader(status:boolean, message:string) {
+    if (status) {
+      this.toastTitle = 'Success';
+      this.toastColorClass = 'success';
+    } else {
+      this.toastTitle = 'Failed';
+      this.toastColorClass = 'danger';
+    }
+    this.toastMessage = message;
+    this.toastReady = true;
   }
 }

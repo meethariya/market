@@ -1,28 +1,18 @@
 <div class="container w-50 mt-5">
+  <!--Alerts-->
+  <app-toaster
+    [title]="toastTitle"
+    [message]="toastMessage"
+    [colorClass]="toastColorClass"
+    [ready]="toastReady"
+    (setReadyFalse)="this.toastReady=false"
+  ></app-toaster>
   <form
     class="g-3 needs-validation"
     [formGroup]="registerForm"
     (ngSubmit)="register()"
   >
     <h1 class="text-center">Register</h1>
-    <div
-      class="alert alert-danger alert-dismissible fade show"
-      role="alert"
-      *ngIf="failedStatus"
-    >
-      <fa-icon [icon]="notOk"></fa-icon><strong>Failed!</strong>
-      {{ errorMessage }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="alert alert-success" role="alert" *ngIf="successStatus">
-      <fa-icon [icon]="ok"></fa-icon>Registered Successfully
-      <a href="/" class="alert-link">Click here to login</a>.
-    </div>
     <div class="row mb-2">
       <div class="col-md-6">
         <label for="firstName" class="form-label">First name</label>

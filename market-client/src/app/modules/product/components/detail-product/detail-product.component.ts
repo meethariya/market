@@ -43,14 +43,14 @@ export class DetailProductComponent implements OnInit {
 
     this.productService.getProductDetails(this.id).subscribe({
       next: (value) => (this.product = value),
-      error: (err) => console.log(err),
+      error: (err) => this.toastLoader(false,err.error),
     });
     this.productService.getProductReviews(this.id).subscribe({
       next: (data) => {
         this.reviews = data;
         data.forEach((r) => (this.starCountArray[r.rating - 1] += 1));
       },
-      error: (err) => console.log(err),
+      error: (err) => this.toastLoader(false,err.error),
     });
     this.activeRole = this.productService.getActiveRole();
   }

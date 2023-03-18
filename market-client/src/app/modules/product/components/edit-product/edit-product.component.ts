@@ -35,7 +35,7 @@ export class EditProductComponent implements OnInit {
   ngOnInit(): void {
     this.productService.getCategory().subscribe({
       next: (data) => (this.categories = data.map((c) => c.categoryName)),
-      error: (err) => console.log(err),
+      error: (err) => this.modifyProductEmitter.emit({ status: false, message: err.error }),
     });
     this.productForm.patchValue({
       name: this.product.name,

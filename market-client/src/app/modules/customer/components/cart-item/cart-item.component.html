@@ -37,6 +37,8 @@
               type="button"
               class="btn btn-outline-danger"
               (click)="cartItemQuantityEditor(-1)"
+              data-bs-toggle="tooltip"
+              title="Reduce quantity by 1"
               [attr.disabled]="item.quantity <= 1 ? true : null"
             >
               <fa-icon [icon]="minus"></fa-icon>
@@ -52,6 +54,8 @@
               type="button"
               class="btn btn-outline-success"
               (click)="cartItemQuantityEditor(1)"
+              data-bs-toggle="tooltip"
+              title="Increase quantity by 1"
             >
               <fa-icon [icon]="plus"></fa-icon>
             </button>

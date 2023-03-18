@@ -88,7 +88,6 @@ export class CustomerHomeComponent implements OnInit {
   }
 
   showToast(data: { status: boolean; message: string }) {
-    console.log(data);
     if (data.status) {
       this.toastTitle = 'Success';
       this.toastColorClass = 'success';

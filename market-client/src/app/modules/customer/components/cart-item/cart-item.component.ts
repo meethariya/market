@@ -9,9 +9,16 @@ import { CustomerService } from '../../services/customer.service';
   styles: [],
 })
 export class CartItemComponent {
-
   @Input() item!: CartList;
-  @Output() deleteFromCart: EventEmitter<CartList> = new EventEmitter();
+  @Output() deleteFromCart: EventEmitter<{
+    status: boolean;
+    message: string;
+    item?: CartList;
+  }> = new EventEmitter();
+  @Output() modifyCartQuantity: EventEmitter<{
+    status: boolean;
+    message: string;
+  }> = new EventEmitter();
 
   plus = faPlus;
   minus = faMinus;
@@ -27,15 +34,34 @@ export class CartItemComponent {
     this.customerService
       .cartItemQuantityEditor(this.item.id, quantityDiff)
       .subscribe({
-        next: (item) => (this.item = item),
-        error: (err) => console.log(err),
+        next: (item) => {
+          this.item = item;
+          this.modifyCartQuantity.emit({
+            status: true,
+            message:
+              this.item.product.name +
+              ' quantity modified to ' +
+              this.item.quantity,
+          });
+        },
+        error: (err) =>
+          this.modifyCartQuantity.emit({
+            status: false,
+            message: err.error,
+          }),
       });
   }
 
-  removeFromCart(){
+  removeFromCart() {
     this.customerService.removeCartitem(this.item.id).subscribe({
-      next: (data) => this.deleteFromCart.emit(this.item),
-      error: (err) => console.log(err)
+      next: (data) =>
+        this.deleteFromCart.emit({
+          status: true,
+          message: 'Item removed from cart',
+          item: this.item,
+        }),
+      error: (err) =>
+        this.deleteFromCart.emit({ status: false, message: err.error }),
     });
   }
 }

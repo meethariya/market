@@ -3,7 +3,7 @@ import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({
   selector: 'app-logout',
-  template: `<button class="text-white btn" (click)="logout()">Logout</button>`,
+  template: `<button class="btn" (click)="logout()">Logout</button>`,
   styles: [
   ]
 })

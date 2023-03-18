@@ -13,7 +13,7 @@
       <caption>
         Your Orders
       </caption>
-      <thead class="table-dark">
+      <thead class="accent">
         <tr>
           <th scope="col" (click)="sortBy('id')" >Order Id &nbsp; <fa-icon [icon]="sortIcon"></fa-icon> </th>
           <th scope="col" (click)="sortBy('timestamp')" >Placed On &nbsp; <fa-icon [icon]="sortIcon"></fa-icon> </th>
@@ -41,7 +41,7 @@
           <td>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn primary text-white"
               data-bs-toggle="modal"
               attr.data-bs-target="#orderModal{{ i.id }}"
             >
@@ -113,7 +113,7 @@
                                 *ngIf="
                                   !reviewedProductId.includes(p.product.id)
                                 "
-                                class="d-grid text-center rounded accent"
+                                class="d-grid text-center rounded primary"
                               >
                                 <!-- Button trigger modal -->
                                 <button
@@ -137,13 +137,6 @@
                     <h6>Placed On: {{ i.timestamp | date : "medium" }}</h6>
                   </div>
                   <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
                   </div>
                 </div>
               </div>
@@ -232,15 +225,8 @@
         </div>
         <div class="modal-footer">
           <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-          <button
             type="submit"
-            class="btn btn-success"
+            class="btn primary text-white"
             [disabled]="!addReview.valid"
           >
             Save changes

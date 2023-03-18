@@ -12,6 +12,7 @@
           {{ item.product.name | titlecase }}
         </h1>
         <button
+          id="close{{item.product.id}}"
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
@@ -42,16 +43,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            id="close{{item.product.id}}"
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
           <div class="accent rounded">
-            <button type="submit" class="text-white btn">Modify</button>
+            <button type="submit" class="btn">Modify</button>
           </div>
         </div>
       </form>

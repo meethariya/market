@@ -4,7 +4,7 @@
       <caption>
         All Orders
       </caption>
-      <thead class="table-dark">
+      <thead class="accent">
         <tr>
           <th scope="col" (click)="sortBy('id')">
             Order Id &nbsp; <fa-icon [icon]="sortIcon"></fa-icon>
@@ -44,7 +44,7 @@
           <td>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn primary text-white"
               data-bs-toggle="modal"
               attr.data-bs-target="#orderModal{{ i.id }}"
             >

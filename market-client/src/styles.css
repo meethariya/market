@@ -1,18 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-.purple {
+.primary {
   background-color: #712cf9;
 }
 
-.blue {
-  background-color: #a28bbe;
-}
-
-.peach {
-  background-color: #64baaa;
-}
-
-.yellow {
+.secondary {
   background-color: #fbeaff;
+}
+
+.accent {
+  background-color: #64baaa;
 }
 
 .golden-star{

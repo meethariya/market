@@ -1,6 +1,13 @@
 import { CartList } from './cart-list';
 import { Customer } from './customer';
+import { Product } from './product';
 
+/**
+ * Order model.
+ * Contains {@link id}, {@link customer}, {@link timestamp}, {@link price}, {@link paymentMethod}, and
+ * {@link cart}.
+ * @see {@link CartList}, {@link Customer}, {@link Product}
+ */
 export class Order {
   public id: number;
   public customer: Customer;

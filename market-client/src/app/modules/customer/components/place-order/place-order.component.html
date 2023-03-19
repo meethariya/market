@@ -1,10 +1,15 @@
+<!-- Place Order -->
 <div class="container my-5">
-  <div *ngIf="failedOrder" class="alert alert-danger" role="alert">
-    {{failedMessage}}
-  </div>
-  <div *ngIf="orderSuccess" class="alert alert-success" role="alert">
-    Order Placed! Cart Cleared, keep shopping.
-  </div>
+  <!--Alerts-->
+  <app-toaster
+    [title]="toastTitle"
+    [message]="toastMessage"
+    [colorClass]="toastColorClass"
+    [ready]="toastReady"
+    (setReadyFalse)="this.toastReady=false"
+  ></app-toaster>
+
+  <!-- BreadCrumb cart->place-order -->
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a routerLink="/customer/cart">Cart</a></li>
@@ -17,12 +22,15 @@
   >
     <h1 class="text-center mb-3">Place Order</h1>
     <div class="row">
+      <!-- Customer Details -->
       <div class="col-sm-4" *ngIf="customer !== undefined">
+        <!-- Customer Profile image -->
         <img
           src="{{ customer.user.profilePicPath.split('/src')[1] }}"
           alt="profilePic"
           class="img-fluid rounded-circle"
         />
+        <!-- Customer Data -->
         <h4>{{ customer.user.name | titlecase }}</h4>
         <h6>Email: {{ customer.user.email }}</h6>
         <h6>Phone: {{ customer.phone }}</h6>
@@ -35,6 +43,7 @@
           {{ customer.address.pincode }}
         </p>
       </div>
+      <!-- Customer Cart -->
       <div class="col-sm-8">
         <div *ngFor="let item of cart">
           <h5>{{ item.product.name }}</h5>
@@ -54,6 +63,7 @@
         <div class="d-flex flex-row-reverse">
           <h5>Total: {{ total | currency : "INR" }}</h5>
         </div>
+        <!--Payment Type-->
         <form (ngSubmit)="order()">
           <div class="d-flex justify-content-between">
             <div>
@@ -78,6 +88,7 @@
       </div>
     </div>
   </div>
+  <!-- If no items are present in cart -->
   <ng-template #emptyCart>
     <div class="text-center">
       <img

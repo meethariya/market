@@ -1,5 +1,7 @@
+<!-- Cart Item -->
 <div class="card mb-3 cardi">
   <div class="row g-0">
+    <!--Product Image-->
     <div class="col-md-4">
       <img
         src="{{ item.product.imagePath[0].split('src/')[1] }}"
@@ -8,12 +10,14 @@
         style="width: 100%; height: 203px; object-fit: cover"
       />
     </div>
+    <!--Product Data-->
     <div class="col-md-8">
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <a routerLink="/product/{{ item.product.id }}" style="text-decoration: none;">
             <h5 class="card-title">{{ item.product.name | titlecase}}</h5>
           </a>
+          <!-- Remove cart item -->
           <fa-icon
             class="text-danger"
             [icon]="trash"
@@ -26,6 +30,7 @@
         <p class="card-text">
           Price: {{ item.product.price | currency : "INR" }}
         </p>
+        <!--Modify cart item quantity-->
         <div class="d-flex justify-content-between">
           <div
             class="btn-group btn-group-sm"
@@ -33,6 +38,7 @@
             aria-label="Basic mixed styles example"
           >
             Quantity:
+            <!-- - button -->
             <button
               type="button"
               class="btn btn-outline-danger"
@@ -43,6 +49,7 @@
             >
               <fa-icon [icon]="minus"></fa-icon>
             </button>
+            <!--ReadOnly quantity input-->
             <input
               class="form-control text-center form-control-sm"
               type="number"
@@ -50,6 +57,7 @@
               value="{{ item.quantity }}"
               readonly
             />
+            <!-- + button -->
             <button
               type="button"
               class="btn btn-outline-success"

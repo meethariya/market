@@ -1,5 +1,13 @@
 import { Category } from './category';
+import { Inventory } from './inventory';
 
+/**
+ * Product model.
+ * Contains {@link id}, {@link name}, {@link brand}, {@link category}, {@link price},
+ *  {@link rating}, {@link imagePath}, and {@link inStock}?.
+ * 
+ * @see {@link Category}, {@link Inventory}
+ */
 export class Product {
   id: number;
   name: string;

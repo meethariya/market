@@ -7,6 +7,10 @@ import { Order } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
 import { GeneralService } from 'src/app/services/general.service';
 
+/**
+ * Manager Service. All data accessed by a Manager is fetched from this service.  
+ * Uses {@link GeneralService} for general activities.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -16,24 +20,51 @@ export class ManagerService {
     private generalService: GeneralService
   ) {}
 
+  /**
+   * Checks whether logged in user is manager or not.  
+   * @see {@link GeneralService.roleVerifier()}.
+   * @returns promise boolean
+   */
   async isManager(): Promise<boolean> {
     return this.generalService.roleVerifier('Manager');
   }
 
+  /**
+   * Get all Products.  
+   * @see {@link GeneralService.getAllProducts()}.
+   * @returns Observale of Product List
+   */
   getProducts(): Observable<Product[]> {
     return this.generalService.getAllProducts();
   }
 
+  /**
+   * Get all category.  
+   * @see {@link GeneralService.getCategory()}.
+   * @returns Observale of category List
+   */
   getCategory(): Observable<Category[]> {
     return this.generalService.getCategory();
   }
 
+  /**
+   * Get all inventory.  
+   * @see {@link GeneralService.getInventory()}.
+   * @returns Observale of inventory List
+   */
   getInventory(): Observable<Inventory[]> {
     return this.generalService.getInventory();
   }
 
-  addInventory(formData: FormData) {
-    return this.http.post(
+  /**
+   * Adds Item / n quantity of item to inventory.  
+   * Backend Request: **POST** `/manager/inventory`
+   * @param formData 
+   * @see {@link GeneralService.headerGenerator()}
+   * @returns id of the item that has been added to inventory.
+   */
+  addInventory(formData: FormData): Observable<Number> {
+    return this.http.post<Number>(
       this.generalService.serverPath + '/manager/inventory',
       formData,
       {
@@ -42,8 +73,15 @@ export class ManagerService {
     );
   }
 
-  reduceInventory(formData: FormData) {
-    return this.http.post(
+  /**
+   * Reduces n quantity of item in inventory.  
+   * Backend Request: **POST** `/manager/reduceInventory`
+   * @param formData 
+   * @see {@link GeneralService.headerGenerator()}
+   * @returns id of the item that has been reduced from inventory stock.
+   */
+  reduceInventory(formData: FormData): Observable<Number> {
+    return this.http.post<Number>(
       this.generalService.serverPath + '/manager/reduceInventory',
       formData,
       {
@@ -52,8 +90,15 @@ export class ManagerService {
     );
   }
 
-  addProduct(formData: FormData) {
-    return this.http.post(
+  /**
+   * Adds a product.  
+   * Backend Request: **POST** `/manager/product`
+   * @param formData 
+   * @see {@link GeneralService.headerGenerator()}
+   * @returns id of the product added.
+   */
+  addProduct(formData: FormData): Observable<Number> {
+    return this.http.post<Number>(
       this.generalService.serverPath + '/manager/product',
       formData,
       {
@@ -62,6 +107,12 @@ export class ManagerService {
     );
   }
 
+  /**
+   * Get All Orders  
+   * Backend Request: **POST** `/manager/order`
+   * @see {@link GeneralService.headerGenerator()}
+   * @returns id of the product added.
+   */
   getAllOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(
       this.generalService.serverPath + '/manager/order',

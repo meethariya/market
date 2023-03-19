@@ -1,4 +1,6 @@
+<!--Inventory item-->
 <div class="card">
+  <!--Product Images-->
   <div attr.id="carouselExample{{ item.product.id }}" class="carousel">
     <div class="carousel-inner">
       <div
@@ -34,6 +36,7 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
+  <!--Product Details-->
   <div class="card-body">
     <a
       routerLink="/product/{{ item.product.id }}"
@@ -48,6 +51,7 @@
       </h6>
       <div class="d-flex justify-content-between">
         <p>{{ item.product.price | currency : "INR" }}</p>
+        <!--Stars-->
         <p>
           <app-star-rating [rating]="item.product.rating"> </app-star-rating>
         </p>
@@ -55,6 +59,7 @@
     </a>
     <div class="d-flex justify-content-between">
       <h6>Stock: {{ item.quantity }}</h6>
+      <!--Modify stock modal trigger button-->
       <div class="d-grid text-center rounded primary">
         <button
           class="btn text-white"
@@ -65,7 +70,7 @@
         </button>
       </div>
     </div>
-    <!-- Modal -->
+    <!-- Modify Modal -->
     <app-add-inventory
       [item]="item"
       (modifyInventoryEmitter)="modifyInventoryQuantity($event)"
@@ -75,6 +80,7 @@
   <div class="card-footer">
     <div class="d-flex justify-content-between">
       <p class="text-muted">
+        <!--Imported on-->
         <small>
           Imported on:
           {{
@@ -84,6 +90,7 @@
           }}
         </small>
       </p>
+      <!--Sold On-->
       <p class="text-muted">
         <small>
           Sold on:

@@ -13,6 +13,7 @@
   >
   </app-toaster>
 
+  <!--Cart List-->
   <div
     class="mx-5"
     *ngFor="
@@ -25,6 +26,7 @@
       (modifyCartQuantity)="modifyCartQuantity($event)"
     ></app-cart-item>
   </div>
+  <!--Pagignation-->
   <pagination-controls
     (pageChange)="p = $event"
     class="my-pagination my-2 d-flex justify-content-center"
@@ -42,10 +44,12 @@
     </div>
   </div>
 </div>
+<!-- If no items are present in cart -->
 <ng-template #emptyCart>
   <div class="text-center">
     <img src="/assets/image/emptyCart.png" alt="cart empty" class="img-fluid" />
     <br />
+    <!-- Route to customer home -->
     <a routerLink="/customer/" class="text-decoration-none">Keep Shopping.</a>
   </div>
 </ng-template>

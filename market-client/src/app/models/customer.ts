@@ -1,7 +1,15 @@
 import { Address } from './address';
 import { CartList } from './cart-list';
 import { User } from './user';
+import { Review } from './review';
 
+/**
+ * Customer model. 
+ * Contains {@link id}, {@link user}, {@link address}, {@link gender}, {@link phone}, 
+ * {@link dob} and {@link cart}
+ * 
+ * @see {@link User}, {@link Address}, {@link CartList}, {@link Review}
+ */
 export class Customer {
   public id: number;
   public user: User;

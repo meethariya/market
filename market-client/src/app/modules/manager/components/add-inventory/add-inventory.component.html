@@ -1,3 +1,4 @@
+<!--Add/ Reduce stock modal-->
 <div
   class="modal fade"
   id="addInventory{{item.product.id}}"
@@ -11,6 +12,7 @@
         <h1 class="modal-title fs-5" id="addInventoryLabel">
           {{ item.product.name | titlecase }}
         </h1>
+        <!--Close button-->
         <button
           id="close{{item.product.id}}"
           type="button"
@@ -19,8 +21,10 @@
           aria-label="Close"
         ></button>
       </div>
+      <!--Quantity form-->
       <form (ngSubmit)="modifyItem()">
         <div class="modal-body">
+          <!--Quantity-->
           <div class="mb-3">
             <label for="quantity" class="col-form-label">Quantity:</label>
             <input
@@ -34,6 +38,7 @@
               required
             />
           </div>
+          <!--Add/Reduce Switch-->
           <div class="d-inline-flex mb-3">
               <h6 class="form-check-label mx-1">Reduce Stock</h6>
               <div class="form-check form-switch">
@@ -42,6 +47,7 @@
               </div>
           </div>
         </div>
+        <!--Submit form-->
         <div class="modal-footer">
           <div class="accent rounded">
             <button type="submit" class="btn">Modify</button>

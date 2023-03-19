@@ -1,5 +1,10 @@
 import { Product } from './product';
 
+/**
+ * Inventory model.
+ * Contains {@link id}?, {@link product}, {@link quantity}, {@link lastImportDate}, and {@link lastSoldDate}.
+ * @see {@link Product}
+ */
 export class Inventory {
   id?: number;
   product: Product;
@@ -17,9 +22,7 @@ export class Inventory {
     this.id = id;
     this.product = product;
     this.quantity = quantity;
-    if(lastImportDate!==undefined)
-      this.lastImportDate = lastImportDate;
-    if(lastSoldDate!==undefined)
-      this.lastSoldDate = lastSoldDate;
+    if (lastImportDate !== undefined) this.lastImportDate = lastImportDate;
+    if (lastSoldDate !== undefined) this.lastSoldDate = lastSoldDate;
   }
 }

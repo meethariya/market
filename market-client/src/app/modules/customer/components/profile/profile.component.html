@@ -8,7 +8,7 @@
     (setReadyFalse)="this.toastReady=false"
   ></app-toaster>
 
-  <!--Form-->
+  <!--Customer Profile Form-->
   <form [formGroup]="formData" (ngSubmit)="submitForm()">
     <div class="row" *ngIf="customer != null">
       <!--Profile Picture-->
@@ -23,6 +23,7 @@
           class="img-fluid rounded-circle"
           style="height: 350px; width: 400px; object-fit: cover;"
         />
+        <!-- Upload profile picture image -->
         <div class="mb-3" id="profilePicEditButton" style="display: none">
           <label for="formFile" class="form-label">Edit Profile Picture</label>
           <input
@@ -85,7 +86,7 @@
           </div>
         </div>
         <h3 class="my-2">Profile</h3>
-
+        <!--Customer Profile -->
         <div class="row mb-2">
           <!--Name-->
           <div class="col-sm-6">
@@ -439,7 +440,7 @@
     </div>
   </form>
 
-  <!-- My reviews -->
+  <!-- Customer reviews -->
   <hr>
   <app-my-reviews (reviewEmitter)="reviewToToaster($event)"></app-my-reviews>
 </div>

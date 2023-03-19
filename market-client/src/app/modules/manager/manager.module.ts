@@ -15,7 +15,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ProductModule } from '../product/product.module';
 import { OrderModule } from 'ngx-order-pipe';
 
-
+/**
+ * Manager Module.  
+ * All Actions for Manager belongs to this module.
+ */
 @NgModule({
   declarations: [
     ManagerHomeComponent,

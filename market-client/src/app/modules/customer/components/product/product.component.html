@@ -1,4 +1,6 @@
+<!-- Product -->
 <div class="card cardi">
+  <!-- Product Images -->
   <div attr.id="carouselExample{{ product.id }}" class="carousel">
     <div class="carousel-inner">
       <div
@@ -34,6 +36,7 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
+  <!-- Product Details -->
   <div class="card-body">
     <a
       routerLink="/product/{{ product.id }}"
@@ -53,11 +56,13 @@
         </p>
       </div>
     </a>
+    <!-- If product is in stock -->
     <app-add-to-cart
       *ngIf="product.inStock; else outOfStock"
       [productId]="product.id"
       (cartEmitter)="successEmit($event)"
     ></app-add-to-cart>
+    <!-- If product is not in stock -->
     <ng-template #outOfStock>
       <div class="d-grid text-center rounded accent mb-3">
         <button class="btn border border-0" disabled>

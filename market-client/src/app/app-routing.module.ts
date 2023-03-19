@@ -33,6 +33,10 @@ const routes: Routes = [
   { path: '**', component: NotFoundComponent },
 ];
 
+/**
+ * Routing for Main app.  
+ * Further uses Customer Routing and Manager Routing.
+ */
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

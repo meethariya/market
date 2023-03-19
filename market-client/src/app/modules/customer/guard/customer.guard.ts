@@ -3,6 +3,13 @@ import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot, 
 import { Observable } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 
+/**
+ * Customer guard. 
+ * Verifies if the user logged in is customer or not.  
+ * Uses {@link CustomerService.isCustomer()}.
+ * If the user is not customer redirects to home page.  
+ * App Route Link: `/customer/*`
+ */
 @Injectable({
   providedIn: 'root'
 })

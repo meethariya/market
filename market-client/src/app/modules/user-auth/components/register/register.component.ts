@@ -1,7 +1,14 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserAuthService } from '../../services/user-auth.service';
+import { ToasterComponent } from 'src/app/modules/facet/toaster/toaster.component';
 
+/**
+ * Register component.
+ * Validates form and registers user. Checks for various backend validations as well.  
+ * Uses {@link UserAuthService.register()}.  
+ * Shows toast message on success/failure using {@link ToasterComponent}.
+ */
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -48,6 +55,7 @@ export class RegisterComponent {
     agreeTermsAndConditions: new FormControl('', [Validators.required]),
   });
 
+  // toast settings variables
   toastTitle: string = '';
   toastMessage: string = '';
   toastColorClass: string = '';
@@ -86,6 +94,7 @@ export class RegisterComponent {
       formData.set('city', this.registerForm.value.city);
       formData.set('state', this.registerForm.value.state);
       formData.set('pincode', this.registerForm.value.pincode);
+      // submits form
       this.userAuthService.register(formData).subscribe({
         next: (data) => this.toastLoader(true,"Account registered successfully. Login with your email and password"),
         error: (err) => this.toastLoader(false,err.error),
@@ -93,10 +102,19 @@ export class RegisterComponent {
     }
   }
 
+  /**
+   * @returns form control
+   */
   get f() {
     return this.registerForm.controls;
   }
 
+  /**
+   * Shows the toast using {@link ToasterComponent}.
+   * @param status
+   * @param message
+   * @returns `void`
+   */
   toastLoader(status:boolean, message:string) {
     if (status) {
       this.toastTitle = 'Success';

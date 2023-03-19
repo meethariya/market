@@ -8,6 +8,9 @@ import { ReviewSortComponent } from './review-sort/review-sort.component';
 import { ToasterComponent } from './toaster/toaster.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+/**
+ * Facet Modules. It has all the filters, search, Sort and toast components.
+ */
 @NgModule({
   declarations: [
     FiltersComponent,

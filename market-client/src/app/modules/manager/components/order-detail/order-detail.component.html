@@ -1,4 +1,4 @@
-<!-- Vertically centered scrollable modal -->
+<!-- Order Details Vertically centered scrollable modal -->
 <div
   class="modal fade"
   id="orderModal{{ order.id }}"
@@ -12,6 +12,7 @@
         <h1 class="modal-title fs-5" id="modalLabel{{ order.id }}">
           Order ID: {{ order.id }}
         </h1>
+        <!--Close button-->
         <button
           type="button"
           class="btn-close"
@@ -20,9 +21,11 @@
           id="closeModal{{order.id}}"
         ></button>
       </div>
+      <!--Order Data-->
       <div class="modal-body">
         <div class="text-center">
           <h3>Customer</h3>
+          <!--Profile Image-->
           <img
             src="{{ order.customer.user.profilePicPath.split('/src')[1] }}"
             alt="profilePic"
@@ -34,6 +37,7 @@
         <h6>Email: {{ order.customer.user.email }}</h6>
         <h6>Gender: {{ order.customer.gender ? "Male" : "Female" }}</h6>
         <h6>Age: {{ age }}</h6>
+        <!--Address-->
         <h6>
           Shipped To: {{ order.customer.address.houseNo | titlecase }} ,
           {{ order.customer.address.addressLine1 | titlecase }} ,
@@ -43,8 +47,10 @@
           {{ order.customer.address.pincode }}
         </h6>
         <h3 class="text-center">Items</h3>
+        <!--Table of ordered items-->
         <div class="table-responsive">
           <table class="table">
+            <!--Columns-->
             <thead>
               <tr>
                 <th scope="col">Product Name</th>
@@ -53,6 +59,7 @@
                 <th scope="col">Quantity</th>
               </tr>
             </thead>
+            <!--Items-->
             <tbody class="table-group-divider">
               <tr *ngFor="let p of order.cart">
                 <td>

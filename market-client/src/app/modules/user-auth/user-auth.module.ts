@@ -8,7 +8,10 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { RegisterComponent } from './components/register/register.component';
 
 
-
+/**
+ * UserAuth Module.  
+ * All authentication functionalities belongs to this module.
+ */
 @NgModule({
   declarations: [
     LoginComponent,

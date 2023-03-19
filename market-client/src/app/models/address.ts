@@ -1,3 +1,11 @@
+import { Customer } from "./customer";
+
+/**
+ * Address Model.  
+ * Containes {@link id}, {@link houseNo}, {@link addressLine1}, {@link addressLine2}, 
+ * {@link city}, {@link state}, and {@link pincode}
+ * @see {@link Customer}
+ */
 export class Address {
   public id: number;
   public houseNo: string;

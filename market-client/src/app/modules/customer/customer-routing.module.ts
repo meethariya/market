@@ -14,6 +14,9 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
 ];
 
+/**
+ * Routing for App route link `/customer/*`
+ */
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

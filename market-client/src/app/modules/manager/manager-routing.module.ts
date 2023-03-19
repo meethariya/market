@@ -10,6 +10,9 @@ const routes: Routes = [
   { path: 'order', component: OrderComponent}
 ];
 
+/**
+ * Routing for App route link `/manager/*`
+ */
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]

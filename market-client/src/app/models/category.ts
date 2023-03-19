@@ -1,3 +1,10 @@
+import { Product } from "./product";
+
+/**
+ * Category model.  
+ * Contains {@link id} and {@link categoryName}
+ * @see {@link Product}
+ */
 export class Category {
   id: number;
   categoryName: string;

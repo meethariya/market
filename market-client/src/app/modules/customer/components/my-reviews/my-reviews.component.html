@@ -1,4 +1,6 @@
+<!-- Customer Reviews -->
 <h3 class="text-center">My reviews</h3>
+<!-- Sort reviews by -->
 <div class="d-flex flex-row-reverse">
   <app-review-sort
     class="d-inline-flex"
@@ -6,6 +8,7 @@
     (reviewSortEmitter)="sortReviews($event)"
   ></app-review-sort>
 </div>
+<!-- All reviews -->
 <div class="row">
   <div
     class="col-md-4"
@@ -55,7 +58,7 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-
+      <!-- Review Data-->
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <a
@@ -64,6 +67,7 @@
           >
             <h5 class="card-title">{{ review.product.name | titlecase }}</h5>
           </a>
+          <!-- Delete Review -->
           <fa-icon
             class="text-danger"
             [icon]="trash"
@@ -75,6 +79,7 @@
         <h6 class="card-subtitle mb-2 text-muted">
           {{ review.product.brand | titlecase }}
         </h6>
+        <!-- Stars -->
         <h5>
           <app-star-rating [rating]="review.rating"> </app-star-rating>
         </h5>
@@ -103,13 +108,14 @@
       </div>
     </div>
   </div>
+  <!-- Pagination -->
   <pagination-controls
     (pageChange)="p = $event"
     class="my-pagination my-2 d-flex justify-content-center"
   ></pagination-controls>
 </div>
 
-<!-- Modal -->
+<!-- Edit Review Modal -->
 <div
   class="modal fade"
   id="modifyReviewModal"
@@ -121,6 +127,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="modifyReviewModalLabel"></h1>
+        <!--Close Modal Button-->
         <button
           type="button"
           id="reviewCloseButton"
@@ -129,6 +136,7 @@
           aria-label="Close"
         ></button>
       </div>
+      <!--Edit Review Form-->
       <form [formGroup]="editReview" (ngSubmit)="modifyReview()">
         <div class="modal-body">
           <label for="reviewRating" class="form-label">Rating</label>
@@ -175,6 +183,7 @@
             />
           </div>
         </div>
+        <!-- Save Changes -->
         <div class="modal-footer">
           <button
             type="submit"

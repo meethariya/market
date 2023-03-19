@@ -1,5 +1,12 @@
 import { Product } from './product';
-
+import { Customer } from './customer';
+import { Order } from './order';
+/**
+ * CartList model.  
+ * Contains {@link id}, {@link addedOn}, {@link quantity} and {@link product}.
+ * 
+ * @see {@link Product}, {@link Order}, {@link Customer}
+ */
 export class CartList {
   id: number;
   addedOn: Date;

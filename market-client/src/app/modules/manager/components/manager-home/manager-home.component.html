@@ -1,3 +1,4 @@
+<!--Manager Home-->
 <div class="container my-5">
   <!--Alerts-->
   <app-toaster
@@ -26,12 +27,14 @@
   </div>
   <div class="row">
     <div class="col-md-4"></div>
+    <!--Search-->
     <div class="col-md-6">
       <app-search
         [productList]="productListForSearching"
         (productsEmitter)="searchedProducts($event)"
       ></app-search>
     </div>
+    <!--Sort-->
     <div class="col-md-2">
       <app-sort
         [products]="products"
@@ -40,6 +43,7 @@
     </div>
   </div>
   <div class="row">
+    <!--Filter-->
     <div class="col-md-3">
       <app-filters
         [categories]="category"
@@ -49,12 +53,14 @@
         (productsEmitter)="modifyProducts($event)"
       ></app-filters>
     </div>
+    <!--Inventory List-->
     <div class="col-md-9" *ngIf="inventory != null && inventory.length !== 0; else noProducts">
       <div class="row">
         <div class="col-md-4 my-2" *ngFor="let i of inventory| paginate: {itemsPerPage: 6, currentPage: p}">
           <app-inventory-item [item]="i" (stockModifyEmitter)="stockQuantityToToast($event)"></app-inventory-item>
         </div>
       </div>
+      <!--Pagination-->
       <pagination-controls (pageChange)="p = $event" class="my-pagination my-2 d-flex justify-content-center"></pagination-controls>
     </div>
     <!--if no products are available-->

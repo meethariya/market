@@ -2,15 +2,22 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { UserAuthService } from '../../services/user-auth.service';
+import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
 
+/**
+ * Login Component.
+ * This component is part of the {@link NavbarComponent}.  
+ * It is responsible for user login.  
+ * On successful login, sets `token`, `role`, `name`, and `profilePic` to localStorage.   
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  email!: string;
-  password!: string;
+  email!: string;                 // user input email
+  password!: string;              // user input password
   failedLogin: boolean = false;
 
   constructor(
@@ -18,9 +25,9 @@ export class LoginComponent {
     private router: Router
   ) {}
   @Output() loginEmitter: EventEmitter<{
-    role: string;
-    name: string;
-    profilePic: string;
+    role: string;           // role to be saved in localStorage
+    name: string;           // name to be saved in localStorage
+    profilePic: string;     // profile picture to be saved in localStorage
   }> = new EventEmitter();
 
   /**

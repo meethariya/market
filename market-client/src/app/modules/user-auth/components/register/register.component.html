@@ -7,6 +7,7 @@
     [ready]="toastReady"
     (setReadyFalse)="this.toastReady=false"
   ></app-toaster>
+  <!--Register Form-->
   <form
     class="g-3 needs-validation"
     [formGroup]="registerForm"
@@ -14,6 +15,7 @@
   >
     <h1 class="text-center">Register</h1>
     <div class="row mb-2">
+      <!--First Name-->
       <div class="col-md-6">
         <label for="firstName" class="form-label">First name</label>
         <input
@@ -38,6 +40,7 @@
           First Name is required.
         </div>
       </div>
+      <!--Last Name-->
       <div class="col-md-6">
         <label for="lastName" class="form-label">Last name</label>
         <input
@@ -64,6 +67,7 @@
       </div>
     </div>
     <div class="row mb-2">
+      <!--Phone-->
       <div class="col-md-4">
         <label for="phone" class="form-label">Phone Number</label>
         <input
@@ -92,6 +96,7 @@
           Phone number should be of 10 digits
         </div>
       </div>
+      <!--Date of Birth-->
       <div class="col-md-4">
         <label for="dob" class="form-label">Date of Birth</label>
         <input
@@ -111,6 +116,7 @@
         </div>
       </div>
       <div class="col-md-4">
+        <!--Gender-->
         <label for="gender" class="form-label">Gender</label><br />
         <div class="form-check form-check-inline">
           <input
@@ -136,6 +142,7 @@
       </div>
     </div>
     <div class="row mb-2">
+      <!--Email-->
       <div class="col-md-6">
         <label for="userEmail" class="form-label">Email</label>
         <input
@@ -162,6 +169,7 @@
           Email should not exceed 50 characters.
         </div>
       </div>
+      <!--Password-->
       <div class="col-md-6">
         <label for="userPassword" class="form-label">Password</label>
         <input
@@ -198,6 +206,7 @@
       </div>
     </div>
     <div class="row mb-2">
+      <!--House No-->
       <div class="col-md-4">
         <label for="houseNo" class="form-label">House No</label>
         <input
@@ -225,6 +234,7 @@
           House Number should not exceed 30 characters.
         </div>
       </div>
+      <!--Address Line 1-->
       <div class="col-md-8">
         <label for="addressLine1" class="form-label">Address Line 1</label>
         <input
@@ -260,6 +270,7 @@
       </div>
     </div>
     <div class="row mb-2">
+      <!--Address Line 2-->
       <div class="col-md-12">
         <label for="addressLine2" class="form-label">Address Line 2</label>
         <input
@@ -286,6 +297,7 @@
       </div>
     </div>
     <div class="row mb-2">
+      <!--City-->
       <div class="col-md-4">
         <label for="city" class="form-label">City</label>
         <input
@@ -309,6 +321,7 @@
           City should not exceed 30 characters.
         </div>
       </div>
+      <!--State-->
       <div class="col-md-4">
         <label for="state" class="form-label">State</label>
         <input
@@ -332,6 +345,7 @@
           State should not exceed 30 characters.
         </div>
       </div>
+      <!--Pincode-->
       <div class="col-md-4">
         <label for="pincode" class="form-label">Pincode</label>
         <input
@@ -366,6 +380,7 @@
       </div>
     </div>
     <div class="row mb-2">
+      <!--Agree terms and conditions-->
       <div class="col-auto mt-2">
         <div class="form-check">
           <input
@@ -394,6 +409,7 @@
         </div>
       </div>
     </div>
+    <!--Submit form-->
     <div class="row mb-2">
       <div class="col-md-12 d-grid">
         <button class="btn btn-success" type="submit" [disabled]="!registerForm.valid">Register</button>

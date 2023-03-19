@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
+/**
+ * UserAuth Service. All Authentication requests are made from this service.  
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -12,7 +15,8 @@ export class UserAuthService {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
   /**
-   * registers a customer
+   * registers a customer.
+   * Backend Request: **POST** `/register`
    * @param formData
    * @returns id of the new customer or throws exception
    */
@@ -71,19 +75,22 @@ export class UserAuthService {
   }
 
   /**
-   * removes the token and redirects to home page
+   * removes the token and redirects to home page.  
+   * Backend Request: **GET** `/logout`
    */
   logout(): void {
     this.httpClient.get(this.path+"/logout", {responseType:"text"}).subscribe();
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    localStorage.removeItem('name');
+    localStorage.removeItem('profilePic');
     this.router.navigate(['/']);
   }
 
   /** Validates the email id and password from backend
-   *
-   * @param email
-   * @param password
+   * Backend Request: **POST** `/login`
+   * @param formData
+   * @param token
    * @returns boolean
    */
   login(formData: FormData, token : string): Observable<any> {

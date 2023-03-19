@@ -1,9 +1,12 @@
+<!--Orders-->
 <div class="container my-5">
+  <!--Table-->
   <div class="table-responsive">
     <table class="table align-middle text-center table-hover caption-top">
       <caption>
         All Orders
       </caption>
+      <!--Columns-->
       <thead class="accent">
         <tr>
           <th scope="col" (click)="sortBy('id')">
@@ -27,6 +30,7 @@
           <th scope="col"></th>
         </tr>
       </thead>
+      <!--Data-->
       <tbody class="table-group-divider">
         <tr
           *ngFor="
@@ -41,6 +45,7 @@
           <td>{{ i.price | currency : "INR" }}</td>
           <td>{{ i.paymentMethod }}</td>
           <td>{{ i.cart.length }}</td>
+          <!--Order Detail-->
           <td>
             <button
               type="button"
@@ -54,6 +59,7 @@
           </td>
         </tr>
       </tbody>
+      <!--Pagination-->
       <tfoot>
         <th colspan="7" class="text-center">
           <pagination-controls

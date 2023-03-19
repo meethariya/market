@@ -1,4 +1,6 @@
+<!--Add to Cart-->
 <div class="d-grid text-center rounded primary mb-3">
+  <!--Button to turn on +/- and quantity options-->
   <button
     class="btn text-white"
     (click)="showQuantity = !showQuantity"
@@ -7,11 +9,13 @@
     Add to Cart
   </button>
 </div>
+<!--When button is turned on-->
 <div class="container" *ngIf="showQuantity">
   <div class="row">
+    <!--Closes current +/- quantity buttons and switch back to add to cart button-->
     <div class="col-sm-2 d-grid mb-3">
       <button
-        id="close{{productId}}"
+        id="close{{ productId }}"
         class="btn btn-danger"
         (click)="showQuantity = !showQuantity"
         data-bs-toggle="tooltip"
@@ -20,12 +24,14 @@
         <fa-icon [icon]="cancel"></fa-icon>
       </button>
     </div>
+    <!-- +/- quantity group -->
     <div class="col-sm-8 mb-3">
       <div
         class="btn-group"
         role="group"
         aria-label="Basic mixed styles example"
       >
+        <!-- Decrease quantity by 1 -->
         <button
           type="button"
           class="btn btn-outline-danger"
@@ -34,6 +40,7 @@
         >
           <fa-icon [icon]="minus"></fa-icon>
         </button>
+        <!-- Quantity -->
         <input
           class="form-control text-center"
           type="number"
@@ -41,6 +48,7 @@
           value="{{ quantity }}"
           readonly
         />
+        <!-- Increase quantity by 1 -->
         <button
           type="button"
           class="btn btn-outline-success"
@@ -50,6 +58,7 @@
         </button>
       </div>
     </div>
+    <!-- Add to cart -->
     <div class="col-sm-2 d-grid mb-3 p-0">
       <button
         class="btn btn-success"

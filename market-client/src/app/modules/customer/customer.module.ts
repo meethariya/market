@@ -19,6 +19,10 @@ import { MyReviewsComponent } from './components/my-reviews/my-reviews.component
 import { ProductModule } from '../product/product.module';
 import { OrderModule } from 'ngx-order-pipe';
 
+/**
+ * Customer Module.  
+ * All Actions for Customer belongs to this module.
+ */
 @NgModule({
   declarations: [
     CustomerHomeComponent,

@@ -1,5 +1,7 @@
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg primary">
   <div class="container-fluid">
+    <!-- App logo -->
     <a class="navbar-brand text-white" href="#">
       <img
         src="favicon.ico"
@@ -52,6 +54,7 @@
           <a class="nav-link text-white" routerLink="/manager/order">Orders</a>
         </li>
       </ul>
+      <!-- Login Model Button -->
       <div class="d-grid text-center rounded accent" *ngIf="!authenticated">
         <button
           type="button"
@@ -62,9 +65,12 @@
           Login
         </button>
       </div>
-      <!-- model -->
+      <!-- Login model -->
       <app-login (loginEmitter)="loggedIn($event)"></app-login>
+      
+      <!--If logged in -->
       <div class = "d-flex flex-row" *ngIf="authenticated">
+        <!-- User name and profile picture -->
         <h6 class="text-white pt-2 mx-2">Hello, {{name}}</h6>
         <img
           src="{{ profilePicPath!.split('/src')[1] }}"
@@ -72,6 +78,7 @@
           class="img-fluid rounded-circle me-4"
           style="object-fit: cover; height: 40px; width: 40px;"
         />
+        <!-- Logout  -->
         <div class="text-center rounded accent">
           <app-logout class="d-grid" (logoutEmitter)="loggedOut()"></app-logout>
         </div>

@@ -9,7 +9,10 @@ import { EditProductComponent } from './components/edit-product/edit-product.com
 import { ReactiveFormsModule } from '@angular/forms';
 
 
-
+/**
+ * Product Module.  
+ * Some general functionalities of Product belongs to this module.
+ */
 @NgModule({
   declarations: [
     DetailProductComponent,

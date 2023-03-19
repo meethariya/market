@@ -9,6 +9,13 @@ import {
 import { Observable } from 'rxjs';
 import { ProductService } from '../services/product.service';
 
+/**
+ * Product guard. 
+ * Verifies if the user logged in or not.  
+ * Uses {@link ProductService.isAuthenticated()}.
+ * If the user is not authenticated redirects to home page.  
+ * App Route Link: `/product/*`
+ */
 @Injectable({
   providedIn: 'root',
 })

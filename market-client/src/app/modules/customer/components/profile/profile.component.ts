@@ -3,20 +3,28 @@ import { Customer } from 'src/app/models/customer';
 import { CustomerService } from '../../services/customer.service';
 import { faPencil, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
+import { ToasterComponent } from 'src/app/modules/facet/toaster/toaster.component';
+import { MyReviewsComponent } from '../my-reviews/my-reviews.component';
+/**
+ * Profile component. This component displays customer `profile details`
+ * and all the `reviews` submmited by the customer.  
+ * It allows customer to `modify` the profile details and also modify or `delete` reviews.
+ * @see {@link MyReviewsComponent}
+ */
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styles: [],
 })
 export class ProfileComponent implements OnInit {
-  customer!: Customer;
-  pencil = faPencil;
-  cancel = faXmark;
-  check = faCheck;
-  profilePicture: string | null = null;
-  image: any = null;
+  customer!: Customer;                      // Customer details
+  pencil = faPencil;                        // Edit Icon
+  cancel = faXmark;                         // Cancel Icon
+  check = faCheck;                          // Submit Icon
+  profilePicture: string | null = null;     // Profile pic url when image is uploaded
+  image: any = null;                        // Image source
 
+  // toast settings variables
   toastTitle: string = '';
   toastMessage: string = '';
   toastColorClass: string = '';
@@ -51,30 +59,60 @@ export class ProfileComponent implements OnInit {
 
   constructor(private customerService: CustomerService) {}
 
+  /**
+   * Loads Customer details using {@link CustomerService.getProfile()}  
+   * Sets all form fields form {@link formData}  
+   * Shoes toast status and message when error is encountered using {@link ToasterComponent}
+   * @returns `void`
+   */
   ngOnInit(): void {
     this.customerService.getProfile().subscribe({
+      // on success
       next: (data) => {
         this.customer = data;
         this.setFormData(data);
       },
+      // on failure
       error: (err) => this.toastLoader(false, err.error),
     });
   }
 
-  editProfile() {
+  /**
+   * Enables user to modify all fields.  
+   * This method is called when {@link pencil} is clicked.  
+   * Hides itselfs and displays {@link cancel} and {@link check} buttons.
+   * @returns `void`
+   */
+  editProfile(): void {
     document.getElementById('onEdit')!.style.display = 'block';
     document.getElementById('editButton')!.style.display = 'none';
     this.readonlyModifier(false);
   }
 
-  cancelEdit() {
+  /**
+   * Disables user to modify all fields.
+   * This method is called when {@link cancel} is clicked.  
+   * Hides {@link cancel} and {@link check} buttons and displays {@link pencil} button.  
+   * Resets all form fields.
+   * @returns `void`
+   */
+  cancelEdit(): void {
     document.getElementById('onEdit')!.style.display = 'none';
     document.getElementById('editButton')!.style.display = 'block';
     this.readonlyModifier(true);
     this.setFormData();
   }
 
-  submitForm() {
+  /**
+   * Submits the modified customer profile data using {@link CustomerService.editProfile()}.  
+   * This method is called when {@link check} is clicked.  
+   * Validates all the form fields. Adds new profile image **if** uploaded to {@link image}.  
+   * Shows toast status and message on success/failure using {@link ToasterComponent}.  
+   * Modifes {@link customer} on success update.    
+   * Clicks {@link cancel} button.
+   * @returns `void`
+   */
+  submitForm(): void {
     if (
       this.formData.value.addressLine1 != null &&
       this.formData.value.city != null &&
@@ -97,6 +135,7 @@ export class ProfileComponent implements OnInit {
       data.set('pincode', this.formData.value.pincode);
       data.set('state', this.formData.value.state);
 
+      // gender radio button value
       let gender = (
         document.querySelector(
           'input[name="gender"]:checked'
@@ -104,17 +143,20 @@ export class ProfileComponent implements OnInit {
       ).value;
       data.set('gender', gender);
 
+      // profile image **if** uploaded.
       if (this.profilePicture != null) {
         data.append('images', this.image);
       }
 
       this.customerService.editProfile(this.customer.id, data).subscribe({
+        // on success
         next: (customerData) => {
           this.customer = customerData;
           this.setFormData(customerData);
           document.getElementById('cancel')!.click();
           this.toastLoader(true,"Profile has been updated.")
         },
+        // on failure
         error: (err) => {
           this.toastLoader(false, err.error);
         },
@@ -122,7 +164,12 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  readonlyModifier(value: boolean) {
+  /**
+   * Toggles all form fields readOnly based on {@link value}.
+   * @param value 
+   */
+  readonlyModifier(value: boolean): void {
+    // bootstrap class template
     let temp: {
       readOnly: boolean;
       originalClassName: string;
@@ -134,6 +181,7 @@ export class ProfileComponent implements OnInit {
         originalClassName: '.form-control',
         changeToClassName: 'form-control-plaintext',
       };
+      // dont show add profile pic button
       this.profilePicture = null;
       document.getElementById('profilePicEditButton')!.style.display = 'none';
     } else {
@@ -142,9 +190,11 @@ export class ProfileComponent implements OnInit {
         originalClassName: '.form-control-plaintext',
         changeToClassName: 'form-control',
       };
+      // show add profile pic button
       document.getElementById('profilePicEditButton')!.style.display = 'block';
     }
-
+    
+    // Modify all other form fields
     let elements = document.querySelectorAll(temp.originalClassName);
     elements.forEach((e) => {
       if (e.id !== 'email') {
@@ -153,12 +203,18 @@ export class ProfileComponent implements OnInit {
       }
     });
 
+    // Gender radio button
     let genderElements = document.querySelectorAll('.form-check-input');
     genderElements.forEach(
       (e) => ((e as HTMLInputElement).disabled = temp.readOnly)
     );
   }
 
+  /**
+   * When image is being uploaded. It is saved to {@link profilePicture} as string
+   * and as image to {@link image}
+   * @param event 
+   */
   onFileChange(event: any) {
     const reader = new FileReader();
     if (event.target.files && event.target.files.length) {
@@ -173,13 +229,25 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  /**
+   * @returns formData control details
+   */
   get f() {
     return this.formData.controls;
   }
 
-  setFormData(customer?: Customer) {
+  /**
+   * Sets all form fields using {@link customer} or {@link this.customer}.  
+   * Converts date to string date acceptable by the `HTML date input`.  
+   * 
+   * @param customer 
+   * @returns `void`
+   */
+  setFormData(customer?: Customer): void {
+    // customer information
     if (customer == null) customer = this.customer;
 
+    // date set
     let customerDob = new Date(customer.dob);
     let date: number | string = customerDob.getDate();
     if (date < 10) {
@@ -193,6 +261,7 @@ export class ProfileComponent implements OnInit {
     
     let stringDob = customerDob.getFullYear() + '-' + month + '-' + date;
 
+    // form data value
     this.formData.setValue({
       gender: customer.gender ? 'male' : 'female',
       phone: customer.phone,
@@ -207,7 +276,13 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  toastLoader(status:boolean, message:string) {
+  /**
+   * Shows the toast using {@link ToasterComponent}.
+   * @param status
+   * @param message
+   * @returns `void`
+   */
+  toastLoader(status:boolean, message:string): void {
     if (status) {
       this.toastTitle = 'Success';
       this.toastColorClass = 'success';
@@ -219,7 +294,12 @@ export class ProfileComponent implements OnInit {
     this.toastReady = true;
   }
 
-  reviewToToaster(data: {status: boolean, message: string}){
+  /**
+   * Shows toast status and message from {@link MyReviewsComponent}.
+   * @param data 
+   * @returns `void`
+   */
+  reviewToToaster(data: {status: boolean, message: string}): void {
     this.toastLoader(data.status, data.message);
   }
 }

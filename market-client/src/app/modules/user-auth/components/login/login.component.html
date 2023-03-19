@@ -1,4 +1,4 @@
-<!-- Modal -->
+<!-- Login Modal -->
 <div
   class="modal fade"
   id="exampleModal"
@@ -10,6 +10,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+        <!--Close modal button-->
         <button
           id="closeButton"
           type="button"
@@ -18,6 +19,7 @@
           aria-label="Close"
         ></button>
       </div>
+      <!--Login Form-->
       <form (ngSubmit)="login()">
         <div class="modal-body">
           <div *ngIf="failedLogin" class="alert alert-danger" role="alert">
@@ -44,10 +46,12 @@
               [(ngModel)]="password"
             />
           </div>
+          <!--Register Link-->
           <div class="mb-3">
             <a class="link-success" href="/register">Don't have an account? Register</a>
           </div>
         </div>
+        <!--Submit form-->
         <div class="modal-footer">
           <div class="accent rounded">
             <button type="submit" class="btn">Login</button>

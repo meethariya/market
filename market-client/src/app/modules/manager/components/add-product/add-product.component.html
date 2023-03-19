@@ -1,3 +1,4 @@
+<!-- Add Product -->
 <div class="container w-50 my-5">
   <!--Alerts-->
   <app-toaster
@@ -10,7 +11,9 @@
 
   <h2 class="text-center">Add New Product</h2>
   <br />
+  <!-- Form -->
   <form class="row g-3" [formGroup]="productForm" (ngSubmit)="submit()">
+    <!--Name-->
     <div class="col-md-6">
       <label for="name" class="form-label">Name</label>
       <input
@@ -27,6 +30,7 @@
         <div *ngIf="f.name.errors?.['maxlength']" class="form-text text-danger">Name should be less than 30 character.</div>
       </div>
     </div>
+    <!--Brand-->
     <div class="col-md-6">
       <label for="brand" class="form-label">Brand</label>
       <input
@@ -43,6 +47,7 @@
         <div *ngIf="f.brand.errors?.['maxlength']" class="form-text text-danger">Brand should be less than 30 character.</div>
       </div>
     </div>
+    <!--Category-->
     <div class="col-md-6">
       <label for="category" class="form-label">Category</label>
       <input
@@ -62,6 +67,7 @@
         <div *ngIf="f.category.errors?.['maxlength']" class="form-text text-danger">Category should be less than 30 character.</div>
       </div>
     </div>
+    <!--Price-->
     <div class="col-md-6">
       <label for="price" class="form-label">Price</label>
       <div class="input-group">
@@ -82,6 +88,7 @@
         <div *ngIf="f.price.errors?.['min']" class="form-text text-danger">Price can not be less than 1.</div>
       </div>
     </div>
+    <!--Images (Optional)-->
     <div class="col-12">
       <label for="images" class="form-label">Product Images</label>
       <input
@@ -93,12 +100,10 @@
         accept="image/*"
         (change)="onImageChange($event)"
       />
-      <div *ngIf="f.images.touched && f.images.invalid">
-        <div *ngIf="f.images.errors?.['required']" class="form-text text-danger">Images are required.</div>
-      </div>
     </div>
     <div class="col-12">
       <h6 class="text-success" *ngIf="productForm.valid">Looks good.</h6>
+      <!--Submit-->
       <div class="d-grid rounded accent">
         <button type="submit" class="btn border border-0" [disabled]="!productForm.valid">Add Product</button>
       </div>

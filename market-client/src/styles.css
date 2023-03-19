@@ -1,24 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Primary Color */
 .primary {
   background-color: #00B8A9 !important;
 }
 
+/* Secondary Color */
 .secondary {
   background-color: #F8F3D4 !important;
 }
 
+/* Accent Color */
 .accent {
   background-color: #f0b70e !important;
 }
 
+/* Golden Color for stars */
 .golden-star{
   color: #FFD700;
 }
 
+/* Root Font */
 .new-font {
   font-family: "Roboto Condensed", sans-serif;
 }
 
+/* bootstrap card effect */
 .card{
   border-radius: 4px;
   background: #fff;
@@ -27,6 +34,7 @@
   cursor: pointer;
 }
 
+/* bootstrap card on hover effect */
 .cardi:hover{
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);

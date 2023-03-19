@@ -20,6 +20,9 @@ import { ProductModule } from './modules/product/product.module';
 import { ManagerModule } from './modules/manager/manager.module';
 import { FacetModule } from './modules/facet/facet.module';
 
+/**
+ * Loading component configuration
+ */
 const loaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#ada2ff', //purple
   bgsOpacity: 0.1,
@@ -50,6 +53,10 @@ const loaderConfig: NgxUiLoaderConfig = {
   maxTime: -1,
   minTime: 50,
 };
+
+/**
+ * Root App Module.
+ */
 @NgModule({
   declarations: [
     AppComponent,

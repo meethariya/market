@@ -133,7 +133,7 @@ public class ReviewDto {
 	}
 
 	/**
-	 * @param review the review to set
+	 * the review to set using other field attributes
 	 */
 	public void setReview() {
 		Review temp = new Review();

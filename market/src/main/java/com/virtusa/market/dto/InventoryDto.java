@@ -81,7 +81,7 @@ public class InventoryDto {
 	}
 	
 	/**
-	 * @param inventory the inventory to set
+	 * the inventory to set using other field attributes
 	 */
 	public void setInventory() {
 		Inventory temp = new Inventory();

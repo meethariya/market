@@ -23,7 +23,7 @@ import jakarta.persistence.TemporalType;
  * @since 10-Feb-2023
  * @see Customer
  * @see Product
- * @See Order
+ * @see Order
  */
 @Entity
 public class CartList {
@@ -53,7 +53,6 @@ public class CartList {
 
 	/**
 	 * @param id
-	 * @param customer
 	 * @param addedOn
 	 * @param quantity
 	 * @param product

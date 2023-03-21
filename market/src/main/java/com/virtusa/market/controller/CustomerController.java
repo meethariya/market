@@ -36,6 +36,7 @@ import com.virtusa.market.exception.InvalidPaymentMethodException;
 import com.virtusa.market.exception.OrderNotFoundException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
+import com.virtusa.market.exception.ReviewNotFoundException;
 import com.virtusa.market.model.CartList;
 import com.virtusa.market.model.Customer;
 import com.virtusa.market.model.Order;
@@ -78,7 +79,8 @@ public class CustomerController {
 	}
 
 	/**
-	 * Adds product to cartlist
+	 * Adds product to cartlist.<br>
+	 * {@link CustomerService#addToCart(CartDto, String)}
 	 * 
 	 * @param cart
 	 * @param error
@@ -87,7 +89,6 @@ public class CustomerController {
 	 * @throws ProductNotFoundException
 	 * @throws UserNotFoundException
 	 * @throws CustomerNotFoundException
-	 * @see {@link CustomerService#addToCart(CartDto, String)}
 	 */
 	@PostMapping("/cart")
 	public ResponseEntity<Long> addToCart(@Valid @ModelAttribute("cart") CartDto cart, Errors error,
@@ -260,9 +261,9 @@ public class CustomerController {
 	 * @param auth
 	 * @return ID of the deleted review.
 	 * @throws IOException 
-	 * @throws ReviewNotFoundException
 	 * @throws UserNotFoundException
 	 * @throws CustomerNotFoundException
+	 * @throws ReviewNotFoundException
 	 */
 	@DeleteMapping("/review/{id}")
 	public ResponseEntity<Long> deleteReview(@PathVariable("id")Long reviewId, Authentication auth) throws IOException{

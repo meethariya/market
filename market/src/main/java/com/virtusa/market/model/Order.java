@@ -64,7 +64,7 @@ public class Order {
 	 * @param customer
 	 * @param timestamp
 	 * @param price
-	 * @param paymentMethod
+	 * @param payementMethod
 	 * @param cart
 	 */
 	public Order(long id, Customer customer, Date timestamp, double price, String payementMethod,
@@ -100,7 +100,7 @@ public class Order {
 	}
 
 	/**
-	 * @param Customer the Customer to set
+	 * @param customer the Customer to set
 	 */
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
@@ -142,7 +142,7 @@ public class Order {
 	}
 
 	/**
-	 * @param paymentMethod the paymentMethod to set
+	 * @param payementMethod the paymentMethod to set
 	 */
 	public void setPaymentMethod(String payementMethod) {
 		this.paymentMethod = payementMethod;

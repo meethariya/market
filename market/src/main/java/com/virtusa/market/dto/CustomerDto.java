@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * All fields of {@link Customer}, {@link User} & {@link Address}.<br>
+ * All fields of {@link Customer}, {@link User} and {@link Address}.<br>
  * Generates proper models from raw input.<br>
  * Contains all backend validation annotations.
  * @author meet
@@ -179,7 +179,7 @@ public class CustomerDto {
 	}
 
 	/**
-	 * @param profilePicPath the profilePicPath to set
+	 * @param source
 	 */
 	public void setProfilePicPath(MessageSource source) {
 
@@ -289,7 +289,7 @@ public class CustomerDto {
 	}
 
 	/**
-	 * @param address the address to set
+	 * the address to set using other field attributes
 	 */
 	public void setAddress() {
 		this.address.setHouseNo(getHouseNo());
@@ -308,7 +308,7 @@ public class CustomerDto {
 	}
 
 	/**
-	 * @param user the user to set
+	 * the user to set using other field attributes
 	 */
 	public void setUser() {
 		this.user.setEmail(getEmail());
@@ -326,7 +326,7 @@ public class CustomerDto {
 	}
 
 	/**
-	 * @param customer the customer to set
+	 * the customer to set using other field attributes
 	 */
 	public void setCustomer() {
 		this.customer.setAddress(getAddress());		

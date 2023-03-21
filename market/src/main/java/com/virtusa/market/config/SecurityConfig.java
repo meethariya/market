@@ -72,12 +72,12 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 
 	/**
 	 * Sets query to get User for login and role verification.
-	 * Password encoder is autowired.
+	 * Password encoder is autowired.<br>
+	 * {@link PasswordEncoderBean#passwordEncoder()}
 	 * 
 	 * @param auth
 	 * @param pe
 	 * @throws Exception
-	 * @see {@link PasswordEncoderBean#passwordEncoder()}
 	 */
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth, PasswordEncoder pe) throws Exception {
@@ -90,9 +90,8 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 	}
 
 	/**
-	 * Cross origin security configuration
-	 * 
-	 * @return WebMvcConfigurer
+	 * Cross origin security configuration.<br>
+	 * returns WebMvcConfigurer
 	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {

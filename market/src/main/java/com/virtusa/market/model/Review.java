@@ -133,7 +133,7 @@ public class Review {
 	}
 
 	/**
-	 * @param comment the comment to set
+	 * @param review the comment to set
 	 */
 	public void setComment(String review) {
 		this.comment = review;

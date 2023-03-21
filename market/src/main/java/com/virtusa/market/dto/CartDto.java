@@ -87,7 +87,7 @@ public class CartDto {
 	}
 
 	/**
-	 * @param cartList the cartList to set
+	 * set new cartlist using other attributes
 	 */
 	public void setCartList() {
 		CartList temp = new CartList();

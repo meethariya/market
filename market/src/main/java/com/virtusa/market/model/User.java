@@ -13,7 +13,6 @@ import jakarta.persistence.Id;
  * @author meet
  * @since 09-Feb-2023
  * @see Customer
- * @see Manager
  */
 @Entity
 public class User {
@@ -146,7 +145,7 @@ public class User {
 	}
 
 	/**
-	 * @param profilePicPath the profilePicPath to set
+	 * @param profilePicAddress the profilePicPath to set
 	 */
 	public void setProfilePicPath(String profilePicAddress) {
 		this.profilePicPath = profilePicAddress;

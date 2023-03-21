@@ -71,13 +71,13 @@ public class ManagerService {
 	 * creates new.</li>
 	 * <li>Sets {@link Category} and {@link Product} from raw input.</li>
 	 * <li>Iterates through each file.</li>
-	 * <ul>
+	 * <ol>
 	 * <li>Saves it in resources using
 	 * {@link #addProduct(ProductDto, MultipartFile[])}. May throw
 	 * <strong>IOException</strong>.</li>
 	 * <li>Creates List of paths using savedImage and returned path.</li>
 	 * <li>Sets list in Product.</li>
-	 * </ul>
+	 * </ol>
 	 * <li>Saves Product.</li>
 	 * <li>Finally returns the Id of the Product that is saved.</li>
 	 * </ul>
@@ -319,7 +319,7 @@ public class ManagerService {
 	 * Checks if product with that Id exist, else throws
 	 * ProductNotFoundException.<br>
 	 * Checks if that product exists in inventory database. Throws error if not exists.
-	 * Checks stock < to be removed quantity. If true throws error.
+	 * Checks stock less than the quantity to be removed. If true throws error.
 	 * Else deducts the stock quantity and return id.
 	 * 
 	 * @param inventoryDto

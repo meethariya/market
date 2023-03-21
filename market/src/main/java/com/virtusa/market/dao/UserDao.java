@@ -20,7 +20,7 @@ import jakarta.annotation.Nullable;
 public interface UserDao extends JpaRepository<User, Long>{
 	/**
 	 * Finds User by email
-	 * @param phone
+	 * @param email
 	 * @return null or User
 	 */
 	@Nullable

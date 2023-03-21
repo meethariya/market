@@ -113,7 +113,7 @@ public class ProductDto {
 		return product;
 	}
 	/**
-	 * @param product the product to set
+	 * the product to set using other field attributes
 	 */
 	public void setProduct() {
 		Product temp = new Product();

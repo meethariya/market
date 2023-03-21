@@ -245,7 +245,7 @@ public class CustomerEditDto {
 	}
 
 	/**
-	 * @param address the address to set
+	 * @param temp the address to set
 	 */
 	public void setAddress(Address temp) {
 		temp.setHouseNo(houseNo);
@@ -258,7 +258,7 @@ public class CustomerEditDto {
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param temp the user to set
 	 */
 	public void setUser(User temp) {
 		temp.setName(name);

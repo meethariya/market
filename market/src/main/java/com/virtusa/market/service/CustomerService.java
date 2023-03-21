@@ -48,6 +48,8 @@ import com.virtusa.market.model.User;
 import jakarta.transaction.Transactional;
 
 /**
+ * Service class for all Customer activities
+ * 
  * @author meet
  * @since 13-Feb-2023
  */
@@ -88,10 +90,10 @@ public class CustomerService {
 	 * <li>User valid or not.</li>
 	 * <li>Customer valid or not.</li>
 	 * <li>If Product already exists in customer's cart</li>
-	 * <ul>
+	 * <ol>
 	 * <li>If not, adds new product to cart</li>
 	 * <li>If exists, modifies its quantity</li>
-	 * </ul>
+	 * </ol>
 	 * </ul>
 	 * 
 	 * @param cartDto
@@ -162,17 +164,17 @@ public class CustomerService {
 	 * <li>Validates existing Customer with authenticated email</li>
 	 * <li>Checks if cart is empty or not.</li>
 	 * <li>Creates new Order and sets it's attributes</li>
-	 * <ul>
+	 * <ol>
 	 * <li>Sets Payment method from user input</li>
 	 * <li>Sets cartItems from Cart of the Authenticated Customer</li>
 	 * <li>Goes through each cart item</li>
 	 * <ul>
 	 * <li>Checks if the cartItem's product is in Inventory</li>
-	 * <li>Checks if cartItem's quantity is <= quantity in Inventory</li>
+	 * <li>Checks if cartItem's quantity is less than or equal to quantity in Inventory</li>
 	 * </ul>
 	 * <li>Modifies Inventory's quantity and Last Sold Date</li>
 	 * <li>Saves the Order</li>
-	 * </ul>
+	 * </ol>
 	 * <li>Clears the Customer's cart</li>
 	 * </ul>
 	 * 

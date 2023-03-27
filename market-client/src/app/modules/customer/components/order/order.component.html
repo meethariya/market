@@ -9,6 +9,13 @@
     (setReadyFalse)="this.toastReady=false"
   ></app-toaster>
 
+  <!--Order Filter-->
+  <app-order-filter 
+    [allOrders]="allOrders" 
+    [fixedOrders]="fixedOrder" 
+    (orderEmitter)="orderFilter($event)">
+  </app-order-filter>
+
   <!--Order table-->
   <div class="table-responsive">
     <table class="table align-middle text-center table-hover caption-top">

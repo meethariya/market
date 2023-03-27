@@ -7,6 +7,8 @@ import { SortComponent } from './sort/sort.component';
 import { ReviewSortComponent } from './review-sort/review-sort.component';
 import { ToasterComponent } from './toaster/toaster.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { OrderFilterComponent } from './order-filter/order-filter.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 /**
  * Facet Modules. It has all the filters, search, Sort and toast components.
@@ -18,14 +20,21 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     SearchComponent,
     ReviewSortComponent,
     ToasterComponent,
+    OrderFilterComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FontAwesomeModule,
+    NgSelectModule,
+  ],
   exports: [
     FiltersComponent,
     SortComponent,
     SearchComponent,
     ReviewSortComponent,
     ToasterComponent,
+    OrderFilterComponent,
   ],
 })
 export class FacetModule {}

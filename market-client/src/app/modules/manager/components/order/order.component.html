@@ -1,5 +1,13 @@
 <!--Orders-->
 <div class="container my-5">
+
+  <!--Order Filter-->
+  <app-order-filter 
+    [allOrders]="order" 
+    [fixedOrders]="fixedOrder" 
+    (orderEmitter)="orderFilter($event)">
+  </app-order-filter>
+
   <!--Table-->
   <div class="table-responsive">
     <table class="table align-middle text-center table-hover caption-top">

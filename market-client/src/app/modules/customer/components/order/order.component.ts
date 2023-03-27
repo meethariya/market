@@ -8,11 +8,11 @@ import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { ToasterComponent } from 'src/app/modules/facet/toaster/toaster.component';
 
 /**
- * Order Component. This component shows table of orders made by the customer.  
- * Provides options for `sorting`.  
- * Shows individual order in **detail**.  
- * If the user has not reviewed the product, It gives option to `review` it.  
- * Shows Toast message when review is uploaded or even when any error occurs using {@link ToasterComponent}  
+ * Order Component. This component shows table of orders made by the customer.
+ * Provides options for `sorting`.
+ * Shows individual order in **detail**.
+ * If the user has not reviewed the product, It gives option to `review` it.
+ * Shows Toast message when review is uploaded or even when any error occurs using {@link ToasterComponent}
  * App route link: `/customer/order`
  */
 @Component({
@@ -28,16 +28,17 @@ import { ToasterComponent } from 'src/app/modules/facet/toaster/toaster.componen
   ],
 })
 export class OrderComponent implements OnInit {
-  p: number = 1;                                // Pagination page number
-  allOrders: Order[] = [];                      // List of all orders
-  myReviews: Review[] = [];                     // List of all reviews
-  reviewedProductId: number[] = [];             // List of products that have been reviewed
-  reviewImages: string[] = [];                  // List of images when review is submitted
-  ratingStar:number = 5;                        // Default Rating Stars
+  p: number = 1; // Pagination page number
+  allOrders: Order[] = []; // List of all orders
+  fixedOrder: Order[] = []; // List of fixed orders
+  myReviews: Review[] = []; // List of all reviews
+  reviewedProductId: number[] = []; // List of products that have been reviewed
+  reviewImages: string[] = []; // List of images when review is submitted
+  ratingStar: number = 5; // Default Rating Stars
 
-  orderVariable: string = "id";                 // Default order sort
-  orderReverse:boolean = true;                  // Sorting ascending/descending
-  sortIcon = faSort;                            // Sort Icon
+  orderVariable: string = 'id'; // Default order sort
+  orderReverse: boolean = true; // Sorting ascending/descending
+  sortIcon = faSort; // Sort Icon
 
   // Toast settings variables
   toastTitle: string = '';
@@ -54,30 +55,33 @@ export class OrderComponent implements OnInit {
   constructor(private customerService: CustomerService) {}
 
   /**
-   * Fetches all the order by the customer.  
-   * Uses {@link CustomerService.getOrder()}.  
-   * Loads all the reviews given by the customer using {@link reviewLoader()}.  
+   * Fetches all the order by the customer.
+   * Uses {@link CustomerService.getOrder()}.
+   * Loads all the reviews given by the customer using {@link reviewLoader()}.
    * Toasts error message on failure.
-   * 
+   *
    * @returns `void`
    */
   ngOnInit(): void {
     this.customerService.getOrder().subscribe({
-      next: (data) => (this.allOrders = data),
+      next: (data) => {
+        this.allOrders = data;
+        this.fixedOrder = data;
+      },
       error: (err) => this.toastLoader(false, err.error),
     });
     this.reviewLoader();
   }
 
   /**
-   * This method is called when new review is being submitted.  
-   * Validates all the form fields and submits using {@link CustomerService.postReview()}.  
-   * Uploads `comments` only if it is filled.  
-   * Uploads `images` only if it is filled.  
-   * Toasts status and message on success/failure.  
+   * This method is called when new review is being submitted.
+   * Validates all the form fields and submits using {@link CustomerService.postReview()}.
+   * Uploads `comments` only if it is filled.
+   * Uploads `images` only if it is filled.
+   * Toasts status and message on success/failure.
    * **Reloads** all the reviews when successfully uploaded.
-   * 
-   * 
+   *
+   *
    * @returns `void`
    */
   submitReview(): void {
@@ -102,7 +106,7 @@ export class OrderComponent implements OnInit {
         // on success
         next: (data) => {
           document.getElementById('reviewCloseButton')?.click();
-          this.toastLoader(true, "Review added successfully");
+          this.toastLoader(true, 'Review added successfully');
           this.reviewLoader();
         },
         // on error
@@ -115,7 +119,7 @@ export class OrderComponent implements OnInit {
 
   /**
    * Change star rating when the rating `range bar` is modified.
-   * @param event 
+   * @param event
    * @returns `void`
    */
   changeRating(event: any): void {
@@ -124,9 +128,9 @@ export class OrderComponent implements OnInit {
   }
 
   /**
-   * This method is called when new images is uploaded.  
+   * This method is called when new images is uploaded.
    * It updates {@link reviewImages}.
-   * @param event 
+   * @param event
    * @returns `void`
    */
   onImageChange(event: any): void {
@@ -137,13 +141,13 @@ export class OrderComponent implements OnInit {
   }
 
   /**
-   * Closes the Detail Order modal and opens add review modal.  
-   * Sets all form fields.  
-   * @param product 
-   * @param orderId 
+   * Closes the Detail Order modal and opens add review modal.
+   * Sets all form fields.
+   * @param product
+   * @param orderId
    * @returns `void`
    */
-  editModal(product: Product, orderId:number): void {
+  editModal(product: Product, orderId: number): void {
     document.getElementById('addReviewModalLabel')!.innerText = product.name;
     (document.getElementById('reviewRating') as HTMLInputElement).value =
       Number(5).toString();
@@ -153,14 +157,14 @@ export class OrderComponent implements OnInit {
   }
 
   /**
-   * Loads all the reviews by the customer.  
-   * Fills the {@link reviewedProductId} with id's of the products that have been reviewed.  
-   * Shows `review` button for all products that have been orders but not yet reviewed.  
-   * Uses {@link CustomerService.getMyReviews()}.  
+   * Loads all the reviews by the customer.
+   * Fills the {@link reviewedProductId} with id's of the products that have been reviewed.
+   * Shows `review` button for all products that have been orders but not yet reviewed.
+   * Uses {@link CustomerService.getMyReviews()}.
    * Shows toasts on any error.
    * @retutns `void`
    */
-  reviewLoader(): void{
+  reviewLoader(): void {
     this.customerService.getMyReviews().subscribe({
       // on success
       next: (data) => {
@@ -174,31 +178,31 @@ export class OrderComponent implements OnInit {
 
   /**
    * Closes modal for detail order.
-   * @param id 
+   * @param id
    * @returns `void`
    */
-  closeMoreModal(id:number): void{
-    document.getElementById("moreCloseModal"+id)?.click();
+  closeMoreModal(id: number): void {
+    document.getElementById('moreCloseModal' + id)?.click();
   }
 
   /**
-   * Sorts table by the clicked attribute.  
+   * Sorts table by the clicked attribute.
    * Alters the ascending/descending order.
-   * @param value 
+   * @param value
    * @returns `void`
    */
-  sortBy(value:string){
+  sortBy(value: string) {
     this.orderVariable = value;
     this.orderReverse = !this.orderReverse;
   }
 
   /**
    * Shows the toast using {@link ToasterComponent}.
-   * @param status 
+   * @param status
    * @param message
-   * @returns `void` 
+   * @returns `void`
    */
-  toastLoader(status:boolean, message:string) {
+  toastLoader(status: boolean, message: string) {
     if (status) {
       this.toastTitle = 'Success';
       this.toastColorClass = 'success';
@@ -208,5 +212,14 @@ export class OrderComponent implements OnInit {
     }
     this.toastMessage = message;
     this.toastReady = true;
+  }
+
+  /**
+   * This methid is called by the Order Filter emitter.
+   * It Filters out orders by year.
+   * @param modifiedOrderList
+   */
+  orderFilter(modifiedOrderList: Order[]) {
+    this.allOrders = modifiedOrderList;
   }
 }

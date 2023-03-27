@@ -27,6 +27,7 @@ import { OrderDetailComponent } from '../order-detail/order-detail.component';
 export class OrderComponent implements OnInit {
   p: number = 1;                      // pagination page number
   order: Order[] = [];                // List of order
+  fixedOrder: Order[] = [];           // List of fixed order
   orderVariable: string = "id";       // Default order table sort field
   orderReverse:boolean = true;        // Sort order by ascending/descending
   sortIcon = faSort;                  // Sort Icon
@@ -39,7 +40,7 @@ export class OrderComponent implements OnInit {
    */
   ngOnInit(): void {
     this.managerService.getAllOrders().subscribe({
-      next: (data) => (this.order = data),
+      next: (data) => {this.order = data; this.fixedOrder=data;},
       error: (err) => console.log(err),
     });
   }
@@ -53,5 +54,14 @@ export class OrderComponent implements OnInit {
   sortBy(value:string): void {
     this.orderVariable = value;
     this.orderReverse = !this.orderReverse;
+  }
+
+  /**
+   * This methid is called by the Order Filter emitter.  
+   * It Filters out orders by year.
+   * @param modifiedOrderList 
+   */
+  orderFilter(modifiedOrderList: Order[]){
+    this.order = modifiedOrderList;
   }
 }

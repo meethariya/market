@@ -54,7 +54,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/customer")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular}")
 public class CustomerController {
 
 	@Autowired

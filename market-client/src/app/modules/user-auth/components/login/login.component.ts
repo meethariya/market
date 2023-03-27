@@ -13,7 +13,7 @@ import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styles: [],
 })
 export class LoginComponent {
   email!: string;                 // user input email

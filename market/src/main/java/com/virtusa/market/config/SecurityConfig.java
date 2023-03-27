@@ -6,6 +6,7 @@ package com.virtusa.market.config;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,6 +29,9 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 
 	@Autowired
 	private DataSource dataSource;
+	
+	@Value("${angular}")
+	private String angularPath;
 
 	/**
 	 * Security configuration for all URLs, Login, Logout, CSRF and basic HTTP.
@@ -95,6 +99,6 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+		registry.addMapping("/**").allowedOrigins(this.angularPath);
 	}
 }

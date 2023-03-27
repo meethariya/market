@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom, Observable, take } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Category } from '../models/category';
 import { Inventory } from '../models/inventory';
 import { Product } from '../models/product';
 import { User } from '../models/user';
-
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class GeneralService {
   constructor(private http: HttpClient) {}
 
   // Backend Server Path
-  serverPath: string = 'http://localhost:8081';
+  serverPath: string = environment.java;
 
   /**
    * @returns token from localStorage
@@ -40,7 +40,7 @@ export class GeneralService {
   /**
    * @returns name of logged in user or null if not logged in
    */
-  getName(): string | null{
+  getName(): string | null {
     return localStorage.getItem('name');
   }
 
@@ -54,9 +54,9 @@ export class GeneralService {
   }
 
   /**
-   * Fetches token using {@link getToken()}.  
-   * Gets user using {@link getUser()}. 
-   * returns role of the user.  
+   * Fetches token using {@link getToken()}.
+   * Gets user using {@link getUser()}.
+   * returns role of the user.
    * **This is an asynchronous funtion**
    * @param role
    * @returns whether the authenticated is of the same role as passed.
@@ -86,7 +86,7 @@ export class GeneralService {
   }
 
   /**
-   * Generates Basic Authentication using token from localStorage.  
+   * Generates Basic Authentication using token from localStorage.
    * Uses {@link getToken()}.
    * @returns HTTPHeaders
    */
@@ -95,7 +95,7 @@ export class GeneralService {
   }
 
   /**
-   * Get all Products.  
+   * Get all Products.
    * Backend Request: **GET** `/product`
    * @see {@link headerGenerator()}
    * @returns `Observable<Product[]>`
@@ -107,7 +107,7 @@ export class GeneralService {
   }
 
   /**
-   * Get all Inventory.  
+   * Get all Inventory.
    * Backend Request: **GET** `/inventory`
    * @see {@link headerGenerator()}
    * @returns `Observable<Inventory[]>`
@@ -119,7 +119,7 @@ export class GeneralService {
   }
 
   /**
-   * Get all Category.  
+   * Get all Category.
    * Backend Request: **GET** `/category`
    * @see {@link headerGenerator()}
    * @returns `Observable<Category[]>`

@@ -34,11 +34,11 @@ const routes: Routes = [
 ];
 
 /**
- * Routing for Main app.  
+ * Routing for Main app.
  * Further uses Customer Routing and Manager Routing.
  */
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { GeneralService } from 'src/app/services/general.service';
 
 /**
  * UserAuth Service. All Authentication requests are made from this service.  
@@ -10,9 +11,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserAuthService {
-  private path: string = 'http://localhost:8081';
+  private path: string;
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(private httpClient: HttpClient, private router: Router, private generalService: GeneralService) {
+    this.path = generalService.serverPath;
+  }
 
   /**
    * registers a customer.

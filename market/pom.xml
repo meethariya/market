@@ -8,14 +8,19 @@
 		<version>3.0.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>com.virtusa</groupId>
 	<artifactId>market</artifactId>
 	<version>1.0.0</version>
 	<name>market</name>
 	<description>Supermarket application</description>
+	
+	<packaging>war</packaging>
+	
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -55,30 +60,33 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- War file generate-->
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20220924</version>
-		</dependency>
+        		<groupId>org.springframework.boot</groupId>
+        		<artifactId>spring-boot-starter-tomcat</artifactId>
+        		<scope>provided</scope>
+    		</dependency>
 	</dependencies>
 
 	<build>
+		<finalName>market</finalName>
 		<plugins>
 			<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-javadoc-plugin</artifactId>
-			<configuration>
-                		<doclint>none</doclint>
-              		</configuration>
-			<executions>
-				<execution>
-					<id>attach-javadocs</id>
-					<goals>
-						<goal>jar</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+                			<doclint>none</doclint>
+              			</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

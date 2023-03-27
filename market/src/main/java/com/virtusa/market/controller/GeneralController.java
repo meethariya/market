@@ -40,12 +40,12 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular}")
 public class GeneralController {
 
 	@Autowired
 	GeneralService service;
-
+	
 	/**
 	 * Saves customer to database
 	 * @param customer
@@ -122,5 +122,13 @@ public class GeneralController {
 	@GetMapping("/review/{productId}")
 	public ResponseEntity<List<Review>> getProductReview(@PathVariable("productId") long productId) throws ProductNotFoundException{
 		return new ResponseEntity<>(service.getProductReview(productId), HttpStatus.OK);
+	}
+	
+	/*
+	 * Checks if backend is reachable or not.
+	 */
+	@GetMapping("/")
+	public ResponseEntity<String> backendReachable(){
+		return new ResponseEntity<>("Market Backend Reached",HttpStatus.OK);
 	}
 }

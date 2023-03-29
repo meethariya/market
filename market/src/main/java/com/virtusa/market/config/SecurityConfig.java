@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 public class SecurityConfig extends AbstractSecurityWebApplicationInitializer implements WebMvcConfigurer {
 
 	@Autowired
@@ -32,6 +34,11 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 	
 	@Value("${angular}")
 	private String angularPath;
+	
+	private String[] authenticatedUrls = { "/postLogin", "/product", "/product/*", "/review/*", "/inventory",
+			"/category" };
+	
+	private String[] permitAllUrls = {"/", "/v3/api-docs/**", "/swagger-ui/**", "/register"};
 
 	/**
 	 * Security configuration for all URLs, Login, Logout, CSRF and basic HTTP.
@@ -45,14 +52,8 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 
 		http
 			.authorizeHttpRequests()
-				.requestMatchers("/").permitAll()
-				.requestMatchers("/register").anonymous()
-				.requestMatchers("/postLogin").authenticated()
-				.requestMatchers("/product").authenticated()
-				.requestMatchers("/product/*").authenticated()
-				.requestMatchers("/review/*").authenticated()
-				.requestMatchers("/inventory").authenticated()
-				.requestMatchers("/category").authenticated()
+				.requestMatchers(permitAllUrls).permitAll()
+				.requestMatchers(authenticatedUrls).authenticated()
 				.requestMatchers("/customer/**").hasAuthority("Customer")
 				.requestMatchers("/manager/**").hasAuthority("Manager")
 				.and()

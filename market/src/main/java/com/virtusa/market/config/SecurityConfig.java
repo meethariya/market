@@ -14,9 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -26,14 +24,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @EnableWebSecurity
-@EnableWebMvc
-public class SecurityConfig extends AbstractSecurityWebApplicationInitializer implements WebMvcConfigurer {
+public class SecurityConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private DataSource dataSource;
 	
 	@Value("${angular}")
 	private String angularPath;
+	
+	@Value("${remoteUrl}")
+	private String remoteUrl;
 	
 	private String[] authenticatedUrls = { "/postLogin", "/product", "/product/*", "/review/*", "/inventory",
 			"/category" };
@@ -100,6 +100,6 @@ public class SecurityConfig extends AbstractSecurityWebApplicationInitializer im
 	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins(this.angularPath);
+		registry.addMapping("/**").allowedOrigins(this.angularPath, this.remoteUrl);
 	}
 }

@@ -31,7 +31,7 @@
           >
             <div class="carousel-item" [ngClass]="i === 0 ? 'active' : ''">
               <img
-                src="{{ image.split('src/')[1] }}"
+                src="{{ 'assets/'+image.split('assets/')[1] }}"
                 class="card-img-top img-fluid"
                 alt="{{ i }}"
                 style="width: 100%; height: 250px; object-fit: cover"

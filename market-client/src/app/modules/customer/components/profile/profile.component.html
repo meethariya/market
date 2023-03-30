@@ -17,7 +17,7 @@
           src="{{
             profilePicture !== null
               ? profilePicture
-              : customer.user.profilePicPath.split('src/')[1]
+              : 'assets/'+customer.user.profilePicPath.split('assets/')[1]
           }}"
           alt="profilePic"
           class="img-fluid rounded-circle"

@@ -43,7 +43,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/manager")
-@CrossOrigin(origins = "${angular}")
+@CrossOrigin(origins = {"${angular}", "${remoteUrl}"})
 public class ManagerController {
 
 	@Autowired

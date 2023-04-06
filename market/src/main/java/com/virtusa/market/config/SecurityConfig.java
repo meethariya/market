@@ -32,9 +32,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 	@Value("${angular}")
 	private String angularPath;
 	
-	@Value("${remoteUrl}")
-	private String remoteUrl;
-	
 	private String[] authenticatedUrls = { "/postLogin", "/product", "/product/*", "/review/*", "/inventory",
 			"/category" };
 	
@@ -100,6 +97,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins(this.angularPath, this.remoteUrl);
+		registry.addMapping("/**").allowedOrigins(this.angularPath);
 	}
 }

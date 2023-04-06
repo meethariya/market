@@ -40,7 +40,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/")
-@CrossOrigin(origins = {"${angular}", "${remoteUrl}"})
+@CrossOrigin(origins = {"${angular}"})
 public class GeneralController {
 
 	@Autowired

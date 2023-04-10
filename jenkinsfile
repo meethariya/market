@@ -6,7 +6,6 @@ pipeline {
         BACKEND_DIR = 'market'
         AWS_DB_URL = credentials('marketDbUrl')
         AWS_DB_CRED = credentials('marketDbCredentials')
-        AWS_TOMCAT = credentials('awsTomcat')
     }
 
     stages {
@@ -50,7 +49,7 @@ pipeline {
             steps {
                 script {
                     deploy adapters: [
-                        tomcat9(credentialsId: 'RemoteTomcat', path: '', url: credentials('awsTomcat'))
+                        tomcat9(credentialsId: 'RemoteTomcat', path: '', url: 'http://localhost:8080')
                     ],
                     contextPath: '/market',
                     onFailure: false,

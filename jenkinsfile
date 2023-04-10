@@ -1,0 +1,124 @@
+pipeline {
+    agent any
+
+    environment {
+        FRONTEND_DIR = 'market-client'
+        BACKEND_DIR = 'market'
+        AWS_DB_URL = credentials('marketDbUrl')
+        AWS_DB_CRED = credentials('marketDbCredentials')
+        AWS_TOMCAT = credentials('awsTomcat')
+    }
+
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Angular Dependencies') {
+            steps {
+                dir(FRONTEND_DIR) {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Build Angular') {
+            steps {
+                dir(FRONTEND_DIR) {
+                    sh 'ng build --base-href=/app/'
+                }
+            }
+        }
+
+        stage('Clean build SpringBoot') {
+            steps {
+                dir(BACKEND_DIR) {
+                    sh 'mvn -Pprod clean package "-DdbUrl=$AWS_DB_URL" "-DdbUsername=$AWS_DB_CRED_USR" "-DdbPassword=$AWS_DB_CRED_PSW"'
+                }
+            }
+        }
+
+        stage('Deploy SpringBoot') {
+            steps {
+                script {
+                    deploy adapters: [
+                        tomcat9(credentialsId: 'RemoteTomcat', path: '', url: '$AWS_TOMCAT')
+                    ],
+                    contextPath: '/market',
+                    onFailure: false,
+                    war: 'market/**/*.war'
+                }
+            }
+        }
+
+        stage('Deploy Angular') {
+            steps {
+                sh '''
+                    #!/bin/bash
+
+                    if [ -d /opt/tomcat/webapps/app ]; then
+                        temp_dir=$PWD
+                        echo " ***** App Folder found in tomcat ***** "
+
+                        mkdir /tmp/appAssets
+                        mkdir /tmp/appAssets/productPic
+                        mkdir /tmp/appAssets/profilePic
+                        mkdir /tmp/appAssets/reviewPic
+                        chmod -R 777 /tmp/appAssets/*
+                        echo " ***** Created temp folder to save previous assets ***** "
+
+                        cp -r /opt/tomcat/webapps/app/assets/image/productPic/* /tmp/appAssets/productPic
+                        wait
+                        cp -r /opt/tomcat/webapps/app/assets/image/profilePic/* /tmp/appAssets/profilePic
+                        wait
+                        cp -r /opt/tomcat/webapps/app/assets/image/reviewPic/* /tmp/appAssets/reviewPic
+                        wait
+                        echo " ***** Tomcat app's productPic, profilePic and reviewPic folders copied to temp ***** "
+
+                        cd /opt/tomcat/webapps/app/
+                        rm -r *
+                        echo " ***** Deleted all contents of Tomcat app ***** "
+
+                        cd $temp_dir
+                        cp -r market-client/dist/market-client/* /opt/tomcat/webapps/app
+                        wait
+                        echo " ***** Copy all freshly build files to Tomcat app ***** "
+
+                        cd /opt/tomcat/webapps/app/assets/image/productPic
+                        rm -r *
+                        cd /opt/tomcat/webapps/app/assets/image/profilePic
+                        rm -r *
+                        cd /opt/tomcat/webapps/app/assets/image/reviewPic
+                        rm -r *
+                        echo " ***** Remove fresh build productPic, profilePic and reviewPic folders ***** "
+
+                        cp -r /tmp/appAssets/* /opt/tomcat/webapps/app/assets/image/
+                        chmod -R 777 /opt/tomcat/webapps/app
+                        echo " ***** Copy temp folder contents back to Tomcat app's assets folder ***** "
+
+                        rm -rf /tmp/appAssets
+                        cd $temp_dir
+                        echo " ***** Remove all temporary files ***** "
+                    else
+                        echo " ***** App Folder not found in tomcat ***** "
+
+                        mkdir /opt/tomcat/webapps/app
+                        chmod -R 777 /opt/tomcat/webapps/app
+                        echo " ***** Create folder in Tomcat app ***** "
+
+                        cp -r market-client/dist/market-client/* /opt/tomcat/webapps/app
+                        echo " ***** Copy all freshly build files to Tomcat app ***** "
+                    fi
+                '''
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { GeneralService } from 'src/app/services/general.service';
 import { LoginComponent } from 'src/app/modules/user-auth/components/login/login.component';
 import { LogoutComponent } from 'src/app/modules/user-auth/components/logout/logout.component';
+import { environment } from 'src/environments/environment';
 
 /**
  * Navbar component. Static for all route links.  
@@ -26,6 +27,7 @@ export class NavbarComponent {
   role: string | null = null;             // role of user if authenticated, else null
   name: string | null = null;             // name of user if authenticated, else null
   profilePicPath: string | null = null;   // profilePicPath of user if authenticated, else null
+  seperator = environment.seperator;      // seperator based on OS
 
   /**
    * sets authenticated value on loadup using {@link GeneralService.isAuthenticated()}.  
@@ -39,6 +41,7 @@ export class NavbarComponent {
     this.role = this.generalService.getRole();
     this.name = this.generalService.getName();
     this.profilePicPath = this.generalService.getProfilePic();
+    console.log(this.seperator);
   }
 
   /**

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from 'src/app/models/product';
 import { StarRatingComponent } from 'src/app/modules/product/components/star-rating/star-rating.component';
+import { environment } from 'src/environments/environment';
 import { AddToCartComponent } from '../add-to-cart/add-to-cart.component';
 import { CustomerHomeComponent } from '../customer-home/customer-home.component';
 
@@ -17,7 +18,7 @@ import { CustomerHomeComponent } from '../customer-home/customer-home.component'
 export class ProductComponent {
   @Input() product!: Product;   // Product input from {@link CustomerHomeComponent}
   @Output() addToCartEmitter: EventEmitter<{status: boolean; message: string}> = new EventEmitter();
-
+  seperator = environment.seperator;      // seperator based on OS
   /**
    * Emits status and message as it is from {@link AddToCartComponent} to {@link CustomerHomeComponent}.  
    * @param data 

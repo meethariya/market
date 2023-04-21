@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CartList } from 'src/app/models/cart-list';
 import { Customer } from 'src/app/models/customer';
+import { environment } from 'src/environments/environment';
 import { CustomerService } from '../../services/customer.service';
 
 /**
@@ -16,7 +17,7 @@ import { CustomerService } from '../../services/customer.service';
 export class PlaceOrderComponent implements OnInit {
   cart!: CartList[]; // Cart List
   customer!: Customer; // Customer Details
-
+  seperator = environment.seperator;      // seperator based on OS
   payment!: string; // Payment method
   // Dropdown menu for select
   paymentOptions = [

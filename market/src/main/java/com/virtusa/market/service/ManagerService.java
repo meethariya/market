@@ -119,7 +119,7 @@ public class ManagerService {
 		// saving all images to resources and setting its path in Dto
 		List<String> allImagePath = new ArrayList<>();
 		if (files == null || files.length == 0) {
-			String path = getProductPicFolderPath() + "default/product.png";
+			String path = getProductPicFolderPath() + "default" + File.separator + "product.png";
 			allImagePath.add(path);
 		} else {
 			for (int i = 0; i < files.length; i++) {

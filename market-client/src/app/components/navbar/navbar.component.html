@@ -73,7 +73,7 @@
         <!-- User name and profile picture -->
         <h6 class="text-white pt-2 mx-2">Hello, {{name}}</h6>
         <img
-          src="{{ 'assets/'+profilePicPath!.split('assets/')[1] }}"
+          src="{{ seperator + profilePicPath!.split(seperator)[1] }}"
           alt="profilePic"
           class="img-fluid rounded-circle me-4"
           style="object-fit: cover; height: 40px; width: 40px;"

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Inventory } from 'src/app/models/inventory';
+import { environment } from 'src/environments/environment';
 import { ManagerHomeComponent } from '../manager-home/manager-home.component';
 
 /**
@@ -20,6 +21,7 @@ export class InventoryItemComponent {
     status: boolean;
     message: string;
   }> = new EventEmitter();
+  seperator = environment.seperator;      // seperator based on OS
 
   /**
    * It Updates quantity of the inventory item stock, also modifies import date.  

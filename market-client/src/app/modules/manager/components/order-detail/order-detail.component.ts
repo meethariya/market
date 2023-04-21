@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Order } from 'src/app/models/order';
+import { environment } from 'src/environments/environment';
 import { OrderComponent } from '../order/order.component';
 /**
  * OrderDetail component.
@@ -16,7 +17,7 @@ import { OrderComponent } from '../order/order.component';
 export class OrderDetailComponent implements OnInit {
   @Input() order!: Order;       // Order details input by parent
   age!: number;                 // Age of the customer
-  
+  seperator = environment.seperator;      // seperator based on OS
   /**
    * Calculate age of the customer.
    */

@@ -5,6 +5,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProfileComponent } from '../profile/profile.component';
 import { ReviewSortComponent } from 'src/app/modules/facet/review-sort/review-sort.component';
+import { environment } from 'src/environments/environment';
 
 /**
  * MyReviews Component. This component shows all the reviews given by the customer on profile page.  
@@ -35,6 +36,7 @@ export class MyReviewsComponent implements OnInit {
   reviews: Review[] = [];           // List of reviews
   reviewImages: string[] = [];      // List of images uploaded when review is modified
   ratingStar: number = 5;           // Default rating to modify rating. Used for {@link StarRatingComponent}
+  seperator = environment.seperator;      // seperator based on OS
 
   editReview = new FormGroup({
     productId: new FormControl(''),

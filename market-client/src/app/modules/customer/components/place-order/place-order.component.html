@@ -26,7 +26,7 @@
       <div class="col-sm-4" *ngIf="customer !== undefined">
         <!-- Customer Profile image -->
         <img
-          src="{{ customer.user.profilePicPath.split('/src')[1] }}"
+          src="{{ seperator+customer.user.profilePicPath.split(seperator)[1] }}"
           alt="profilePic"
           class="img-fluid rounded-circle"
         />

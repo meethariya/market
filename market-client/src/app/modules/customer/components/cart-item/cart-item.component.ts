@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { CartList } from 'src/app/models/cart-list';
+import { environment } from 'src/environments/environment';
 import { CustomerService } from '../../services/customer.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class CartItemComponent {
   plus = faPlus;                          // Plus Icon
   minus = faMinus;                        // Minus Icon
   trash = faTrash;                        // Trash Icon
-
+  seperator = environment.seperator;      // seperator based on OS
   constructor(private customerService: CustomerService) {}
 
   /**

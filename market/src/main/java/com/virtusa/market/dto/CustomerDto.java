@@ -183,12 +183,12 @@ public class CustomerDto {
 	 */
 	public void setProfilePicPath(MessageSource source) {
 
-		String path = source.getMessage("profileFolder", null, Locale.ENGLISH)+"default/";
+		String path = source.getMessage("profileFolder", null, Locale.ENGLISH)+"default"+File.separator;
 		// appending folder name
 		if (getGender().equalsIgnoreCase("male")) {
-			path += "male/";
+			path += "male"+File.separator;
 		} else {
-			path += "female/";
+			path += "female"+File.separator;
 		}
 		// getting list of all images
 		String[] contents = new File(path).list();

@@ -6,6 +6,7 @@ import { ProductService } from '../../services/product.service';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { ReviewSortComponent } from 'src/app/modules/facet/review-sort/review-sort.component';
 import { EditProductComponent } from '../edit-product/edit-product.component';
+import { environment } from 'src/environments/environment';
 
 /**
  * Shows product details to authenticated user.  
@@ -38,7 +39,7 @@ export class DetailProductComponent implements OnInit {
   starCountArray = [0, 0, 0, 0, 0];
   activeRole: string = '';  // authenticated user's role
   pencil = faPencil;        // Edit Icon
-
+  seperator = environment.seperator;      // seperator based on OS
   // toast settings variables
   toastTitle: string = '';
   toastMessage: string = '';

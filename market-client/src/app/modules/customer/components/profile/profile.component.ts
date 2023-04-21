@@ -5,6 +5,7 @@ import { faPencil, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToasterComponent } from 'src/app/modules/facet/toaster/toaster.component';
 import { MyReviewsComponent } from '../my-reviews/my-reviews.component';
+import { environment } from 'src/environments/environment';
 /**
  * Profile component. This component displays customer `profile details`
  * and all the `reviews` submmited by the customer.  
@@ -23,7 +24,7 @@ export class ProfileComponent implements OnInit {
   check = faCheck;                          // Submit Icon
   profilePicture: string | null = null;     // Profile pic url when image is uploaded
   image: any = null;                        // Image source
-
+  seperator = environment.seperator;      // seperator based on OS
   // toast settings variables
   toastTitle: string = '';
   toastMessage: string = '';

@@ -11,7 +11,7 @@
 
   <div class="row">
     <!--Product Images-->
-    <div class="col-md-6">
+    <div class="col-md-6" *ngIf="product!=null">
       <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div
@@ -50,7 +50,7 @@
     </div>
     
     <!--Product Data-->
-    <div class="col-md-6 p-5">
+    <div class="col-md-6 p-5" *ngIf="product!=null">
       <div class="d-flex justify-content-between">
         <h6 class="text-muted mt-3">
           {{ product.category.categoryName | titlecase }}
@@ -179,7 +179,7 @@
         "
         class="col-md-4 mb-3"
       >
-        <div class="card cardi">
+        <div class="card cardi h-100">
           <!--Review Images-->
           <div
             id="carouselExample{{ review.id }}"

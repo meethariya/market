@@ -45,7 +45,7 @@ public class GeneralService {
 	@Autowired
 	PasswordEncoder pe;
 
-	@Value("profileFolder")
+	@Value("${profileFolder}")
 	private String profileFolder;
 	
 	@Autowired

@@ -66,4 +66,11 @@ export class LoginComponent {
       },
     });
   }
+
+  /**
+   * Close Login Modal
+   */
+  closeLogin(){
+    document.getElementById("closeButton")?.click();
+  }
 }

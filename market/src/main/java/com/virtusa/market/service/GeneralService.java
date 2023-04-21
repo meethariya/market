@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,11 +43,11 @@ import jakarta.transaction.Transactional;
 public class GeneralService {
 
 	@Autowired
-	MessageSource source;
-
-	@Autowired
 	PasswordEncoder pe;
 
+	@Value("profileFolder")
+	private String profileFolder;
+	
 	@Autowired
 	private CustomerDao customerDao;
 
@@ -92,7 +92,7 @@ public class GeneralService {
 		}
 		// sets all parameters that are to be modified
 		customerDto.setPassword(pe.encode(customerDto.getPassword()));
-		customerDto.setProfilePicPath(source);
+		customerDto.setProfilePicPath(profileFolder);
 		customerDto.setAddress();
 		customerDto.setUser();
 		customerDto.setCustomer();

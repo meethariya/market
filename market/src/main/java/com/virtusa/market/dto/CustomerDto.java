@@ -6,11 +6,9 @@ package com.virtusa.market.dto;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.Random;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.context.MessageSource;
 
 import com.virtusa.market.model.Address;
 import com.virtusa.market.model.Customer;
@@ -181,9 +179,9 @@ public class CustomerDto {
 	/**
 	 * @param source
 	 */
-	public void setProfilePicPath(MessageSource source) {
+	public void setProfilePicPath(String source) {
 
-		String path = source.getMessage("profileFolder", null, Locale.ENGLISH)+"default"+File.separator;
+		String path = source+"default"+File.separator;
 		// appending folder name
 		if (getGender().equalsIgnoreCase("male")) {
 			path += "male"+File.separator;

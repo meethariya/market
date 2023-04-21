@@ -41,7 +41,6 @@ export class NavbarComponent {
     this.role = this.generalService.getRole();
     this.name = this.generalService.getName();
     this.profilePicPath = this.generalService.getProfilePic();
-    console.log(this.seperator);
   }
 
   /**

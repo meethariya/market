@@ -12,7 +12,7 @@
   <div class="row">
     <!--Product Images-->
     <div class="col-md-6">
-      <div id="carouselExample" class="carousel">
+      <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div
             *ngFor="let image of product.imagePath; let i = index"
@@ -23,7 +23,7 @@
                 src="{{ seperator+image.split(seperator)[1] }}"
                 class="card-img-top img-fluid"
                 alt="{{ i }}"
-                style="height: 500px; object-fit: scale-down"
+                style="height: 500px; object-fit: contain"
               />
             </div>
           </div>

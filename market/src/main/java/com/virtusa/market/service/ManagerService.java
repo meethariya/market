@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,6 +62,9 @@ public class ManagerService {
 
 	@Autowired
 	private MessageSource source;
+	
+	@Value("${productFolder}")
+	private String productFolder;
 
 	/**
 	 * Saves product into database with series of actions.<br>
@@ -116,29 +120,30 @@ public class ManagerService {
 			productDto.setBrand(source.getMessage("appName", null, Locale.ENGLISH));
 		}
 
-		// saving all images to resources and setting its path in Dto
-		List<String> allImagePath = new ArrayList<>();
-		if (files == null || files.length == 0) {
-			String path = getProductPicFolderPath() + "default" + File.separator + "product.png";
-			allImagePath.add(path);
-		} else {
-			for (int i = 0; i < files.length; i++) {
-				String imagePath = saveImage(i + 1, productDto.getName().concat(productDto.getBrand()), files[i]);
-				allImagePath.add(imagePath);
-			}
-		}
-		productDto.setImagePath(allImagePath);
-
 		// sets product and saves it
 		productDto.setProduct();
 		Product saved = productDao.save(productDto.getProduct());
+		
+		// saving all images to resources and setting its path in savedProduct
+		List<String> allImagePath = new ArrayList<>();
+		if (files == null || files.length == 0) {
+			String path = productFolder + "default" + File.separator + "product.png";
+			allImagePath.add(path);
+		} else {
+			for (int i = 0; i < files.length; i++) {
+				String imagePath = saveImage(i + 1, String.valueOf(saved.getId()), files[i]);
+				allImagePath.add(imagePath);
+			}
+		}
+		saved.setImagePath(allImagePath);
+		productDao.save(saved);
 
 		return saved.getId();
 	}
 
 	/**
 	 * Saves an image to resources and returns it entire path.<br>
-	 * Name consists of Product name and Product Brand which creates a sub-folder
+	 * Name consists of Product ID which creates a sub-folder
 	 * for all its images.<br>
 	 * Index is used as name of file, to store in its folder sequentially.<br>
 	 * 
@@ -152,7 +157,7 @@ public class ManagerService {
 	 */
 	private String saveImage(int index, String name, MultipartFile image) throws IOException {
 		// fetching product path + name(product name & brand)
-		String path = getProductPicFolderPath().concat(name);
+		String path = productFolder.concat(name);
 		// Image Name used for its extension
 		String imageName = image.getOriginalFilename();
 		if (imageName == null) {
@@ -242,7 +247,7 @@ public class ManagerService {
 			List<String> allImagePath = new ArrayList<>();
 			// If files are being uploaded
 			for (int i = 0; i < files.length; i++) {
-				String imagePath = saveImage(i + 1, productDto.getName().concat(productDto.getBrand()), files[i]);
+				String imagePath = saveImage(i + 1, String.valueOf(id), files[i]);
 				allImagePath.add(imagePath);
 			}
 			productDto.setImagePath(allImagePath);
@@ -350,13 +355,6 @@ public class ManagerService {
 	 */
 	public List<Order> getAllOrders() {
 		return orderDao.findAll();
-	}
-
-	/**
-	 * @return path of product picture folder
-	 */
-	private String getProductPicFolderPath() {
-		return source.getMessage("productFolder", null, Locale.ENGLISH);
 	}
 
 }

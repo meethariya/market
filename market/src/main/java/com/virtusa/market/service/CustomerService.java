@@ -10,12 +10,11 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,9 +56,12 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class CustomerService {
 
-	@Autowired
-	private MessageSource source;
-
+	@Value("${profileFolder}")
+	private String profileFolder;
+	
+	@Value("${reviewFolder}")
+	private String reviewFolder;
+	
 	@Autowired
 	private ProductDao productDao;
 
@@ -396,7 +398,7 @@ public class CustomerService {
 
 		// If Customer has changed Profile Picture
 		if (image != null) {
-			String path = source.getMessage("profileFolder", null, Locale.ENGLISH);
+			String path = profileFolder;
 			// Image Name used for its extension
 			String imageName = image.getOriginalFilename();
 			if (imageName == null) {
@@ -524,7 +526,7 @@ public class CustomerService {
 	 */
 	private String saveImage(int index, long productId, long customerId, MultipartFile image) throws IOException {
 		// fetching review path + productId
-		String path = source.getMessage("reviewFolder", null, Locale.ENGLISH) + productId;
+		String path = reviewFolder + productId;
 		// Image Name used for its extension
 		String originalName = image.getOriginalFilename();
 		if (originalName == null) {

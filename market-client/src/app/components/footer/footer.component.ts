@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  faGithub,
+  faGitlabSquare,
   faInstagram,
   faLinkedin,
 } from '@fortawesome/free-brands-svg-icons';
@@ -16,6 +16,6 @@ import {
 })
 export class FooterComponent {
   linkedIn = faLinkedin;      //linkedIn Icon
-  github = faGithub;          // Github Icon
+  gitlab = faGitlabSquare;    // Gitlab Icon
   instagram = faInstagram;    // Instagram Icon
 }

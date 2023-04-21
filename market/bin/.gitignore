@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### logs ###
+appLog.log
+
+### images ###
+*.png
+*.jpg
+*.jpeg

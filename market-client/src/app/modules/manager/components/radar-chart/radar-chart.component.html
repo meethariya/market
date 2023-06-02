@@ -1,0 +1,16 @@
+<div class="card cardi">
+  <div class="card-header text-center">
+    <h4 class="mt-1">Number of products by rating</h4>
+  </div>
+  <div class="card-body">
+    <!-- Figure -->
+    <canvas
+      baseChart
+      class="chart"
+      [data]="radarChartData"
+      [options]="radarChartOptions"
+      [type]="'radar'"
+    >
+    </canvas>
+  </div>
+</div>

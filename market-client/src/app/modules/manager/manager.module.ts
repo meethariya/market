@@ -14,6 +14,10 @@ import { FacetModule } from '../facet/facet.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ProductModule } from '../product/product.module';
 import { OrderModule } from 'ngx-order-pipe';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RadarChartComponent } from './components/radar-chart/radar-chart.component';
+import { NgChartsModule } from 'ng2-charts';
+import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 
 /**
  * Manager Module.  
@@ -26,7 +30,10 @@ import { OrderModule } from 'ngx-order-pipe';
     AddInventoryComponent,
     AddProductComponent,
     OrderComponent,
-    OrderDetailComponent
+    OrderDetailComponent,
+    DashboardComponent,
+    RadarChartComponent,
+    PieChartComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +44,8 @@ import { OrderModule } from 'ngx-order-pipe';
     FacetModule,
     ProductModule,
     OrderModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgChartsModule
   ]
 })
 export class ManagerModule { }

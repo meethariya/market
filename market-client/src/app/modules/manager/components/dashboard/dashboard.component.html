@@ -1,0 +1,130 @@
+<!-- Manager Dashboard -->
+<div class="container my-5">
+  <!--Alerts-->
+  <app-toaster
+    [title]="toastTitle"
+    [message]="toastMessage"
+    [colorClass]="toastColorClass"
+    [ready]="toastReady"
+    (setReadyFalse)="this.toastReady = false"
+  ></app-toaster>
+
+  <!-- First Row -->
+  <div class="row my-3">
+    <div class="card cardi">
+      <div class="card-body">
+        <!-- Greeting message -->
+        <h4 class="card-text">{{ greeting }}</h4>
+        <br />
+        <div class="row">
+          <!-- Sales -->
+          <div class="col-sm-3">
+            <app-small-data
+              [icon]="sales"
+              [text]="'Sales'"
+              [value]="salesValue"
+              [color]="'purple'"
+            ></app-small-data>
+          </div>
+          <!-- Customers -->
+          <div class="col-sm-3">
+            <app-small-data
+              [icon]="customers"
+              [text]="'Customers'"
+              [value]="customersValue"
+              [color]="'yellow'"
+            ></app-small-data>
+          </div>
+          <!-- Products -->
+          <div class="col-sm-3">
+            <app-small-data
+              [icon]="products"
+              [text]="'Products'"
+              [value]="productsValue"
+              [color]="'green'"
+            ></app-small-data>
+          </div>
+          <!-- Revenue -->
+          <div class="col-sm-3">
+            <app-small-data
+              [icon]="revenue"
+              [text]="'Revenue'"
+              [value]="revenueValue"
+              [color]="'sky-blue'"
+            ></app-small-data>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Second Row -->
+  <div class="row my-3">
+    <!-- No of Products by rating (Radar Chart)-->
+    <div class="col-md-4">
+      <app-radar-chart
+        (errorEmitter)="toastForwarder($event)"
+      ></app-radar-chart>
+    </div>
+    <!-- Payment Method count (Pie Chart) -->
+    <div class="col-md-4">
+      <app-pie-chart (errorEmitter)="toastForwarder($event)"></app-pie-chart>
+    </div>
+    <!-- 4 small data -->
+    <div class="col-md-4">
+      <div class="row">
+        <!--Daily-->
+        <div class="col-sm-6 mb-1">
+          <div class="card cardi">
+            <div class="card-body">
+              <app-small-data
+                [text]="'Today Sales'"
+                [color]="'purple'"
+                [value]="todaySale"
+                [icon]="todayIcon"
+              ></app-small-data>
+            </div>
+          </div>
+        </div>
+        <!--Weekly-->
+        <div class="col-sm-6 mb-1">
+          <div class="card cardi">
+            <div class="card-body">
+              <app-small-data
+                [text]="'Week Sales'"
+                [color]="'yellow'"
+                [value]="weekSale"
+                [icon]="weekIcon"
+              ></app-small-data>
+            </div>
+          </div>
+        </div>
+        <!--Monthly-->
+        <div class="col-sm-6 mt-1">
+          <div class="card cardi">
+            <div class="card-body">
+              <app-small-data
+                [text]="'Month Sales'"
+                [color]="'green'"
+                [value]="monthSale"
+                [icon]="monthIcon"
+              ></app-small-data>
+            </div>
+          </div>
+        </div>
+        <!--Yearly-->
+        <div class="col-sm-6 mt-1">
+          <div class="card cardi">
+            <div class="card-body">
+              <app-small-data
+                [text]="'Year Sales'"
+                [color]="'sky-blue'"
+                [value]="yearSale"
+                [icon]="yearIcon"
+              ></app-small-data>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

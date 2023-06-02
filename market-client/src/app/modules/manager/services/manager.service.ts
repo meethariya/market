@@ -59,7 +59,7 @@ export class ManagerService {
   /**
    * Adds Item / n quantity of item to inventory.  
    * Backend Request: **POST** `/manager/inventory`
-   * @param formData 
+   * @param formData
    * @see {@link GeneralService.headerGenerator()}
    * @returns id of the item that has been added to inventory.
    */
@@ -76,7 +76,7 @@ export class ManagerService {
   /**
    * Reduces n quantity of item in inventory.  
    * Backend Request: **POST** `/manager/reduceInventory`
-   * @param formData 
+   * @param formData
    * @see {@link GeneralService.headerGenerator()}
    * @returns id of the item that has been reduced from inventory stock.
    */
@@ -93,7 +93,7 @@ export class ManagerService {
   /**
    * Adds a product.  
    * Backend Request: **POST** `/manager/product`
-   * @param formData 
+   * @param formData
    * @see {@link GeneralService.headerGenerator()}
    * @returns id of the product added.
    */
@@ -116,6 +116,130 @@ export class ManagerService {
   getAllOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(
       this.generalService.serverPath + '/manager/order',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Get all order count.
+   * Backend Request: **GET** `/manager/orderCount`.
+   * @returns number of all orders
+   */
+  getAllSalesCount(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/orderCount',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Get all customer count.
+   * Backend Request: **GET** `/manager/customerCount`.
+   * @returns number of all customers
+   */
+  getCustomerCount(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/customerCount',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Get all product count.
+   * Backend Request: **GET** `/manager/productCount`.
+   * @returns number of all products
+   */
+  getProductCount(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/productCount',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Get sum of all order price.
+   * Backend Request: **GET** `/manager/orderSumPrice`.
+   * @returns total revenue
+   */
+  getTotalRevenue(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/orderSumPrice',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Returns List of product rating rounded up to whole number and it's count.
+   * Backend Request: **GET** `/manager/productCountByRating`.
+   * @returns List of Rating and its count
+   */
+  getProductCountByRating(): Observable<
+    { roundedRating: number; idCount: number }[]
+  > {
+    return this.http.get<{ roundedRating: number; idCount: number }[]>(
+      this.generalService.serverPath + '/manager/productCountByRating',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+  
+  /**
+   * Returns List of payment methods and how many times it has been used.  
+   * Backend Request: **GET** `/manager/paymentMethodCount`.
+   * @returns List of payment methods and its count
+   */
+  getPaymentMethodCount(): Observable<
+    { method: string; count: number }[]
+  > {
+    return this.http.get<{ method: string; count: number }[]>(
+      this.generalService.serverPath + '/manager/paymentMethodCount',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Get today's order count.
+   * Backend Request: **GET** `/manager/todaySale`.
+   * @returns number of orders placed today
+   */
+  getTodaySale(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/todaySale',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+  
+  /**
+   * Get order count this week.
+   * Backend Request: **GET** `/manager/thisWeekSale`.
+   * @returns number of orders placed this week
+   */
+  getThisWeekSale(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/thisWeekSale',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+  
+  /**
+   * Get order count this month.
+   * Backend Request: **GET** `/manager/thisMonthSale`.
+   * @returns number of orders placed this month
+   */
+  getThisMonthSale(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/thisMonthSale',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+  
+  /**
+   * Get order count this year.
+   * Backend Request: **GET** `/manager/thisYearSale`.
+   * @returns number of orders placed this year
+   */
+  getThisYearSale(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/thisYearSale',
       { headers: this.generalService.headerGenerator() }
     );
   }

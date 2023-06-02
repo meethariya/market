@@ -5,6 +5,7 @@ package com.virtusa.market.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.virtusa.market.dto.InventoryDto;
+import com.virtusa.market.dto.PaymentMethodProjection;
 import com.virtusa.market.dto.ProductDto;
+import com.virtusa.market.dto.RatingProjection;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
@@ -43,7 +46,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/manager")
-@CrossOrigin(origins = {"${angular}"})
+@CrossOrigin(origins = { "${angular}" })
 public class ManagerController {
 
 	@Autowired
@@ -66,7 +69,8 @@ public class ManagerController {
 	 */
 	@PostMapping("/product")
 	public ResponseEntity<Long> addProduct(@Valid @ModelAttribute("product") ProductDto productDto, Errors error,
-			@RequestParam(name = "images", required = false) MultipartFile[] files) throws ProductAlreadyExistsException, IOException {
+			@RequestParam(name = "images", required = false) MultipartFile[] files)
+			throws ProductAlreadyExistsException, IOException {
 
 		FieldError fieldError = error.getFieldError();
 		if (fieldError != null) {
@@ -87,12 +91,13 @@ public class ManagerController {
 	 * @return updated Product
 	 * @throws ProductAlreadyExistsException
 	 * @throws IOException
-	 * @throws ProductNotFoundException 
+	 * @throws ProductNotFoundException
 	 */
 	@PutMapping("/product/{id}")
 	public ResponseEntity<Product> editProduct(@PathVariable(value = "id") int id,
 			@Valid @ModelAttribute("product") ProductDto productDto, Errors error,
-			@RequestParam(name = "images", required = false) MultipartFile[] files) throws ProductAlreadyExistsException, IOException, ProductNotFoundException {
+			@RequestParam(name = "images", required = false) MultipartFile[] files)
+			throws ProductAlreadyExistsException, IOException, ProductNotFoundException {
 
 		FieldError fieldError = error.getFieldError();
 		if (fieldError != null) {
@@ -129,15 +134,15 @@ public class ManagerController {
 	@PostMapping("/inventory")
 	public ResponseEntity<Long> addToInventory(@Valid @ModelAttribute("inventory") InventoryDto inventoryDto,
 			Errors error) throws ProductNotFoundException {
-		
+
 		FieldError fieldError = error.getFieldError();
 		if (fieldError != null) {
 			throw new IncorrectFormDetailsException(fieldError.getDefaultMessage());
 		}
-		
+
 		return new ResponseEntity<>(managerService.addToInventory(inventoryDto), HttpStatus.CREATED);
 	}
-	
+
 	/**
 	 * Reduces Stock quantity.
 	 * 
@@ -148,22 +153,134 @@ public class ManagerController {
 	 */
 	@PostMapping("/reduceInventory")
 	public ResponseEntity<Long> removeFromInventory(@Valid @ModelAttribute("inventory") InventoryDto inventoryDto,
-			Errors error) throws ProductNotFoundException{
-		
+			Errors error) throws ProductNotFoundException {
+
 		FieldError fieldError = error.getFieldError();
 		if (fieldError != null) {
 			throw new IncorrectFormDetailsException(fieldError.getDefaultMessage());
 		}
-		
+
 		return new ResponseEntity<>(managerService.removeFromInventory(inventoryDto), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @return list of Order
 	 */
 	@GetMapping("order")
-	public ResponseEntity<List<Order>> getAllOrders(){
+	public ResponseEntity<List<Order>> getAllOrders() {
 		return new ResponseEntity<>(managerService.getAllOrders(), HttpStatus.OK);
 	}
-		
+
+	/**
+	 * @return count of today's sales
+	 */
+	@GetMapping("todaySale")
+	public ResponseEntity<Integer> getTodaySale() {
+		return new ResponseEntity<>(managerService.getTodaySale(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return count of present week's sales
+	 */
+	@GetMapping("thisWeekSale")
+	public ResponseEntity<Integer> getThisWeekSale() {
+		return new ResponseEntity<>(managerService.getThisWeekSale(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return count of present month's sales
+	 */
+	@GetMapping("thisMonthSale")
+	public ResponseEntity<Integer> getThisMonthSale() {
+		return new ResponseEntity<>(managerService.getThisMonthSale(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return count of present year's sales
+	 */
+	@GetMapping("thisYearSale")
+	public ResponseEntity<Integer> getThisYearSale() {
+		return new ResponseEntity<>(managerService.getThisYearSale(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return Order with lowest Price.
+	 */
+	@GetMapping("lowestPriceOrder")
+	public ResponseEntity<Order> getLowestPriceOrder() {
+		return new ResponseEntity<>(managerService.getLowestPriceOrder(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return Order with highest price.
+	 */
+	@GetMapping("highestPriceOrder")
+	public ResponseEntity<Order> getHighestPriceOrder() {
+		return new ResponseEntity<>(managerService.getHighestPriceOrder(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return average price of all the orders.
+	 */
+	@GetMapping("averagePriceOrder")
+	public ResponseEntity<Double> getAveragePriceOrder() {
+		return new ResponseEntity<>(managerService.getAvgOrderPrice(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return List of count of product grouped and ordered by rating.
+	 */
+	@GetMapping("productCountByRating")
+	public ResponseEntity<List<RatingProjection>> getProductCountByRating() {
+		return new ResponseEntity<>(managerService.getProductCountByRating(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return count of all the customers.
+	 */
+	@GetMapping("customerCount")
+	public ResponseEntity<Long> getCustomerCount() {
+		return new ResponseEntity<>(managerService.customerCount(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return count of all the products.
+	 */
+	@GetMapping("productCount")
+	public ResponseEntity<Long> getProductCount() {
+		return new ResponseEntity<>(managerService.productCount(), HttpStatus.OK);
+	}
+
+	/**
+	 * @return count of all the orders.
+	 */
+	@GetMapping("orderCount")
+	public ResponseEntity<Long> getOrderCount() {
+		return new ResponseEntity<>(managerService.orderCount(), HttpStatus.OK);
+	}
+	
+	/**
+	 * @return Sum of price of all the orders.
+	 */
+	@GetMapping("orderSumPrice")
+	public ResponseEntity<Double> getSumOfOrderPrice() {
+		return new ResponseEntity<>(managerService.allOrderPrice(), HttpStatus.OK);
+	}
+	
+	/**
+	 * @return All payment method and its count.
+	 */
+	@GetMapping("paymentMethodCount")
+	public ResponseEntity<List<PaymentMethodProjection>> getPaymentMethodCount(){
+		return new ResponseEntity<>(managerService.paymentMethodCount(), HttpStatus.OK);
+	}
+
+	/**
+	 * Calculates count of all order's product's category.
+	 * @return Map of category and its count.
+	 */
+	@GetMapping("salesByCategory")
+	public ResponseEntity<Map<String, Integer>> getSalesByCategory() {
+		return new ResponseEntity<>(managerService.salesByProductCategory(), HttpStatus.OK);
+	}
 }

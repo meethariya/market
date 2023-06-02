@@ -8,9 +8,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -22,14 +25,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.virtusa.market.controller.ManagerController;
 import com.virtusa.market.dao.CategoryDao;
+import com.virtusa.market.dao.CustomerDao;
 import com.virtusa.market.dao.InventoryDao;
 import com.virtusa.market.dao.OrderDao;
 import com.virtusa.market.dao.ProductDao;
 import com.virtusa.market.dto.InventoryDto;
+import com.virtusa.market.dto.PaymentMethodProjection;
 import com.virtusa.market.dto.ProductDto;
+import com.virtusa.market.dto.RatingProjection;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
+import com.virtusa.market.model.CartList;
 import com.virtusa.market.model.Category;
 import com.virtusa.market.model.Inventory;
 import com.virtusa.market.model.Order;
@@ -61,8 +68,11 @@ public class ManagerService {
 	private OrderDao orderDao;
 
 	@Autowired
+	private CustomerDao customerDao;
+
+	@Autowired
 	private MessageSource source;
-	
+
 	@Value("${productFolder}")
 	private String productFolder;
 
@@ -123,7 +133,7 @@ public class ManagerService {
 		// sets product and saves it
 		productDto.setProduct();
 		Product saved = productDao.save(productDto.getProduct());
-		
+
 		// saving all images to resources and setting its path in savedProduct
 		List<String> allImagePath = new ArrayList<>();
 		if (files == null || files.length == 0) {
@@ -143,8 +153,8 @@ public class ManagerService {
 
 	/**
 	 * Saves an image to resources and returns it entire path.<br>
-	 * Name consists of Product ID which creates a sub-folder
-	 * for all its images.<br>
+	 * Name consists of Product ID which creates a sub-folder for all its
+	 * images.<br>
 	 * Index is used as name of file, to store in its folder sequentially.<br>
 	 * 
 	 * @param index
@@ -323,9 +333,9 @@ public class ManagerService {
 	/**
 	 * Checks if product with that Id exist, else throws
 	 * ProductNotFoundException.<br>
-	 * Checks if that product exists in inventory database. Throws error if not exists.
-	 * Checks stock less than the quantity to be removed. If true throws error.
-	 * Else deducts the stock quantity and return id.
+	 * Checks if that product exists in inventory database. Throws error if not
+	 * exists. Checks stock less than the quantity to be removed. If true throws
+	 * error. Else deducts the stock quantity and return id.
 	 * 
 	 * @param inventoryDto
 	 * @return Id of the inventory modified.
@@ -334,16 +344,16 @@ public class ManagerService {
 	 */
 	public Long removeFromInventory(InventoryDto inventoryDto) throws ProductNotFoundException {
 		Optional<Product> dbProduct = productDao.findById(inventoryDto.getId());
-		if(dbProduct.isEmpty())
+		if (dbProduct.isEmpty())
 			throw new ProductNotFoundException();
-		
+
 		Inventory inventoryByProduct = inventoryDao.findByProduct(dbProduct.get());
 		if (inventoryByProduct == null)
 			throw new ProductNotFoundException("Product is not added to Inventory.");
-		
-		if(inventoryByProduct.getQuantity() < inventoryDto.getQuantity())
+
+		if (inventoryByProduct.getQuantity() < inventoryDto.getQuantity())
 			throw new IncorrectFormDetailsException("Stock can not go below 0");
-		
+
 		inventoryByProduct.setQuantity(inventoryByProduct.getQuantity() - inventoryDto.getQuantity());
 		inventoryByProduct.setLastImportDate(new Date());
 		inventoryDao.save(inventoryByProduct);
@@ -357,4 +367,126 @@ public class ManagerService {
 		return orderDao.findAll();
 	}
 
+	/**
+	 * @return count of today's sales.
+	 */
+	public int getTodaySale() {
+		return orderDao.findByTimestamp(new Date()).size();
+	}
+
+	/**
+	 * @return count of present week's sale. Sunday To Saturday.
+	 */
+	public int getThisWeekSale() {
+		Date today = new Date();
+
+		Calendar calender = Calendar.getInstance();
+		calender.setTime(today);
+
+		calender.set(Calendar.DAY_OF_WEEK, calender.getFirstDayOfWeek());
+		Date startDate = calender.getTime();
+
+		calender.set(Calendar.DATE, 6);
+		Date endDate = calender.getTime();
+
+		return orderDao.findByTimestampBetween(startDate, endDate).size();
+	}
+
+	/**
+	 * @return count of present month's sale.
+	 */
+	public int getThisMonthSale() {
+		return orderDao.findByTimestampMonth(new Date()).size();
+	}
+
+	/**
+	 * @return count of present year's sale.
+	 */
+	public int getThisYearSale() {
+		return orderDao.findByTimestampYear(new Date()).size();
+	}
+
+	/**
+	 * @return Order with lowest price.
+	 */
+	public Order getLowestPriceOrder() {
+		return orderDao.findFirstByOrderByPriceAsc();
+	}
+
+	/**
+	 * @return Order with highest price.
+	 */
+	public Order getHighestPriceOrder() {
+		return orderDao.findFirstByOrderByPriceDesc();
+	}
+
+	/**
+	 * @return Average price of all the orders.
+	 */
+	public Double getAvgOrderPrice() {
+		return orderDao.findAvgPrice();
+	}
+
+	/**
+	 * @return list of count of product grouped and ordered by rating.
+	 */
+	public List<RatingProjection> getProductCountByRating() {
+		return productDao.findCountByRating();
+	}
+
+	/**
+	 * @return count of customers.
+	 */
+	public Long customerCount() {
+		return customerDao.count();
+	}
+
+	/**
+	 * @return count of products.
+	 */
+	public Long productCount() {
+		return productDao.count();
+	}
+
+	/**
+	 * @return count of orders.
+	 */
+	public Long orderCount() {
+		return orderDao.count();
+	}
+
+	/**
+	 * @return Sum of price of all the orders.
+	 */
+	public Double allOrderPrice() {
+		return orderDao.sumOfOrderPrice();
+	}
+
+	/**
+	 * @return All payment method and its count.
+	 */
+	public List<PaymentMethodProjection> paymentMethodCount() {
+		return orderDao.paymentMethodCount();
+	}
+
+	/**
+	 * Iterates through all the {@link Order}, and then further each of its {@link CartList}. <br>
+	 * Checks if the product's {@link Category} is already in data map. <br>
+	 * Increments it's count if exists, else creates a new record with count <b>1</b>. 
+	 * @return Category name and its count.
+	 */
+	public Map<String, Integer> salesByProductCategory() {
+		List<Order> all = orderDao.findAll();
+		Map<String, Integer> data = new HashMap<>();
+		for (Order o : all) {
+			for (CartList c : o.getCart()) {
+				String name = c.getProduct().getCategory().getCategoryName();
+				if (data.containsKey(name))
+					data.replace(name, data.get(name) + 1);
+				else
+					data.put(name, 1);
+			}
+		}
+		return data;
+	}
 }

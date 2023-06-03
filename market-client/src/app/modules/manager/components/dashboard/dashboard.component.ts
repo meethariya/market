@@ -19,7 +19,19 @@ import { ManagerService } from '../../services/manager.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styles: [
-    
+    `
+    .maroon{
+      background-color:#c73f65;
+    }
+
+    .grey{
+      background-color:#567582;
+    }
+
+    .green{
+      background-color:#56CA00;
+    }
+    `
   ]
 })
 export class DashboardComponent implements OnInit{

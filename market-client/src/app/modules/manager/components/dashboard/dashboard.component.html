@@ -125,33 +125,62 @@
           </div>
         </div>
       </div>
+
+      <!--Order low,avg,high-->
       <div class="card cardi">
         <div class="card-body row">
           <p class="text-center"><strong>Order Price</strong></p>
+
           <!--Lowest order Price-->
-          <app-small-data
-            class="col-sm-4"
-            [text]="'Lowest'"
-            [color]="'maroon'"
-            [value]="lowestOrderPrice"
-            [icon]="lowestOrderIcon"
-          ></app-small-data>
+          <div class="col-sm-4 text-center">
+            <div class="row">
+              <div class="col text-white mb-1">
+                <fa-icon class="rounded-2 py-2 px-2 maroon" [icon]="lowestOrderIcon" size="xl"></fa-icon>
+              </div>
+              <div class="col">
+                <div class="row">
+                  <h6 class="text-muted">Lowest</h6>
+                </div>
+                <div class="row">
+                  <h4 class="ps-3">{{ lowestOrderPrice }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <!--Average order Price-->
-          <app-small-data
-            class="col-sm-4"
-            [text]="'Average'"
-            [color]="'grey'"
-            [value]="averageOrderPrice"
-            [icon]="averageOrderIcon"
-          ></app-small-data>
+          <div class="col-sm-4 text-center">
+            <div class="row">
+              <div class="col text-white mb-1">
+                <fa-icon class="rounded-2 py-2 px-2 grey" [icon]="averageOrderIcon" size="xl"></fa-icon>
+              </div>
+              <div class="col">
+                <div class="row">
+                  <h6 class="text-muted">Average</h6>
+                </div>
+                <div class="row">
+                  <h4 class="ps-3">{{ averageOrderPrice }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!--Highest Order Price-->
-          <app-small-data
-            class="col-sm-4"
-            [text]="'Highest'"
-            [color]="'green'"
-            [value]="highestOrderPrice"
-            [icon]="highestOrderIcon"
-          ></app-small-data>
+          <div class="col-sm-4 text-center">
+            <div class="row">
+              <div class="col text-white mb-1">
+                <fa-icon class="rounded-2 py-2 px-2 green" [icon]="highestOrderIcon" size="xl"></fa-icon>
+              </div>
+              <div class="col">
+                <div class="row">
+                  <h6 class="text-muted">Highest</h6>
+                </div>
+                <div class="row">
+                  <h4 class="ps-3">{{ highestOrderPrice }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -159,14 +188,14 @@
   <!--Third Row-->
   <div class="row my-3">
     <!--Sales by category (Bar Graph)-->
-    <div class="col-md-12">
+    <div class="col-md-6">
       <app-bar-chart (errorEmitter)="toastForwarder($event)"></app-bar-chart>
     </div>
-    <!-- <div class="col-md-6">
+    <div class="col-md-6">
       <div class="card cardi">
         <div class="card-header text-center"></div>
         <div class="card-body"></div>
       </div>
-    </div> -->
+    </div>
   </div>
 </div>

@@ -243,4 +243,52 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
+  
+  /**
+   * Get order of the highest price.  
+   * Backend Request: **GET** `/manager/highestPriceOrder`.
+   * @returns Order of highest price
+   */
+  getHighestPriceOrder(): Observable<Order> {
+    return this.http.get<Order>(
+      this.generalService.serverPath + '/manager/highestPriceOrder',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+  
+  /**
+   * Get average order price.  
+   * Backend Request: **GET** `/manager/averagePriceOrder`.
+   * @returns average order price
+   */
+  getAveragePriceOrder(): Observable<number> {
+    return this.http.get<number>(
+      this.generalService.serverPath + '/manager/averagePriceOrder',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+  
+  /**
+   * Get lowest order price.  
+   * Backend Request: **GET** `/manager/lowestPriceOrder`.
+   * @returns lowest order price
+   */
+  getLowestPriceOrder(): Observable<Order> {
+    return this.http.get<Order>(
+      this.generalService.serverPath + '/manager/lowestPriceOrder',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+  
+  /**
+   * Get count of products sold grouped by category.  
+   * Backend Request: **GET** `/manager/salesByCategory`.
+   * @returns sales count by category
+   */
+  getSalesByCategory(): Observable<Map<string,number>> {
+    return this.http.get<Map<string,number>>(
+      this.generalService.serverPath + '/manager/salesByCategory',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
 }

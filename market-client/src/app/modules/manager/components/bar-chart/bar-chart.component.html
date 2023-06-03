@@ -1,15 +1,15 @@
 <div class="card cardi">
   <div class="card-header text-center">
-    <h4 class="mt-1">Payment Methods</h4>
+    <h4 class="mt-1">Products Sold By Category</h4>
   </div>
   <div class="card-body">
     <!-- Figure -->
     <canvas
       baseChart
       class="chart"
-      [data]="pieChartData"
-      [type]="'pie'"
-      [options]="pieChartOptions"
+      [data]="barChartData"
+      [options]="barChartOptions"
+      [type]="'bar'"
     >
     </canvas>
   </div>

@@ -7,6 +7,9 @@ import { faSun } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
+import { faDownLong } from '@fortawesome/free-solid-svg-icons';
+import { faEquals } from '@fortawesome/free-solid-svg-icons'; 
+import { faUpLong } from '@fortawesome/free-solid-svg-icons';
 import { ManagerService } from '../../services/manager.service';
 /**
  * Sets Admin dashboard.  
@@ -44,11 +47,17 @@ export class DashboardComponent implements OnInit{
   weekIcon=faCalendarWeek;
   monthIcon=faCalendarDays;
   yearIcon=faCalendarCheck;
+  lowestOrderIcon=faDownLong;
+  averageOrderIcon=faEquals;
+  highestOrderIcon=faUpLong;
 
   todaySale!:number;
   weekSale!:number;
   monthSale!:number;
   yearSale!:number;
+  lowestOrderPrice!:number;
+  averageOrderPrice!:number;
+  highestOrderPrice!:number;
   
   constructor(private managerService: ManagerService) {}
 
@@ -102,6 +111,24 @@ export class DashboardComponent implements OnInit{
     // This year's Sales
     this.managerService.getThisYearSale().subscribe({
       next: (data) => this.yearSale = data,
+      error: (err) => this.toastLoader(false, err.error)
+    });
+    
+    // Lowest Order Price
+    this.managerService.getLowestPriceOrder().subscribe({
+      next: (data) => this.lowestOrderPrice = data.price,
+      error: (err) => this.toastLoader(false, err.error)
+    });
+    
+    // Average Order Price
+    this.managerService.getAveragePriceOrder().subscribe({
+      next: (data) => this.averageOrderPrice = data,
+      error: (err) => this.toastLoader(false, err.error)
+    });
+    
+    // Highest Order Price
+    this.managerService.getHighestPriceOrder().subscribe({
+      next: (data) => this.highestOrderPrice = data.price,
       error: (err) => this.toastLoader(false, err.error)
     });
   }

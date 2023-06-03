@@ -34,6 +34,7 @@ public interface OrderDao extends JpaRepository<Order, Long> {
 	 * @param date
 	 * @return List of Orders
 	 */
+	@Query("FROM Order WHERE DATE(timestamp)=DATE(:date)")
 	public List<Order> findByTimestamp(Date date);
 
 	/**
@@ -42,7 +43,7 @@ public interface OrderDao extends JpaRepository<Order, Long> {
 	 * @param endDate
 	 * @return List of Orders
 	 */
-	public List<Order> findByTimestampBetween(Date startDate, Date endDate);
+	public List<Order> findByTimestampBetween(Date startOfWeek, Date endOfWeek);
 	
 	/**
 	 * Finds all orders in given month.
@@ -68,7 +69,7 @@ public interface OrderDao extends JpaRepository<Order, Long> {
 	/**
 	 * @return average price of all records.
 	 */
-	@Query("SELECT AVG(o.price) FROM Order o")
+	@Query("SELECT ROUND(AVG(o.price),0) FROM Order o")
 	public Double findAvgPrice();
 	
 	/**

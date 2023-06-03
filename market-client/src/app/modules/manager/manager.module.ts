@@ -18,6 +18,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RadarChartComponent } from './components/radar-chart/radar-chart.component';
 import { NgChartsModule } from 'ng2-charts';
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
+import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 
 /**
  * Manager Module.  
@@ -33,7 +34,8 @@ import { PieChartComponent } from './components/pie-chart/pie-chart.component';
     OrderDetailComponent,
     DashboardComponent,
     RadarChartComponent,
-    PieChartComponent
+    PieChartComponent,
+    BarChartComponent
   ],
   imports: [
     CommonModule,

@@ -24,6 +24,14 @@ import { Component, Input } from '@angular/core';
     .sky-blue{
       background-color:#16B1FF;
     }
+
+    .maroon{
+      background-color:#c73f65;
+    }
+
+    .grey{
+      background-color:#567582;
+    }
     `
   ]
 })

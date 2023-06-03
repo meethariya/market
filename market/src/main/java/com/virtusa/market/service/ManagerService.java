@@ -7,8 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -375,20 +378,14 @@ public class ManagerService {
 	}
 
 	/**
-	 * @return count of present week's sale. Sunday To Saturday.
+	 * @return count of present week's sale. Monday To Sunday.
 	 */
 	public int getThisWeekSale() {
-		Date today = new Date();
-
-		Calendar calender = Calendar.getInstance();
-		calender.setTime(today);
-
-		calender.set(Calendar.DAY_OF_WEEK, calender.getFirstDayOfWeek());
-		Date startDate = calender.getTime();
-
-		calender.set(Calendar.DATE, 6);
-		Date endDate = calender.getTime();
-
+		LocalDate today = LocalDate.now();
+		LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		LocalDate endOfWeek = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+		Date startDate = Date.from(startOfWeek.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date endDate = Date.from(endOfWeek.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		return orderDao.findByTimestampBetween(startDate, endDate).size();
 	}
 

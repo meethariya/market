@@ -28,6 +28,7 @@ import com.virtusa.market.dto.InventoryDto;
 import com.virtusa.market.dto.PaymentMethodProjection;
 import com.virtusa.market.dto.ProductDto;
 import com.virtusa.market.dto.RatingProjection;
+import com.virtusa.market.dto.SalesProjection;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
@@ -258,7 +259,7 @@ public class ManagerController {
 	public ResponseEntity<Long> getOrderCount() {
 		return new ResponseEntity<>(managerService.orderCount(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @return Sum of price of all the orders.
 	 */
@@ -266,21 +267,48 @@ public class ManagerController {
 	public ResponseEntity<Double> getSumOfOrderPrice() {
 		return new ResponseEntity<>(managerService.allOrderPrice(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @return All payment method and its count.
 	 */
 	@GetMapping("paymentMethodCount")
-	public ResponseEntity<List<PaymentMethodProjection>> getPaymentMethodCount(){
+	public ResponseEntity<List<PaymentMethodProjection>> getPaymentMethodCount() {
 		return new ResponseEntity<>(managerService.paymentMethodCount(), HttpStatus.OK);
 	}
 
 	/**
 	 * Calculates count of all order's product's category.
+	 * 
 	 * @return Map of category and its count.
 	 */
 	@GetMapping("salesByCategory")
 	public ResponseEntity<Map<String, Integer>> getSalesByCategory() {
 		return new ResponseEntity<>(managerService.salesByProductCategory(), HttpStatus.OK);
+	}
+
+	/**
+	 * Selects orders only for given gender(true=male/false=female) and current
+	 * year.<br>
+	 * Groups all orders by month and returns its count.
+	 * 
+	 * @param gender
+	 * @return List of order count grouped by month
+	 */
+	@GetMapping("yearSalesByGender")
+	public ResponseEntity<List<SalesProjection>> getYearSalesByGender(@RequestParam("gender") boolean gender) {
+		return new ResponseEntity<>(managerService.yearSalesByGender(gender), HttpStatus.OK);
+	}
+	
+	/**
+	 * Selects orders only for given gender(true=male/false=female) and current
+	 * month.<br>
+	 * Groups all orders by date and returns its count.
+	 * 
+	 * @param gender
+	 * @return List of order count grouped by month
+	 */
+	@GetMapping("monthSalesByGender")
+	public ResponseEntity<List<SalesProjection>> getMonthSalesByGender(@RequestParam("gender") boolean gender) {
+		return new ResponseEntity<>(managerService.monthSalesByGender(gender), HttpStatus.OK);
 	}
 }

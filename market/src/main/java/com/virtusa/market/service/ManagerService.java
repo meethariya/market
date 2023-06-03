@@ -36,6 +36,7 @@ import com.virtusa.market.dto.InventoryDto;
 import com.virtusa.market.dto.PaymentMethodProjection;
 import com.virtusa.market.dto.ProductDto;
 import com.virtusa.market.dto.RatingProjection;
+import com.virtusa.market.dto.SalesProjection;
 import com.virtusa.market.exception.IncorrectFormDetailsException;
 import com.virtusa.market.exception.ProductAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
@@ -467,9 +468,12 @@ public class ManagerService {
 	}
 
 	/**
-	 * Iterates through all the {@link Order}, and then further each of its {@link CartList}. <br>
+	 * Iterates through all the {@link Order}, and then further each of its
+	 * {@link CartList}. <br>
 	 * Checks if the product's {@link Category} is already in data map. <br>
-	 * Increments it's count if exists, else creates a new record with count <b>1</b>. 
+	 * Increments it's count if exists, else creates a new record with count
+	 * <b>1</b>.
+	 * 
 	 * @return Category name and its count.
 	 */
 	public Map<String, Integer> salesByProductCategory() {
@@ -485,5 +489,27 @@ public class ManagerService {
 			}
 		}
 		return data;
+	}
+
+	/**
+	 * Selects orders only for given gender and current year.<br>
+	 * Groups all orders by month and returns its count.
+	 * 
+	 * @param gender
+	 * @return List of order count grouped by month
+	 */
+	public List<SalesProjection> yearSalesByGender(boolean gender) {
+		return orderDao.yearSalesByGender(gender, new Date());
+	}
+	
+	/**
+	 * Selects orders only for given gender and current month.<br>
+	 * Groups all orders by date and returns its count.
+	 * 
+	 * @param gender
+	 * @return List of order count grouped by month
+	 */
+	public List<SalesProjection> monthSalesByGender(boolean gender) {
+		return orderDao.monthSalesByGender(gender, new Date());
 	}
 }

@@ -1,0 +1,49 @@
+<div class="card cardi">
+  <div class="card-header d-flex justify-content-between">
+    <h4 class="mt-1">This {{ mode }} sales</h4>
+    <!--toggles chart-->
+    <select class="form-select w-25" [(ngModel)]="mode">
+      <option selected value="Year">Year</option>
+      <option value="Month">Month</option>
+    </select>
+  </div>
+  <div class="card-body">
+    <!--Swap between Year and Month Graphs-->
+    <div *ngIf="mode == 'Year'; else month">
+      <!--While data is loading, show placeholder-->
+      <div *ngIf="yearLineChartData.datasets.length == 0; else showGraph1">
+        <h1 class="placeholder-glow">
+          <span class="placeholder col-12"></span>
+        </h1>
+      </div>
+      <!--Actual Year Graph-->
+      <ng-template #showGraph1>
+        <canvas
+          baseChart
+          class="chart"
+          [data]="yearLineChartData"
+          [options]="yearLineChartOptions"
+          [type]="'line'"
+        ></canvas>
+      </ng-template>
+    </div>
+    <ng-template #month>
+      <!--While data is loading, show placeholder-->
+      <div *ngIf="monthLineChartData.datasets.length == 0; else showGraph2">
+        <h1 class="placeholder-glow">
+          <span class="placeholder col-12"></span>
+        </h1>
+      </div>
+      <!--Actual Month Graph-->
+      <ng-template #showGraph2>
+        <canvas
+          baseChart
+          class="chart"
+          [data]="monthLineChartData"
+          [options]="monthLineChartOptions"
+          [type]="'line'"
+        ></canvas>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

@@ -191,11 +191,9 @@
     <div class="col-md-6">
       <app-bar-chart (errorEmitter)="toastForwarder($event)"></app-bar-chart>
     </div>
+    <!--Sales for current year/month (Line Graph)-->
     <div class="col-md-6">
-      <div class="card cardi">
-        <div class="card-header text-center"></div>
-        <div class="card-body"></div>
-      </div>
+      <app-line-chart (errorEmitter)="toastForwarder($event)"></app-line-chart>
     </div>
   </div>
 </div>

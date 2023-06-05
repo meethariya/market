@@ -21,7 +21,7 @@ export class ManagerService {
   ) {}
 
   /**
-   * Checks whether logged in user is manager or not.  
+   * Checks whether logged in user is manager or not.
    * @see {@link GeneralService.roleVerifier()}.
    * @returns promise boolean
    */
@@ -30,7 +30,7 @@ export class ManagerService {
   }
 
   /**
-   * Get all Products.  
+   * Get all Products.
    * @see {@link GeneralService.getAllProducts()}.
    * @returns Observale of Product List
    */
@@ -39,7 +39,7 @@ export class ManagerService {
   }
 
   /**
-   * Get all category.  
+   * Get all category.
    * @see {@link GeneralService.getCategory()}.
    * @returns Observale of category List
    */
@@ -48,7 +48,7 @@ export class ManagerService {
   }
 
   /**
-   * Get all inventory.  
+   * Get all inventory.
    * @see {@link GeneralService.getInventory()}.
    * @returns Observale of inventory List
    */
@@ -57,7 +57,7 @@ export class ManagerService {
   }
 
   /**
-   * Adds Item / n quantity of item to inventory.  
+   * Adds Item / n quantity of item to inventory.
    * Backend Request: **POST** `/manager/inventory`
    * @param formData
    * @see {@link GeneralService.headerGenerator()}
@@ -74,7 +74,7 @@ export class ManagerService {
   }
 
   /**
-   * Reduces n quantity of item in inventory.  
+   * Reduces n quantity of item in inventory.
    * Backend Request: **POST** `/manager/reduceInventory`
    * @param formData
    * @see {@link GeneralService.headerGenerator()}
@@ -91,7 +91,7 @@ export class ManagerService {
   }
 
   /**
-   * Adds a product.  
+   * Adds a product.
    * Backend Request: **POST** `/manager/product`
    * @param formData
    * @see {@link GeneralService.headerGenerator()}
@@ -108,7 +108,7 @@ export class ManagerService {
   }
 
   /**
-   * Get All Orders  
+   * Get All Orders
    * Backend Request: **POST** `/manager/order`
    * @see {@link GeneralService.headerGenerator()}
    * @returns id of the product added.
@@ -181,15 +181,13 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Returns List of payment methods and how many times it has been used.  
    * Backend Request: **GET** `/manager/paymentMethodCount`.
    * @returns List of payment methods and its count
    */
-  getPaymentMethodCount(): Observable<
-    { method: string; count: number }[]
-  > {
+  getPaymentMethodCount(): Observable<{ method: string; count: number }[]> {
     return this.http.get<{ method: string; count: number }[]>(
       this.generalService.serverPath + '/manager/paymentMethodCount',
       { headers: this.generalService.headerGenerator() }
@@ -207,7 +205,7 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Get order count this week.
    * Backend Request: **GET** `/manager/thisWeekSale`.
@@ -219,7 +217,7 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Get order count this month.
    * Backend Request: **GET** `/manager/thisMonthSale`.
@@ -231,7 +229,7 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Get order count this year.
    * Backend Request: **GET** `/manager/thisYearSale`.
@@ -243,7 +241,7 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Get order of the highest price.  
    * Backend Request: **GET** `/manager/highestPriceOrder`.
@@ -255,7 +253,7 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Get average order price.  
    * Backend Request: **GET** `/manager/averagePriceOrder`.
@@ -267,7 +265,7 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Get lowest order price.  
    * Backend Request: **GET** `/manager/lowestPriceOrder`.
@@ -279,15 +277,39 @@ export class ManagerService {
       { headers: this.generalService.headerGenerator() }
     );
   }
-  
+
   /**
    * Get count of products sold grouped by category.  
    * Backend Request: **GET** `/manager/salesByCategory`.
    * @returns sales count by category
    */
-  getSalesByCategory(): Observable<Map<string,number>> {
-    return this.http.get<Map<string,number>>(
+  getSalesByCategory(): Observable<Map<string, number>> {
+    return this.http.get<Map<string, number>>(
       this.generalService.serverPath + '/manager/salesByCategory',
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Get order's for given gender(true=male/false=female) for current year.  
+   * Backend Request: **GET** `/manager/yearSalesByGender?gender=boolean`.  
+   * @returns sales count of this year by gender
+   */
+  getYearSalesByGender(gender:boolean): Observable<{ group: number; count: number }[]> {
+    return this.http.get<{ group: number; count: number }[]>(
+      this.generalService.serverPath + '/manager/yearSalesByGender?gender=' + gender,
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Get order's for given gender(true=male/false=female) for current month.  
+   * Backend Request: **GET** `/manager/yearSalesByGender?gender=boolean`.  
+   * @returns sales count of this month by gender
+   */
+  getMonthSalesByGender(gender:boolean): Observable<{ group: number; count: number }[]> {
+    return this.http.get<{ group: number; count: number }[]>(
+      this.generalService.serverPath + '/manager/monthSalesByGender?gender=' + gender,
       { headers: this.generalService.headerGenerator() }
     );
   }

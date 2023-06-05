@@ -43,7 +43,7 @@ export class RadarChartComponent implements OnInit {
           datasets: [
             {
               data: this.productCount,
-              label: 'Rating in Stars',
+              label: 'Products',
             },
           ],
         };

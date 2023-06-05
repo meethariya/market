@@ -39,3 +39,5 @@ appLog.log
 *.png
 *.jpg
 *.jpeg
+
+bin/

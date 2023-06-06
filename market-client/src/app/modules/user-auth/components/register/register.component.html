@@ -117,7 +117,7 @@
       </div>
       <div class="col-md-4">
         <!--Gender-->
-        <label for="gender" class="form-label">Gender</label><br />
+        <label for="male" class="form-label">Gender</label><br />
         <div class="form-check form-check-inline">
           <input
             class="form-check-input"
@@ -399,15 +399,15 @@
           />
           <label class="form-check-label" for="invalidCheck">
             By clicking this you agree with our
-              <!--Modal toggler-->
-              <button
-                type="button"
-                class="btn btn-link px-0"
-                data-bs-toggle="modal"
-                data-bs-target="#termsCondition"
-              >
-                terms and conditions
-              </button>
+            <!--Modal toggler-->
+            <button
+              type="button"
+              class="btn btn-link px-0"
+              data-bs-toggle="modal"
+              data-bs-target="#termsCondition"
+            >
+              terms and conditions
+            </button>
           </label>
           <div
             *ngIf="f.agreeTermsAndConditions.errors?.['required']"
@@ -418,18 +418,44 @@
         </div>
       </div>
     </div>
-    <!--Submit form-->
-    <div class="row mb-2">
-      <div class="col-md-12 d-grid">
+    <div class="row" *ngIf="otp == null || !validOtp; else registerBlock">
+      <div class="col-md-4 d-grid">
         <button
+          type="button"
           class="btn btn-success"
-          type="submit"
           [disabled]="!registerForm.valid"
+          (click)="requestOtp()"
         >
-          Register
+          Send OTP
         </button>
       </div>
+      <div class="col-md-4">
+        <input
+          type="number"
+          class="form-control text-center"
+          id="otpInput"
+          placeholder="123456"
+          [(ngModel)]="userOtp"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="otp == null"
+          (ngModelChange)="userInputOtp()"
+        />
+      </div>
     </div>
+    <!--Submit form-->
+    <ng-template #registerBlock>
+      <div class="row mb-2">
+        <div class="col-md-12 d-grid">
+          <button
+            class="btn btn-success"
+            type="submit"
+            [disabled]="!registerForm.valid"
+          >
+            Register
+          </button>
+        </div>
+      </div>
+    </ng-template>
   </form>
 </div>
 

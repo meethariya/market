@@ -5,8 +5,8 @@ import { ToasterComponent } from 'src/app/modules/facet/toaster/toaster.componen
 
 /**
  * Register component.
- * Validates form and registers user. Checks for various backend validations as well.  
- * Uses {@link UserAuthService.register()}.  
+ * Validates form and registers user. Checks for various backend validations as well.
+ * Uses {@link UserAuthService.register()}.
  * Shows toast message on success/failure using {@link ToasterComponent}.
  */
 @Component({
@@ -55,6 +55,11 @@ export class RegisterComponent {
     agreeTermsAndConditions: new FormControl('', [Validators.required]),
   });
 
+  // OTP
+  validOtp=false;
+  otp!: string;
+  userOtp!: number;
+
   // toast settings variables
   toastTitle: string = '';
   toastMessage: string = '';
@@ -81,11 +86,17 @@ export class RegisterComponent {
       this.registerForm.value.state != null
     ) {
       let formData: FormData = new FormData();
-      let gender = (document.getElementById('male') as HTMLInputElement).checked;
+      let gender = (document.getElementById('male') as HTMLInputElement)
+        .checked;
       formData.set('gender', gender ? 'male' : 'female');
       formData.set('phone', this.registerForm.value.phone);
       formData.set('dob', this.registerForm.value.dob);
-      formData.set('name', this.registerForm.value.firstName + ' ' + this.registerForm.value.lastName);
+      formData.set(
+        'name',
+        this.registerForm.value.firstName +
+          ' ' +
+          this.registerForm.value.lastName
+      );
       formData.set('email', this.registerForm.value.email);
       formData.set('password', this.registerForm.value.password);
       formData.set('houseNo', this.registerForm.value.houseNo);
@@ -96,8 +107,12 @@ export class RegisterComponent {
       formData.set('pincode', this.registerForm.value.pincode);
       // submits form
       this.userAuthService.register(formData).subscribe({
-        next: (data) => this.toastLoader(true,"Account registered successfully. Login with your email and password"),
-        error: (err) => this.toastLoader(false,err.error),
+        next: (data) =>
+          this.toastLoader(
+            true,
+            'Account registered successfully. Login with your email and password'
+          ),
+        error: (err) => this.toastLoader(false, err.error),
       });
     }
   }
@@ -115,7 +130,7 @@ export class RegisterComponent {
    * @param message
    * @returns `void`
    */
-  toastLoader(status:boolean, message:string) {
+  toastLoader(status: boolean, message: string) {
     if (status) {
       this.toastTitle = 'Success';
       this.toastColorClass = 'success';
@@ -125,5 +140,43 @@ export class RegisterComponent {
     }
     this.toastMessage = message;
     this.toastReady = true;
+  }
+
+  requestOtp() {
+    if (
+      this.registerForm.value.firstName != null &&
+      this.registerForm.value.lastName != null &&
+      this.registerForm.value.email != null
+    ) {
+      let formData = new FormData();
+      formData.append(
+        'username',
+        this.registerForm.value.firstName + this.registerForm.value.lastName
+      );
+      formData.append('email', this.registerForm.value.email);
+      this.userAuthService.requestOtp(formData).subscribe({
+        next: (data) => {
+          this.otp = data;
+          this.toastLoader(true, 'OTP sent successfully');
+        },
+        error: (err) => this.toastLoader(false, err.message),
+      });
+    }
+  }
+
+  userInputOtp() {
+    if (this.userOtp.toString() == this.otp){
+      this.toastLoader(true, 'OTP verified successfully');
+      this.validOtp=true;
+    }
+    else if (this.userOtp.toString().length == this.otp.length){
+      console.log(this.userOtp);
+      console.log(this.userOtp.toString().length);
+      console.log(this.otp.length);
+      this.toastLoader(false, 'Invalid OTP');
+    } else {
+      console.log("none");
+    }
+
   }
 }

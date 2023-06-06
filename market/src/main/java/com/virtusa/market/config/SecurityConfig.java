@@ -35,7 +35,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 	private String[] authenticatedUrls = { "/postLogin", "/product", "/product/*", "/review/*", "/inventory",
 			"/category" };
 	
-	private String[] permitAllUrls = {"/", "/v3/api-docs/**", "/swagger-ui/**", "/register"};
+	private String[] permitAllUrls = {"/", "/v3/api-docs/**", "/swagger-ui/**", "/register", "/sendOtp"};
 
 	/**
 	 * Security configuration for all URLs, Login, Logout, CSRF and basic HTTP.

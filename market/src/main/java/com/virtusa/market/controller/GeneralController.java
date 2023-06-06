@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virtusa.market.dto.CustomerDto;
@@ -35,19 +36,21 @@ import jakarta.validation.Valid;
 /**
  * General Controller used for actions common to user and manager.<br>
  * Security Level: <strong>Authenticated/Anonymous</strong>.
+ * 
  * @author meet
  * @since 11-Feb-2023
  */
 @RestController
 @RequestMapping("/")
-@CrossOrigin(origins = {"${angular}"})
+@CrossOrigin(origins = { "${angular}" })
 public class GeneralController {
 
 	@Autowired
 	GeneralService service;
-	
+
 	/**
 	 * Saves customer to database
+	 * 
 	 * @param customer
 	 * @param error
 	 * @see GeneralService#registerCustomer(CustomerDto)
@@ -58,25 +61,26 @@ public class GeneralController {
 	@PostMapping("/register")
 	public ResponseEntity<Long> register(@Valid @ModelAttribute("customer") CustomerDto customer, Errors error)
 			throws CustomerAlreadyExistsException {
-		
+
 		FieldError fieldError = error.getFieldError();
-		if (fieldError!=null) {
+		if (fieldError != null) {
 			throw new IncorrectFormDetailsException(fieldError.getDefaultMessage());
 		}
 		Long id = service.registerCustomer(customer);
 		return new ResponseEntity<>(id, HttpStatus.CREATED);
 	}
-	
+
 	/**
 	 * get user that is authenticated
+	 * 
 	 * @param auth
 	 * @return User object
 	 */
 	@GetMapping(path = "/postLogin")
-	public ResponseEntity<User> postLogin(Authentication auth){
+	public ResponseEntity<User> postLogin(Authentication auth) {
 		return new ResponseEntity<>(service.getUser(auth.getName()), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @return List of products and its image path
 	 */
@@ -84,9 +88,10 @@ public class GeneralController {
 	public ResponseEntity<List<Product>> getAllProduct() {
 		return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Get Product by its id
+	 * 
 	 * @param id
 	 * @return Product
 	 * @throws ProductNotFoundException
@@ -95,23 +100,23 @@ public class GeneralController {
 	public ResponseEntity<Product> getProduct(@PathVariable("id") long id) throws ProductNotFoundException {
 		return new ResponseEntity<>(service.getProduct(id), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @return List of all products in inventory
 	 */
 	@GetMapping("/inventory")
-	public ResponseEntity<List<Inventory>> allInventory(){
+	public ResponseEntity<List<Inventory>> allInventory() {
 		return new ResponseEntity<>(service.allInventory(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * @return list of categories
 	 */
 	@GetMapping("category")
-	public ResponseEntity<List<Category>> getAllCategory(){
-		return new ResponseEntity<>(service.getAllCategory(), HttpStatus.OK);		
+	public ResponseEntity<List<Category>> getAllCategory() {
+		return new ResponseEntity<>(service.getAllCategory(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Get all reviews of a product
 	 * 
@@ -120,15 +125,28 @@ public class GeneralController {
 	 * @throws ProductNotFoundException
 	 */
 	@GetMapping("/review/{productId}")
-	public ResponseEntity<List<Review>> getProductReview(@PathVariable("productId") long productId) throws ProductNotFoundException{
+	public ResponseEntity<List<Review>> getProductReview(@PathVariable("productId") long productId)
+			throws ProductNotFoundException {
 		return new ResponseEntity<>(service.getProductReview(productId), HttpStatus.OK);
 	}
-	
+
 	/*
 	 * Checks if backend is reachable or not.
 	 */
 	@GetMapping("/")
-	public ResponseEntity<String> backendReachable(){
-		return new ResponseEntity<>("Market Backend Reached",HttpStatus.OK);
+	public ResponseEntity<String> backendReachable() {
+		return new ResponseEntity<>("Market Backend Reached", HttpStatus.OK);
+	}
+
+	/**
+	 * Sends mail to user of random generated OTP and returns same for validation.
+	 * 
+	 * @param username
+	 * @param to
+	 * @return 6 Digit OTP
+	 */
+	@PostMapping("/sendOtp")
+	public ResponseEntity<String> sendOtp(@RequestParam("username") String username, @RequestParam("email") String to) {
+		return new ResponseEntity<>(service.sendRegisterationOtp(username, to), HttpStatus.OK);
 	}
 }

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -166,5 +167,16 @@ public class ExceptionHandlerController {
 	public ResponseEntity<String> handleReviewNotFoundException(ReviewNotFoundException e){
 		log.error(e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * Handles error for MailException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(MailException.class)
+	public ResponseEntity<String> handleMailException(MailException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 }

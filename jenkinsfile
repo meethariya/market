@@ -40,7 +40,7 @@ pipeline {
         stage('Clean build SpringBoot') {
             steps {
                 dir(BACKEND_DIR) {
-                    sh 'mvn -Pprod clean package "-DdbUrl=$AWS_DB_URL" "-DdbUsername=$AWS_DB_CRED_USR" "-DdbPassword=$AWS_DB_CRED_PSW"'
+                    sh 'mvn -Pprod clean package "-DdbUrl=$AWS_DB_URL" "-DdbUsername=$AWS_DB_CRED_USR" "-DdbPassword=$AWS_DB_CRED_PSW" "-DmailPassword=$MAIL_PASSWORD"'
                 }
             }
         }

@@ -5,9 +5,12 @@ package com.virtusa.market.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import com.virtusa.market.dao.ProductDao;
 import com.virtusa.market.dao.ReviewDao;
 import com.virtusa.market.dao.UserDao;
 import com.virtusa.market.dto.CustomerDto;
+import com.virtusa.market.dto.EmailDetails;
 import com.virtusa.market.exception.CustomerAlreadyExistsException;
 import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.model.Category;
@@ -42,12 +46,20 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class GeneralService {
 
+	private Random random = new Random();
+
 	@Autowired
 	PasswordEncoder pe;
 
+	@Autowired
+	private JavaMailSender mailSender;
+
+	@Value("${spring.mail.username}")
+	private String sender;
+
 	@Value("${profileFolder}")
 	private String profileFolder;
-	
+
 	@Autowired
 	private CustomerDao customerDao;
 
@@ -146,8 +158,8 @@ public class GeneralService {
 	}
 
 	/**
-	 * Searches for the product using id. Throws error if not found.
-	 * Find all Reviews for given Product.
+	 * Searches for the product using id. Throws error if not found. Find all
+	 * Reviews for given Product.
 	 * 
 	 * @param productId
 	 * @return List of Review
@@ -159,5 +171,57 @@ public class GeneralService {
 			throw new ProductNotFoundException("No Such Product Available");
 		Product product = findById.get();
 		return reviewDao.findByProduct(product);
+	}
+
+	/**
+	 * Accepts email details converts it to {@link SimpleMailMessage} and sends mail
+	 * to all the recipients.
+	 * 
+	 * @param details Email details
+	 */
+	public void sendMail(EmailDetails details) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom(sender);
+		message.setTo(details.getRecipients());
+		message.setSubject(details.getSubject());
+		message.setText(details.getBody());
+
+		mailSender.send(message);
+	}
+
+	/**
+	 * Generates 6 digit random OTP using {@link random}.
+	 * 
+	 * @return String of 6 digit OTP
+	 */
+	private String otpGenerator() {
+		StringBuilder otp = new StringBuilder();
+		this.random.ints(0, 10).limit(6).forEach(otp::append);
+		return otp.toString();
+	}
+
+	/**
+	 * Generates Random 6 digit OTP.<br>
+	 * Prepares details for {@link EmailDetails}.<br>
+	 * Sends mail using {@link GeneralService#sendMail}<br>
+	 * Finally returns the OTP for validation.
+	 * 
+	 * @param recipientUsername name for mail body
+	 * @param to                email for recipient address
+	 * @return 6 digit OTP
+	 */
+	public String sendRegisterationOtp(String recipientUsername, String to) {
+		EmailDetails details = new EmailDetails();
+		String otp = otpGenerator();
+		String body = "Dear " + recipientUsername + ",\n\n"
+				+ "Please use the following OTP to complete your registration:\nOTP: " + otp
+				+ "\nThank You.\n\nBest Regards,\nTeam BigMart";
+		details.setSubject("Registration OTP for BigMart");
+		details.setBody(body);
+		details.setRecipients(new String[] { to });
+		
+		sendMail(details);
+		
+		return otp;
 	}
 }

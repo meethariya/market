@@ -104,4 +104,13 @@ export class UserAuthService {
 
     return this.httpClient.post(this.path + '/login', formData, { headers: headers });
   }
+
+  /**
+   * Sends user name and email for OTP request. Sends user OTP email and returns OTP
+   * @param formData 
+   * @returns OTP
+   */
+  requestOtp(formData: FormData): Observable<string> {
+    return this.httpClient.post<string>(this.path + '/sendOtp', formData);
+  }
 }

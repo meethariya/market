@@ -5,7 +5,7 @@
     [message]="toastMessage"
     [colorClass]="toastColorClass"
     [ready]="toastReady"
-    (setReadyFalse)="this.toastReady=false"
+    (setReadyFalse)="this.toastReady = false"
   ></app-toaster>
   <!--Register Form-->
   <form
@@ -398,7 +398,16 @@
             required
           />
           <label class="form-check-label" for="invalidCheck">
-            Agree to terms and conditions
+            By clicking this you agree with our
+              <!--Modal toggler-->
+              <button
+                type="button"
+                class="btn btn-link px-0"
+                data-bs-toggle="modal"
+                data-bs-target="#termsCondition"
+              >
+                terms and conditions
+              </button>
           </label>
           <div
             *ngIf="f.agreeTermsAndConditions.errors?.['required']"
@@ -412,8 +421,17 @@
     <!--Submit form-->
     <div class="row mb-2">
       <div class="col-md-12 d-grid">
-        <button class="btn btn-success" type="submit" [disabled]="!registerForm.valid">Register</button>
+        <button
+          class="btn btn-success"
+          type="submit"
+          [disabled]="!registerForm.valid"
+        >
+          Register
+        </button>
       </div>
     </div>
   </form>
 </div>
+
+<!--Terms and Conditions modal-->
+<app-terms-condition></app-terms-condition>

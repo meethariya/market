@@ -7,6 +7,7 @@ import { FacetModule } from '../facet/facet.module';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { RegisterComponent } from './components/register/register.component';
+import { TermsConditionComponent } from './components/terms-condition/terms-condition.component';
 
 
 /**
@@ -17,7 +18,8 @@ import { RegisterComponent } from './components/register/register.component';
   declarations: [
     LoginComponent,
     RegisterComponent,
-    LogoutComponent
+    LogoutComponent,
+    TermsConditionComponent
   ],
   imports: [
     CommonModule,

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import {
   faGitlabSquare,
-  faInstagram,
   faLinkedin,
 } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Footer component for entire website.  
@@ -17,5 +17,5 @@ import {
 export class FooterComponent {
   linkedIn = faLinkedin;      //linkedIn Icon
   gitlab = faGitlabSquare;    // Gitlab Icon
-  instagram = faInstagram;    // Instagram Icon
+  mail = faEnvelope;    // Mail Icon
 }

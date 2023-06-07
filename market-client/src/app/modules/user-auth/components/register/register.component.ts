@@ -56,9 +56,9 @@ export class RegisterComponent {
   });
 
   // OTP
-  validOtp=false;
-  otp!: string;
-  userOtp!: number;
+  validOtp = false;
+  otp!: number;           // Server's OTP
+  userOtp!: number;       // User's OTP (NgModel)
 
   // toast settings variables
   toastTitle: string = '';
@@ -68,6 +68,9 @@ export class RegisterComponent {
 
   constructor(private userAuthService: UserAuthService) {}
 
+  /**
+   * Validates all user Input and registers user.
+   */
   register() {
     // validation
     if (
@@ -142,6 +145,10 @@ export class RegisterComponent {
     this.toastReady = true;
   }
 
+  /**
+   * Validates Username and email for user input.  
+   * Sends the data as FormData to backend to recieve OTP.
+   */
   requestOtp() {
     if (
       this.registerForm.value.firstName != null &&
@@ -158,25 +165,25 @@ export class RegisterComponent {
         next: (data) => {
           this.otp = data;
           this.toastLoader(true, 'OTP sent successfully');
+          this.registerForm.disable();
         },
         error: (err) => this.toastLoader(false, err.message),
       });
     }
   }
 
+  /**
+   * Validates User Input OTP with server's OTP.  
+   * Toggles register button and shows valid/invalid OTP toasts.
+   */
   userInputOtp() {
-    if (this.userOtp.toString() == this.otp){
+    let userOtpLen = String(this.userOtp).length;
+    let otpLen = String(this.otp).length;
+    if (this.userOtp === this.otp) {
       this.toastLoader(true, 'OTP verified successfully');
-      this.validOtp=true;
-    }
-    else if (this.userOtp.toString().length == this.otp.length){
-      console.log(this.userOtp);
-      console.log(this.userOtp.toString().length);
-      console.log(this.otp.length);
+      this.validOtp = true;
+    } else if (userOtpLen === otpLen) {
       this.toastLoader(false, 'Invalid OTP');
-    } else {
-      console.log("none");
     }
-
   }
 }

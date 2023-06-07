@@ -110,7 +110,7 @@ export class UserAuthService {
    * @param formData 
    * @returns OTP
    */
-  requestOtp(formData: FormData): Observable<string> {
-    return this.httpClient.post<string>(this.path + '/sendOtp', formData);
+  requestOtp(formData: FormData): Observable<number> {
+    return this.httpClient.post<number>(this.path + '/sendOtp', formData);
   }
 }

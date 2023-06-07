@@ -418,8 +418,10 @@
         </div>
       </div>
     </div>
+    <!-- Shows this block only when Otp is not valid or server's OTP is not recieved -->
     <div class="row" *ngIf="otp == null || !validOtp; else registerBlock">
       <div class="col-md-4 d-grid">
+        <!--Send OTP button-->
         <button
           type="button"
           class="btn btn-success"
@@ -429,12 +431,13 @@
           Send OTP
         </button>
       </div>
+      <!--User Input for OTP, enables only when OTP is recieved from backend-->
       <div class="col-md-4">
         <input
           type="number"
           class="form-control text-center"
           id="otpInput"
-          placeholder="123456"
+          placeholder="6 digit OTP"
           [(ngModel)]="userOtp"
           [ngModelOptions]="{ standalone: true }"
           [disabled]="otp == null"

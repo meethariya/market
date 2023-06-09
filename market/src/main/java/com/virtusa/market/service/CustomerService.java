@@ -4,6 +4,8 @@
 package com.virtusa.market.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,9 +17,21 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.virtusa.market.dao.CartListDao;
 import com.virtusa.market.dao.CustomerDao;
 import com.virtusa.market.dao.InventoryDao;
@@ -44,6 +58,9 @@ import com.virtusa.market.model.Product;
 import com.virtusa.market.model.Review;
 import com.virtusa.market.model.User;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 
 /**
@@ -58,10 +75,10 @@ public class CustomerService {
 
 	@Value("${profileFolder}")
 	private String profileFolder;
-	
+
 	@Value("${reviewFolder}")
 	private String reviewFolder;
-	
+
 	@Autowired
 	private ProductDao productDao;
 
@@ -82,6 +99,9 @@ public class CustomerService {
 
 	@Autowired
 	private ReviewDao reviewDao;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 	/**
 	 * Converts CartDto raw input to proper CartList.<br>
@@ -172,7 +192,8 @@ public class CustomerService {
 	 * <li>Goes through each cart item</li>
 	 * <ul>
 	 * <li>Checks if the cartItem's product is in Inventory</li>
-	 * <li>Checks if cartItem's quantity is less than or equal to quantity in Inventory</li>
+	 * <li>Checks if cartItem's quantity is less than or equal to quantity in
+	 * Inventory</li>
 	 * </ul>
 	 * <li>Modifies Inventory's quantity and Last Sold Date</li>
 	 * <li>Saves the Order</li>
@@ -598,4 +619,219 @@ public class CustomerService {
 		product.setRating(avgRatingOfProduct);
 		productDao.save(product);
 	}
+
+	/**
+	 * Searches for Order using id and validates email. Generates receipt for the
+	 * same and send's the receipt as an attachment to user email.<br>
+	 * Delete's receipt once all actions are complete in order to avoid cluttering.
+	 * 
+	 * @param orderId
+	 * @param customerEmail
+	 * @throws MessagingException
+	 * @throws MailException
+	 */
+	public boolean makeRecieptForOrder(long orderId, String customerEmail) throws MailException, MessagingException {
+		Order order = findOrder(orderId, customerEmail);
+		if (generateReciept(order)) {
+			mailSender.send(prepareOrderRecieptMail(order));
+			// deleting receipt to save storage
+			return new File(orderId + ".pdf").delete();
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Generates Order Reciept PDF for the given order using {@link PdfWriter}.
+	 * Returns true if everything works well, any error goes to false.
+	 * 
+	 * @param order reciept
+	 */
+	private boolean generateReciept(Order order) {
+		String destination = order.getId() + ".pdf";
+
+		// creating pdf components
+		Document document = new Document();
+
+		// document meta data
+		document.addAuthor("BigMart Services");
+		document.addCreationDate();
+		document.addCreator("BigMart Services");
+		document.addSubject("Order Reciept");
+		document.addTitle("Order Reciept");
+
+		// Fonts
+		Font f1 = new Font();
+		f1.setStyle(Font.BOLD);
+		f1.setSize(18);
+		Font f2 = new Font();
+		f2.setSize(12);
+
+		// writing to pdf
+		try {
+			PdfWriter.getInstance(document, new FileOutputStream(new File(destination)));
+			document.open();
+
+			// Company name
+			document.add(createParagraph("BigMart Services\n", Element.ALIGN_CENTER, f1));
+			// Company Address
+			document.add(createParagraph("BigMart Services\nA2,Raja Road\nDelhi-294994", Element.ALIGN_RIGHT, f2));
+			// Customer's address
+			String add = order.getCustomer().getUser().getName() + "\n" + order.getCustomer().getAddress().getHouseNo()
+					+ ",\n" + order.getCustomer().getAddress().getAddressLine1() + ",\n"
+					+ order.getCustomer().getAddress().getAddressLine2() + ",\n"
+					+ order.getCustomer().getAddress().getCity() + ", " + order.getCustomer().getAddress().getState()
+					+ "-" + order.getCustomer().getAddress().getPincode() + "\n\n";
+			document.add(createParagraph(add, Element.ALIGN_LEFT, f2));
+
+			// Order Details
+			document.add(createParagraph("Order Details\n", Element.ALIGN_CENTER, f2));
+
+			// Order no & date
+			document.add(createParagraph(
+					"Order Number: " + order.getId() + "\nOrder Date: " + order.getTimestamp().toString() + "\n\n",
+					Element.ALIGN_LEFT, f2));
+			// Table
+			document.add(createOrderReceiptTable(order));
+			// Order total cost
+			document.add(createParagraph("Total: " + order.getPrice(), Element.ALIGN_RIGHT, f2));
+			// Payment Method
+			document.add(
+					createParagraph("Payment Method: " + order.getPaymentMethod() + "\n\n", Element.ALIGN_RIGHT, f2));
+			// Thanks Note
+			document.add(createParagraph(
+					"Thank you for choosing BigMart, If you have any queries please reach out to us at bigmartservices@gmail.com\nTeam BigMart.",
+					Element.ALIGN_LEFT, f2));
+
+			document.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (DocumentException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Create new cell using text and font.
+	 * 
+	 * @param text cell content
+	 * @param f    Font
+	 * @return Cell
+	 */
+	private PdfPCell createCell(String text, Font f) {
+		return new PdfPCell(createParagraph(text, Element.ALIGN_CENTER, f));
+	}
+
+	/**
+	 * Creates Order table for it's receipt
+	 * 
+	 * @param order reciept creation
+	 * @return table
+	 */
+	private PdfPTable createOrderReceiptTable(Order order) {
+		// Table
+		PdfPTable table = new PdfPTable(5);
+		table.setWidthPercentage(100);
+		table.setHorizontalAlignment(Element.ALIGN_CENTER);
+		// Fonts
+		Font f3 = new Font();
+		f3.setStyle(Font.BOLD);
+		f3.setSize(12);
+
+		Font f2 = new Font();
+		f2.setSize(12);
+
+		// heading
+		// sr no
+		table.addCell(createCell("Sr. No.", f3));
+		// Product Name
+		table.addCell(createCell("Product Name", f3));
+		// Price
+		table.addCell(createCell("Price", f3));
+		// Quantity
+		table.addCell(createCell("Quantity", f3));
+		// Total
+		table.addCell(createCell("Total", f3));
+
+		int srNo = 1;
+		for (CartList i : order.getCart()) {
+			// sr no
+			table.addCell(createCell(String.valueOf(srNo++), f2));
+			// product name
+			table.addCell(createCell(i.getProduct().getName(), f2));
+			// product name
+			table.addCell(createCell(String.valueOf(i.getProduct().getPrice()), f2));
+			// Quantity
+			table.addCell(createCell(String.valueOf(i.getQuantity()), f2));
+			// Total
+			table.addCell(createCell(String.valueOf(i.getQuantity() * i.getProduct().getPrice()), f2));
+		}
+
+		return table;
+	}
+
+	/**
+	 * Creates new Paragraph for given text.
+	 * 
+	 * @param text      content of paragraph
+	 * @param alignment paragrpah alignment
+	 * @param f         font
+	 * @return
+	 */
+	private Paragraph createParagraph(String text, int alignment, Font f) {
+		Paragraph temp = new Paragraph(text);
+		temp.setAlignment(alignment);
+		temp.setFont(f);
+		return temp;
+	}
+
+	/**
+	 * Prepares mail with subject, body, recipient address and receipt attachment.
+	 * 
+	 * @param order
+	 * @return Mail with attachment
+	 * @throws MessagingException
+	 */
+	private MimeMessage prepareOrderRecieptMail(Order order) throws MessagingException {
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo(new InternetAddress(order.getCustomer().getUser().getEmail()));
+		String body = """
+						<!DOCTYPE html>
+				<html>
+				<head>
+				    <meta charset="UTF-8">
+				    <title>Order Confirmation</title>
+				</head>
+				<body>
+				    <h1>Thank You for Your Order!</h1>
+				    <p>Dear """ + order.getCustomer().getUser().getName()
+				+ """
+						    		,</p>
+
+						    <p>Thank you for your recent purchase. We appreciate your business and are excited to have you as our valued customer.</p>
+
+						    <p>Below, you will find the receipt for your order:</p>
+
+						    <p>If you have any questions or concerns regarding your order, please don't hesitate to contact our customer support team. We are here to assist you!</p>
+
+						    <p>Thank you once again for choosing our company.</p>
+
+						    <p>Best regards,<br>
+						    BigMart Services</p>
+						</body>
+						</html>
+
+										""";
+		helper.setText(body);
+		FileSystemResource file = new FileSystemResource(new File(order.getId() + ".pdf"));
+		helper.addAttachment("reciept", file);
+		helper.setSubject("Order Reciept");
+		return message;
+	}
+
 }

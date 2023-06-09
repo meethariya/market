@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -43,6 +44,7 @@ import com.virtusa.market.model.Order;
 import com.virtusa.market.model.Review;
 import com.virtusa.market.service.CustomerService;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 /**
@@ -268,5 +270,19 @@ public class CustomerController {
 	@DeleteMapping("/review/{id}")
 	public ResponseEntity<Long> deleteReview(@PathVariable("id")Long reviewId, Authentication auth) throws IOException{
 		return new ResponseEntity<>(customerService.deleteReview(reviewId, auth.getName()), HttpStatus.OK);
+	}
+	
+	/**
+	 * Sends Order receipt as mail to the customer.
+	 * 
+	 * @param orderId
+	 * @param auth
+	 * @return Boolean
+	 * @throws MessagingException 
+	 * @throws MailException 
+	 */
+	@GetMapping("/generateReceipt/{id}")
+	public ResponseEntity<Boolean> generateReceipt(@PathVariable("id") long orderId, Authentication auth) throws MailException, MessagingException {
+		return new ResponseEntity<>(customerService.makeRecieptForOrder(orderId, auth.getName()), HttpStatus.OK);
 	}
 }

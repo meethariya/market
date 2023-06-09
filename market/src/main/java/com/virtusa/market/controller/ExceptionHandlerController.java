@@ -25,6 +25,8 @@ import com.virtusa.market.exception.ProductNotFoundException;
 import com.virtusa.market.exception.ReviewNotFoundException;
 import com.virtusa.market.exception.UserNotFoundException;
 
+import jakarta.mail.MessagingException;
+
 /**
  * Handle all exceptions thrown by controllers
  * @author meet
@@ -176,6 +178,17 @@ public class ExceptionHandlerController {
 	 */
 	@ExceptionHandler(MailException.class)
 	public ResponseEntity<String> handleMailException(MailException e){
+		log.error(e.getMessage());
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
+	/**
+	 * Handles error for MessagingException
+	 * @param e
+	 * @return Error Message response
+	 */
+	@ExceptionHandler(MessagingException.class)
+	public ResponseEntity<String> handleMessagingException(MessagingException e){
 		log.error(e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 	}

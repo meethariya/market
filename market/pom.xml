@@ -6,42 +6,37 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.0.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	
 	<groupId>com.virtusa</groupId>
 	<artifactId>market</artifactId>
 	<version>1.0.0</version>
 	<name>market</name>
 	<description>Supermarket application</description>
-	
 	<packaging>war</packaging>
-	
 	<properties>
 		<java.version>17</java.version>
 	</properties>
-	
 	<profiles>
 		<profile>
-		    <id>dev</id>
-		    <properties>
-		        <activatedProperties>dev</activatedProperties>
-		        <dbUrl>jdbc:mysql://localhost/market</dbUrl>
-		        <dbUsername>meet</dbUsername>
-		        <dbPassword>Hariya@123</dbPassword>
-		    </properties>
-		    <activation>
-		        <activeByDefault>true</activeByDefault>
-		    </activation>
+			<id>dev</id>
+			<properties>
+				<activatedProperties>dev</activatedProperties>
+				<dbUrl>jdbc:mysql://localhost/market</dbUrl>
+				<dbUsername>meet</dbUsername>
+				<dbPassword>Hariya@123</dbPassword>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 		</profile>
 		<profile>
-		    <id>prod</id>
-		    <properties>
-		        <activatedProperties>prod</activatedProperties>
-		    </properties>
+			<id>prod</id>
+			<properties>
+				<activatedProperties>prod</activatedProperties>
+			</properties>
 		</profile>
 	</profiles>
-	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -59,7 +54,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -81,6 +75,17 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- PDF  -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>layout</artifactId>
+			<version>7.2.5</version>
+		</dependency>
 		<!-- Mail -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -88,40 +93,38 @@
 		</dependency>
 		<!-- Swagger -->
 		<dependency>
-      			<groupId>org.springdoc</groupId>
-      			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-      			<version>2.0.4</version>
-   		</dependency>
-
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.0.4</version>
+		</dependency>
 		<!-- War file generate-->
 		<dependency>
-        		<groupId>org.springframework.boot</groupId>
-        		<artifactId>spring-boot-starter-tomcat</artifactId>
-        		<scope>provided</scope>
-    		</dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
-
 	<build>
 		<finalName>market</finalName>
 		<plugins>
 			<plugin>
-			  	<groupId>org.apache.maven.plugins</groupId>
-			    	<artifactId>maven-resources-plugin</artifactId>
-			    	<version>2.7</version>
-			  	<dependencies>
-			    		<dependency>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<dependencies>
+					<dependency>
 						<groupId>org.apache.maven.shared</groupId>
 						<artifactId>maven-filtering</artifactId>
 						<version>1.3</version>
-			    		</dependency>
-			  	</dependencies>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
-                			<doclint>none</doclint>
-              			</configuration>
+					<doclint>none</doclint>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -133,5 +136,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

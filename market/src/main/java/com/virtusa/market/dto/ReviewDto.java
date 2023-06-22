@@ -151,7 +151,8 @@ public class ReviewDto {
 	public void setReview(Review review) {
 		review.setRating(rating);
 		review.setComment(comment);
-		review.setImagePath(imagePath);
+		if (imagePath != null && !imagePath.isEmpty())
+			review.setImagePath(imagePath);
 		this.review = review;
 	}
 }

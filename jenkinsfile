@@ -68,19 +68,13 @@ pipeline {
                         echo " ***** App Folder found in tomcat ***** "
 
                         mkdir /tmp/appAssets
-                        mkdir /tmp/appAssets/productPic
-                        mkdir /tmp/appAssets/profilePic
-                        mkdir /tmp/appAssets/reviewPic
                         chmod -R 777 /tmp/appAssets/*
+                        
                         echo " ***** Created temp folder to save previous assets ***** "
 
-                        cp -r /opt/tomcat/webapps/app/assets/image/productPic/* /tmp/appAssets/productPic
+                        cp -r /opt/tomcat/webapps/app/assets/* /tmp/appAssets
                         wait
-                        cp -r /opt/tomcat/webapps/app/assets/image/profilePic/* /tmp/appAssets/profilePic
-                        wait
-                        cp -r /opt/tomcat/webapps/app/assets/image/reviewPic/* /tmp/appAssets/reviewPic
-                        wait
-                        echo " ***** Tomcat app's productPic, profilePic and reviewPic folders copied to temp ***** "
+                        echo " ***** Tomcat app's asset folder copied to temp ***** "
 
                         cd /opt/tomcat/webapps/app/
                         rm -r *
@@ -91,13 +85,9 @@ pipeline {
                         wait
                         echo " ***** Copy all freshly build files to Tomcat app ***** "
 
-                        cd /opt/tomcat/webapps/app/assets/image/productPic
+                        cd /opt/tomcat/webapps/app/assets
                         rm -r *
-                        cd /opt/tomcat/webapps/app/assets/image/profilePic
-                        rm -r *
-                        cd /opt/tomcat/webapps/app/assets/image/reviewPic
-                        rm -r *
-                        echo " ***** Remove fresh build productPic, profilePic and reviewPic folders ***** "
+                        echo " ***** Remove fresh build assets folder ***** "
 
                         cp -r /tmp/appAssets/* /opt/tomcat/webapps/app/assets/image/
                         chmod -R 777 /opt/tomcat/webapps/app

@@ -158,16 +158,17 @@ export class RegisterComponent {
       let formData = new FormData();
       formData.append(
         'username',
-        this.registerForm.value.firstName + this.registerForm.value.lastName
+        this.registerForm.value.firstName + " " +this.registerForm.value.lastName
       );
       formData.append('email', this.registerForm.value.email);
       this.userAuthService.requestOtp(formData).subscribe({
         next: (data) => {
           this.otp = data;
           this.toastLoader(true, 'OTP sent successfully');
-          this.registerForm.disable();
+          // this.registerForm.controls['email'].disable();
+          // this.registerForm.controls['phone'].disable();
         },
-        error: (err) => this.toastLoader(false, err.message),
+        error: (err) => this.toastLoader(false, "Unable to send OTP currently, please try again later after some time"),
       });
     }
   }

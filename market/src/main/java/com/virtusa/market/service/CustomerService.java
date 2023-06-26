@@ -800,8 +800,7 @@ public class CustomerService {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setTo(new InternetAddress(order.getCustomer().getUser().getEmail()));
-		String body = """
-						<!DOCTYPE html>
+		String htmlBody = """
 				<html>
 				<head>
 				    <meta charset="UTF-8">
@@ -825,11 +824,27 @@ public class CustomerService {
 						    BigMart Services</p>
 						</body>
 						</html>
+						""";
+		String plainBody = """
+				Thank You for Your Order!\n
+		    Dear """ + order.getCustomer().getUser().getName()
+		+ """
+				    		,\n
 
-										""";
-		helper.setText(body);
+				    Thank you for your recent purchase. We appreciate your business and are excited to have you as our valued customer.\n
+
+				    Below, you will find the receipt for your order:\n
+
+				    If you have any questions or concerns regarding your order, please don't hesitate to contact our customer support team. We are here to assist you!\n
+
+				    Thank you once again for choosing our company.\n
+
+				    Best regards,\n
+				    BigMart Services\n
+				""";
+		helper.setText(plainBody,htmlBody);
 		FileSystemResource file = new FileSystemResource(new File(order.getId() + ".pdf"));
-		helper.addAttachment("reciept", file);
+		helper.addAttachment("reciept.pdf", file);
 		helper.setSubject("Order Reciept");
 		return message;
 	}

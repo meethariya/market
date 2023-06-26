@@ -61,6 +61,7 @@ export class PlaceOrderComponent implements OnInit {
    * Place an order. This method is called when the form is `submitted`.  
    * Uses {@link  CustomerService.placeOrder()} to place order.  
    * Shows toast status and message on success/failure, using {@link ToasterComponent}.  
+   * On success, sends order reciept to customer via mail.  
    * Resets all vaules and empties customer cart when order is placed successfully.  
    * @returns `void`
    */
@@ -70,10 +71,16 @@ export class PlaceOrderComponent implements OnInit {
     this.customerService.placeOrder(formData).subscribe({
       // on success
       next: (id) => {
-        this.toastLoader(true, 'Order Places Successfully!');
+        this.toastLoader(true, 'Order Placed Successfully!');
         this.cart = [];
         this.total = 0;
         this.payment = '';
+        // send order receipt to mail.
+        this.customerService.generateReceipt(id).subscribe({
+          // on success
+          next: (response) => this.toastLoader(true, "Order receipt sent successfully"),
+          error: (err) => this.toastLoader(false,err.error)
+        });
       },
       // on failure
       error: (err) => this.toastLoader(false, err.error),

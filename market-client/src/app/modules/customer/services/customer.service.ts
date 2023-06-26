@@ -62,7 +62,7 @@ export class CustomerService {
   /**
    * Adds a product to the cart list of the customer logged in.
    * Backend Request: **POST** `/customer/cart`
-   * @param cartData 
+   * @param cartData
    * @see {@link GeneralService.headerGenerator()}
    * @returns Id of the CartList added
    */
@@ -80,7 +80,7 @@ export class CustomerService {
    * Get Cart of the customer logged in.  
    * Backend Request: **GET** `/customer/cart`
    * @see {@link GeneralService.headerGenerator()}
-   * @returns Observale of list of CartList 
+   * @returns Observale of list of CartList
    */
   getCart(): Observable<CartList[]> {
     return this.http.get<CartList[]>(
@@ -94,8 +94,8 @@ export class CustomerService {
   /**
    * Changes the quantity of the CartList item of the Customer logged in.  
    * Backend Request: **PUT** `/customer/cart`
-   * @param cartItemId 
-   * @param quantityDiff 
+   * @param cartItemId
+   * @param quantityDiff
    * @see {@link GeneralService.headerGenerator()}
    * @returns Observable of CartList
    */
@@ -227,6 +227,19 @@ export class CustomerService {
   deleteReview(reviewId: number): Observable<Number> {
     return this.http.delete<Number>(
       this.generalService.serverPath + '/customer/review/' + reviewId,
+      { headers: this.generalService.headerGenerator() }
+    );
+  }
+
+  /**
+   * Send Order receipt to mail.
+   * Backend Request: **GET** `/customer/generateReceipt/{id}`
+   * @see {@link GeneralService.headerGenerator()}
+   * @returns boolean indicating whether the order receipt was sent successfully
+   */
+  generateReceipt(id: number | Number): Observable<boolean> {
+    return this.http.get<boolean>(
+      this.generalService.serverPath + '/customer/generateReceipt/' + id,
       { headers: this.generalService.headerGenerator() }
     );
   }

@@ -11,7 +11,7 @@
     <!--Swap between Year and Month Graphs-->
     <div *ngIf="mode == 'Year'; else month">
       <!--While data is loading, show placeholder-->
-      <div *ngIf="yearLineChartData.datasets.length == 0; else showGraph1">
+      <div *ngIf="yearLineChartData.datasets.length != 2; else showGraph1">
         <h1 class="placeholder-glow">
           <span class="placeholder col-12"></span>
         </h1>

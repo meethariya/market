@@ -68,12 +68,12 @@ pipeline {
                         echo " ***** App Folder found in tomcat ***** "
 
                         mkdir /tmp/appAssets
-                        chmod -R 777 /tmp/appAssets/*
                         
                         echo " ***** Created temp folder to save previous assets ***** "
 
                         cp -r /opt/tomcat/webapps/app/assets/* /tmp/appAssets
                         wait
+                        chmod -R 777 /tmp/appAssets/*
                         echo " ***** Tomcat app's asset folder copied to temp ***** "
 
                         cd /opt/tomcat/webapps/app/

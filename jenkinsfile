@@ -24,7 +24,7 @@ pipeline {
         stage('Install Angular Dependencies') {
             steps {
                 dir(FRONTEND_DIR) {
-                    sh 'npm install'
+                    sh 'npm install --legacy-peer-deps'
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
             steps {
                 script {
                     deploy adapters: [
-                        tomcat9(credentialsId: 'RemoteTomcat', path: '', url: 'http://localhost:8080')
+                        tomcat9(credentialsId: 'Tomcat10', path: '', url: 'http://localhost:8080')
                     ],
                     contextPath: '/market',
                     onFailure: false,

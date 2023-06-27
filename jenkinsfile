@@ -60,53 +60,37 @@ pipeline {
 
         stage('Deploy Angular') {
             steps {
-                sh '''
-                    #!/bin/bash
+            	sh'''
+            		scp -rp -i $RSAkey market-client/dist/market-client/* ubuntu@ec2-13-233-120-185.ap-south-1.compute.amazonaws.com:/home/ubuntu/port/            		
+            	'''
+            	sshagent(credentials: ['sshEC2']) {
+		        sh '''
+		            #!/bin/bash
+		            if [ -d /opt/tomcat/webapps/app ]; then
+		            	echo " ***** App Folder found in tomcat ***** "
+		                sudo cp /home/ubuntu/port/* /opt/tomcat/webapps/app
+		            else
+		                echo " ***** App Folder not found in tomcat ***** "
 
-                    if [ -d /opt/tomcat/webapps/app ]; then
-                        temp_dir=$PWD
-                        echo " ***** App Folder found in tomcat ***** "
+		                sudo mkdir /opt/tomcat/webapps/app
+		                sudo chmod -R 777 /opt/tomcat/webapps/app
+		                echo " ***** Create folder in Tomcat app ***** "
 
-                        mkdir /tmp/appAssets
-                        
-                        echo " ***** Created temp folder to save previous assets ***** "
-
-                        cp -r /opt/tomcat/webapps/app/assets/* /tmp/appAssets
-                        wait
-                        chmod -R 777 /tmp/appAssets/*
-                        echo " ***** Tomcat app's asset folder copied to temp ***** "
-
-                        cd /opt/tomcat/webapps/app/
-                        rm -r *
-                        echo " ***** Deleted all contents of Tomcat app ***** "
-
-                        cd $temp_dir
-                        cp -r market-client/dist/market-client/* /opt/tomcat/webapps/app
-                        wait
-                        echo " ***** Copy all freshly build files to Tomcat app ***** "
-
-                        cd /opt/tomcat/webapps/app/assets
-                        rm -r *
-                        echo " ***** Remove fresh build assets folder ***** "
-
-                        cp -r /tmp/appAssets/* /opt/tomcat/webapps/app/assets/image/
-                        chmod -R 777 /opt/tomcat/webapps/app
-                        echo " ***** Copy temp folder contents back to Tomcat app's assets folder ***** "
-
-                        rm -rf /tmp/appAssets
-                        cd $temp_dir
-                        echo " ***** Remove all temporary files ***** "
-                    else
-                        echo " ***** App Folder not found in tomcat ***** "
-
-                        mkdir /opt/tomcat/webapps/app
-                        chmod -R 777 /opt/tomcat/webapps/app
-                        echo " ***** Create folder in Tomcat app ***** "
-
-                        cp -r market-client/dist/market-client/* /opt/tomcat/webapps/app
-                        echo " ***** Copy all freshly build files to Tomcat app ***** "
-                    fi
-                '''
+		                sudo cp -r /home/ubuntu/port/* /opt/tomcat/webapps/app
+		                echo " ***** Copy all freshly build files to Tomcat app ***** "
+		            fi
+		            echo " ***** Clearing the port ***** "
+		            sudo rm -rf /home/ubuntu/port/*
+		            sudo mkdir /home/ubuntu/port
+		            sudo chmod -R 777 /home/ubuntu/port
+		        '''
+                }
+            }
+        }
+        
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
             }
         }
     }

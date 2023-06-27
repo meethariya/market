@@ -6,6 +6,7 @@ pipeline {
         BACKEND_DIR = 'market'
         AWS_DB_URL = credentials('marketDbUrl')
         AWS_DB_CRED = credentials('marketDbCredentials')
+        PEM_FILE = credentials('RSAkey')
     }
 
     stages {
@@ -61,7 +62,7 @@ pipeline {
         stage('Deploy Angular') {
             steps {
             	sh'''
-            		scp -rp -i "$RSAkey" market-client/dist/market-client/* ubuntu@ec2-13-233-120-185.ap-south-1.compute.amazonaws.com:/home/ubuntu/port/            		
+            		scp -rp -i "$PEM_FILE" market-client/dist/market-client/* ubuntu@ec2-13-233-120-185.ap-south-1.compute.amazonaws.com:/home/ubuntu/port/            		
             	'''
             	sshagent(credentials: ['sshEC2']) {
 		        sh '''

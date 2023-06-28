@@ -6,6 +6,7 @@ pipeline {
         BACKEND_DIR = 'market'
         AWS_DB_URL = credentials('marketDbUrl')
         AWS_DB_CRED = credentials('marketDbCredentials')
+        MAIL_PASSWORD = credentials('MAIL_PASSWORD')
         PEM_FILE = credentials('RSAkey')
         script = 
         """ #!/bin/bash

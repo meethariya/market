@@ -70,21 +70,21 @@ pipeline {
 		            #!/bin/bash
 		            if [ -d /opt/tomcat/webapps/app ]; then
 		            	echo " ***** App Folder found in tomcat ***** "
-		                	sudo cp /home/ubuntu/port/* /opt/tomcat/webapps/app
+		                	cp /home/ubuntu/port/* /opt/tomcat/webapps/app
 		            else
 		                echo " ***** App Folder not found in tomcat ***** "
 
-		                sudo mkdir /opt/tomcat/webapps/app
-		                sudo chmod -R 777 /opt/tomcat/webapps/app
+		                mkdir /opt/tomcat/webapps/app
+		                chmod -R 777 /opt/tomcat/webapps/app
 		                echo " ***** Created folder in Tomcat app ***** "
 
-		                sudo cp -r /home/ubuntu/port/* /opt/tomcat/webapps/app
+		                cp -r /home/ubuntu/port/* /opt/tomcat/webapps/app
 		                echo " ***** Copied all freshly build files to Tomcat app ***** "
 		            fi
 		            echo " ***** Clearing the port ***** "
-		            sudo rm -rf /home/ubuntu/port/*
-		            sudo mkdir /home/ubuntu/port
-		            sudo chmod -R 777 /home/ubuntu/port
+		            rm -rf /home/ubuntu/port/*
+		            mkdir /home/ubuntu/port
+		            chmod -R 777 /home/ubuntu/port
 		        '''
                 }
             }

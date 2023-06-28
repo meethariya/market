@@ -7,6 +7,26 @@ pipeline {
         AWS_DB_URL = credentials('marketDbUrl')
         AWS_DB_CRED = credentials('marketDbCredentials')
         PEM_FILE = credentials('RSAkey')
+        script = 
+        """ #!/bin/bash
+            if [ -d /opt/tomcat/webapps/app ]; then
+                echo " ***** App Folder found in tomcat ***** ";
+                cp /home/ubuntu/port/* /opt/tomcat/webapps/app;
+            else
+                echo " ***** App Folder not found in tomcat ***** ";
+
+                mkdir /opt/tomcat/webapps/app;
+                chmod -R 777 /opt/tomcat/webapps/app;
+                echo " ***** Created folder in Tomcat app ***** ";
+
+                cp -r /home/ubuntu/port/* /opt/tomcat/webapps/app;
+                echo " ***** Copied all freshly build files to Tomcat app ***** ";
+            fi
+            echo " ***** Clearing the port ***** ";
+            rm -rf /home/ubuntu/port/*;
+            mkdir /home/ubuntu/port;
+            chmod -R 777 /home/ubuntu/port;
+        """
     }
 
     stages {
@@ -66,26 +86,7 @@ pipeline {
 				echo " ***** Transfered built files to server's port ***** "
             	'''
             	sshagent(credentials: ['sshEC2']) {
-		        sh '''
-		            #!/bin/bash
-		            if [ -d /opt/tomcat/webapps/app ]; then
-		            	echo " ***** App Folder found in tomcat ***** "
-		                	cp /home/ubuntu/port/* /opt/tomcat/webapps/app
-		            else
-		                echo " ***** App Folder not found in tomcat ***** "
-
-		                mkdir /opt/tomcat/webapps/app
-		                chmod -R 777 /opt/tomcat/webapps/app
-		                echo " ***** Created folder in Tomcat app ***** "
-
-		                cp -r /home/ubuntu/port/* /opt/tomcat/webapps/app
-		                echo " ***** Copied all freshly build files to Tomcat app ***** "
-		            fi
-		            echo " ***** Clearing the port ***** "
-		            rm -rf /home/ubuntu/port/*
-		            mkdir /home/ubuntu/port
-		            chmod -R 777 /home/ubuntu/port
-		        '''
+                    sh "ssh -tt ubuntu@ec2-13-233-120-185.ap-south-1.compute.amazonaws.com '$script'"
                 }
             }
         }

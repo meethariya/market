@@ -70,7 +70,7 @@ pipeline {
             steps {
                 script {
                     deploy adapters: [
-                        tomcat9(credentialsId: 'Tomcat10', path: '', url: 'http://localhost:8080')
+                        tomcat9(credentialsId: 'RemoteTomcat', path: '', url: 'http://13.233.120.185:8080')
                     ],
                     contextPath: '/market',
                     onFailure: false,
